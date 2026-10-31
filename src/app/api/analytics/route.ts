@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
-import { PlaceHubStore } from "@/lib/store";
+import { PlaceHubStore, ensureNeonHydrated } from "@/lib/store";
 
 export async function GET() {
   try {
+    await ensureNeonHydrated();
     const analytics = PlaceHubStore.getAnalytics();
     return NextResponse.json(analytics);
   } catch (error: any) {

@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import { PlaceHubStore } from "@/lib/store";
+import { PlaceHubStore, ensureNeonHydrated } from "@/lib/store";
 
 export async function GET(request: Request) {
+  await ensureNeonHydrated();
   const { searchParams } = new URL(request.url);
   const email = searchParams.get("email");
   const id = searchParams.get("id");

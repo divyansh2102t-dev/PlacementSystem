@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import { PlaceHubStore } from "@/lib/store";
+import { PlaceHubStore, ensureNeonHydrated } from "@/lib/store";
 
 export async function GET(request: Request) {
+  await ensureNeonHydrated();
   const { searchParams } = new URL(request.url);
   const role = searchParams.get("role");
   const search = searchParams.get("search")?.toLowerCase();
@@ -25,6 +26,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    await ensureNeonHydrated();
     const body = await request.json();
 
     if (!body.email || !body.name || !body.role) {
@@ -66,6 +68,7 @@ export async function POST(request: Request) {
 
 export async function PATCH(request: Request) {
   try {
+    await ensureNeonHydrated();
     const body = await request.json();
     const { id, action, ...updates } = body;
 

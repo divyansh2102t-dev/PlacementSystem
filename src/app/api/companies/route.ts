@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import { PlaceHubStore } from "@/lib/store";
+import { PlaceHubStore, ensureNeonHydrated } from "@/lib/store";
 
 export async function GET(request: Request) {
+  await ensureNeonHydrated();
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
   const tier = searchParams.get("tier");
@@ -36,6 +37,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    await ensureNeonHydrated();
     const body = await request.json();
 
     // Check for bulk CSV import or single creation
@@ -60,18 +62,18 @@ export async function POST(request: Request) {
             eligibleBatch: item.eligibleBatch || "2027",
             requiredSkills: Array.isArray(item.requiredSkills)
               ? item.requiredSkills
-              : ["Java", "SQL"],
-            deadline: item.deadline || "2026-12-30",
-            driveDate: item.driveDate || "2027-01-10",
+              : ["JavaScript", "SQL"],
+            deadline: item.deadline || "2026-12-15",
+            driveDate: item.driveDate || "2026-12-20",
             status: item.status || "Upcoming",
-            description: item.description || "Recruitment drive via Placement System.",
+            description: item.description || "Campus recruitment drive.",
           });
           created.push(comp);
         }
       }
       return NextResponse.json({
         success: true,
-        message: `Imported ${created.length} company recruitment drives successfully!`,
+        message: `Successfully imported ${created.length} recruitment drives!`,
         companies: created,
       });
     }
@@ -85,32 +87,38 @@ export async function POST(request: Request) {
 
     const newCompany = PlaceHubStore.addCompany({
       companyName: body.companyName,
-      industry: body.industry || "Technology",
+      industry: body.industry || "Information Technology",
       tier: body.tier || "Dream",
       roleTitle: body.roleTitle,
       roleType: body.roleType || "Full-Time",
-      ctcLpa: parseFloat(body.ctcLpa) || 10.0,
-      stipendMonthly: parseFloat(body.stipendMonthly) || 25000,
-      location: body.location || "Bengaluru",
+      ctcLpa: parseFloat(body.ctcLpa) || 12.0,
+      stipendMonthly: parseFloat(body.stipendMonthly) || 30000,
+      location: body.location || "Pan-India",
       minCgpa: parseFloat(body.minCgpa) || 7.0,
       maxBacklogs: parseInt(body.maxBacklogs, 10) || 0,
-      eligibleDepts: body.eligibleDepts || ["CSE", "IT", "ECE"],
+      eligibleDepts: Array.isArray(body.eligibleDepts)
+        ? body.eligibleDepts
+        : ["CSE", "IT", "ECE"],
       eligibleBatch: body.eligibleBatch || "2027",
-      requiredSkills: body.requiredSkills || ["Problem Solving", "Core CS"],
-      deadline: body.deadline || "2026-12-30",
-      driveDate: body.driveDate || "2027-01-15",
+      requiredSkills: Array.isArray(body.requiredSkills)
+        ? body.requiredSkills
+        : typeof body.requiredSkills === "string"
+        ? body.requiredSkills.split(",").map((s: string) => s.trim())
+        : ["Problem Solving"],
+      deadline: body.deadline || "2026-12-01",
+      driveDate: body.driveDate || "2026-12-10",
       status: body.status || "Upcoming",
-      description: body.description || "Campus recruitment drive.",
+      description: body.description || "Exciting engineering role.",
     });
 
     return NextResponse.json({
       success: true,
-      message: `Created recruitment drive for ${newCompany.companyName}`,
+      message: `Recruitment drive for ${newCompany.companyName} created!`,
       company: newCompany,
     });
   } catch (error: any) {
     return NextResponse.json(
-      { error: error?.message || "Failed to create company" },
+      { error: error?.message || "Failed to create company drive" },
       { status: 500 }
     );
   }
@@ -118,6 +126,7 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   try {
+    await ensureNeonHydrated();
     const body = await request.json();
     const { id, ...updates } = body;
 
@@ -145,6 +154,7 @@ export async function PUT(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
+    await ensureNeonHydrated();
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
 

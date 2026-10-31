@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import { PlaceHubStore } from "@/lib/store";
+import { PlaceHubStore, ensureNeonHydrated } from "@/lib/store";
 
 export async function GET(request: Request) {
+  await ensureNeonHydrated();
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
   const dept = searchParams.get("department");
@@ -40,6 +41,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    await ensureNeonHydrated();
     const body = await request.json();
 
     // Check for bulk CSV import
@@ -116,6 +118,7 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   try {
+    await ensureNeonHydrated();
     const body = await request.json();
     const { id, ...updates } = body;
 

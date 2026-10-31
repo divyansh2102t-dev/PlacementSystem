@@ -13,6 +13,14 @@ import {
   User,
 } from "@/types";
 import { checkEligibility } from "./eligibility";
+import {
+  getDb,
+  logExecutedQuery,
+  neonGetApplications,
+  neonGetCompanies,
+  neonGetStudents,
+  neonGetUsers,
+} from "./db";
 
 // Global in-memory storage singleton that persists during the server lifecycle
 declare global {
@@ -23,6 +31,7 @@ declare global {
     companies: CompanyDrive[];
     applications: Application[];
     websiteVisits: { page: string; views: number }[];
+    hydratedFromNeon?: boolean;
   } | undefined;
 }
 
@@ -44,6 +53,29 @@ if (!global.__placehub_store__) {
 
 const store = global.__placehub_store__;
 
+export async function ensureNeonHydrated(): Promise<void> {
+  const sql = getDb();
+  if (!sql || store.hydratedFromNeon) return;
+
+  try {
+    const [neonUsers, neonStudents, neonCompanies, neonApps] = await Promise.all([
+      neonGetUsers(),
+      neonGetStudents(),
+      neonGetCompanies(),
+      neonGetApplications(),
+    ]);
+
+    if (neonUsers.length > 0) store.users = neonUsers;
+    if (neonStudents.length > 0) store.students = neonStudents;
+    if (neonCompanies.length > 0) store.companies = neonCompanies;
+    if (neonApps.length > 0) store.applications = neonApps;
+
+    store.hydratedFromNeon = true;
+  } catch (err) {
+    console.error("Neon hydration check fallback to in-memory store:", err);
+  }
+}
+
 export const PlaceHubStore = {
   // ================= USERS =================
   getUsers(): User[] {
@@ -64,12 +96,32 @@ export const PlaceHubStore = {
       createdAt: new Date().toISOString().split("T")[0],
     };
     store.users.unshift(newUser);
+
+    // Sync to Neon
+    const sql = getDb();
+    if (sql) {
+      const q = `INSERT INTO users (id, name, email, role, student_id, active, avatar, created_at)
+VALUES (${newUser.id}, '${newUser.name.replace(/'/g, "''")}', '${newUser.email}', '${newUser.role}', ${newUser.studentId ?? "NULL"}, ${newUser.active}, '${newUser.avatar || ""}', '${newUser.createdAt}')`;
+      logExecutedQuery("INSERT User", q);
+      sql.query(q).catch((e) => console.error("Neon User Insert Error:", e));
+    }
+
     return newUser;
   },
   updateUser(id: number, updates: Partial<User>): User | null {
     const index = store.users.findIndex((u) => u.id === id);
     if (index === -1) return null;
     store.users[index] = { ...store.users[index], ...updates };
+
+    // Sync to Neon
+    const sql = getDb();
+    if (sql) {
+      const user = store.users[index];
+      const q = `UPDATE users SET name = '${user.name.replace(/'/g, "''")}', active = ${user.active} WHERE id = ${id}`;
+      logExecutedQuery("UPDATE User", q);
+      sql.query(q).catch((e) => console.error("Neon User Update Error:", e));
+    }
+
     return store.users[index];
   },
 
@@ -91,12 +143,32 @@ export const PlaceHubStore = {
       id: Math.max(0, ...store.students.map((s) => s.id)) + 1,
     };
     store.students.unshift(newStudent);
+
+    // Sync to Neon
+    const sql = getDb();
+    if (sql) {
+      const q = `INSERT INTO students (id, roll_no, name, email, phone, department, batch, cgpa, active_backlogs, skills, resume_url, status, offers_count, highest_offer_lpa)
+VALUES (${newStudent.id}, '${newStudent.rollNo}', '${newStudent.name.replace(/'/g, "''")}', '${newStudent.email}', '${newStudent.phone}', '${newStudent.department}', '${newStudent.batch || "2027"}', ${newStudent.cgpa}, ${newStudent.activeBacklogs || 0}, '${JSON.stringify(newStudent.skills || [])}', '${newStudent.resumeUrl || ""}', '${newStudent.status}', ${newStudent.offersCount || 0}, ${newStudent.highestOfferLpa ?? "NULL"})`;
+      logExecutedQuery("INSERT Student", q);
+      sql.query(q).catch((e) => console.error("Neon Student Insert Error:", e));
+    }
+
     return newStudent;
   },
   updateStudent(id: number, updates: Partial<Student>): Student | null {
     const index = store.students.findIndex((s) => s.id === id);
     if (index === -1) return null;
     store.students[index] = { ...store.students[index], ...updates };
+
+    // Sync to Neon
+    const sql = getDb();
+    if (sql) {
+      const s = store.students[index];
+      const q = `UPDATE students SET cgpa = ${s.cgpa}, active_backlogs = ${s.activeBacklogs}, status = '${s.status}', skills = '${JSON.stringify(s.skills || [])}', phone = '${s.phone}' WHERE id = ${id}`;
+      logExecutedQuery("UPDATE Student", q);
+      sql.query(q).catch((e) => console.error("Neon Student Update Error:", e));
+    }
+
     return store.students[index];
   },
 
@@ -114,20 +186,48 @@ export const PlaceHubStore = {
       applicantsCount: 0,
     };
     store.companies.unshift(newCompany);
+
+    // Sync to Neon
+    const sql = getDb();
+    if (sql) {
+      const q = `INSERT INTO companies (id, company_name, logo, industry, tier, role_title, role_type, ctc_lpa, stipend_monthly, location, min_cgpa, max_backlogs, eligible_depts, eligible_batch, required_skills, deadline, drive_date, status, description, applicants_count)
+VALUES (${newCompany.id}, '${newCompany.companyName.replace(/'/g, "''")}', '${newCompany.logo || ""}', '${newCompany.industry}', '${newCompany.tier}', '${newCompany.roleTitle.replace(/'/g, "''")}', '${newCompany.roleType}', ${newCompany.ctcLpa}, ${newCompany.stipendMonthly || 0}, '${newCompany.location}', ${newCompany.minCgpa}, ${newCompany.maxBacklogs}, '${JSON.stringify(newCompany.eligibleDepts || [])}', '${newCompany.eligibleBatch || "2027"}', '${JSON.stringify(newCompany.requiredSkills || [])}', '${newCompany.deadline}', '${newCompany.driveDate}', '${newCompany.status || "Upcoming"}', '${(newCompany.description || "").replace(/'/g, "''")}', 0)`;
+      logExecutedQuery("INSERT Company", q);
+      sql.query(q).catch((e) => console.error("Neon Company Insert Error:", e));
+    }
+
     return newCompany;
   },
   updateCompany(id: number, updates: Partial<CompanyDrive>): CompanyDrive | null {
     const index = store.companies.findIndex((c) => c.id === id);
     if (index === -1) return null;
     store.companies[index] = { ...store.companies[index], ...updates };
+
+    // Sync to Neon
+    const sql = getDb();
+    if (sql) {
+      const c = store.companies[index];
+      const q = `UPDATE companies SET role_title = '${c.roleTitle.replace(/'/g, "''")}', ctc_lpa = ${c.ctcLpa}, deadline = '${c.deadline}', status = '${c.status}' WHERE id = ${id}`;
+      logExecutedQuery("UPDATE Company", q);
+      sql.query(q).catch((e) => console.error("Neon Company Update Error:", e));
+    }
+
     return store.companies[index];
   },
   deleteCompany(id: number): boolean {
     const index = store.companies.findIndex((c) => c.id === id);
     if (index === -1) return false;
     store.companies.splice(index, 1);
-    // Also remove applications for this company
     store.applications = store.applications.filter((a) => a.driveId !== id);
+
+    // Sync to Neon
+    const sql = getDb();
+    if (sql) {
+      const q = `DELETE FROM companies WHERE id = ${id}`;
+      logExecutedQuery("DELETE Company", q);
+      sql.query(q).catch((e) => console.error("Neon Company Delete Error:", e));
+    }
+
     return true;
   },
 
@@ -211,6 +311,15 @@ export const PlaceHubStore = {
       student.status = "In Process";
     }
 
+    // Sync to Neon
+    const sql = getDb();
+    if (sql) {
+      const q = `INSERT INTO applications (id, student_id, student_name, roll_no, department, cgpa, drive_id, company_name, role_title, ctc_lpa, applied_date, stage, remarks, resume_url, history)
+VALUES (${newApp.id}, ${newApp.studentId}, '${newApp.studentName.replace(/'/g, "''")}', '${newApp.rollNo}', '${newApp.department}', ${newApp.cgpa}, ${newApp.driveId}, '${newApp.companyName.replace(/'/g, "''")}', '${newApp.roleTitle.replace(/'/g, "''")}', ${newApp.ctcLpa}, '${newApp.appliedDate}', '${newApp.stage}', '${(newApp.remarks || "").replace(/'/g, "''")}', '${newApp.resumeUrl || ""}', '${JSON.stringify(newApp.history)}')`;
+      logExecutedQuery("INSERT Application", q);
+      sql.query(q).catch((e) => console.error("Neon Application Insert Error:", e));
+    }
+
     return {
       success: true,
       message: `Successfully applied to ${company.companyName}!`,
@@ -247,6 +356,14 @@ export const PlaceHubStore = {
           app.ctcLpa
         );
       }
+    }
+
+    // Sync to Neon
+    const sql = getDb();
+    if (sql) {
+      const q = `UPDATE applications SET stage = '${stage}', remarks = '${(remarks || "").replace(/'/g, "''")}', history = '${JSON.stringify(app.history)}' WHERE id = ${appId}`;
+      logExecutedQuery("UPDATE Application Stage", q);
+      sql.query(q).catch((e) => console.error("Neon App Stage Update Error:", e));
     }
 
     return app;

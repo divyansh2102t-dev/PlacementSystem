@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
-import { PlaceHubStore } from "@/lib/store";
+import { PlaceHubStore, ensureNeonHydrated } from "@/lib/store";
 import { ApplicationStage } from "@/types";
 
 export async function GET(request: Request) {
+  await ensureNeonHydrated();
   const { searchParams } = new URL(request.url);
   const studentId = searchParams.get("studentId");
   const driveId = searchParams.get("driveId");
@@ -27,6 +28,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    await ensureNeonHydrated();
     const { studentId, driveId } = await request.json();
 
     if (!studentId || !driveId) {
@@ -60,6 +62,7 @@ export async function POST(request: Request) {
 
 export async function PATCH(request: Request) {
   try {
+    await ensureNeonHydrated();
     const body = await request.json();
 
     // Check for bulk action

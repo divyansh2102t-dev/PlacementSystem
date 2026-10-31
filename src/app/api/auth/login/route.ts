@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
-import { PlaceHubStore } from "@/lib/store";
+import { PlaceHubStore, ensureNeonHydrated } from "@/lib/store";
 
 export async function POST(request: Request) {
   try {
+    await ensureNeonHydrated();
     const { email } = await request.json();
 
     if (!email) {

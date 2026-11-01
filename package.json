@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:seed": "node --experimental-strip-types scripts/seed-neon.mjs"
+    "db:seed": "node scripts/seed-neon.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.0",

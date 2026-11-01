@@ -58,7 +58,7 @@ async function seedNeon() {
   const sql = neon(databaseUrl);
 
   // Load Seed Data
-  const seedModule = await import("./seedData.clean.ts");
+  const seedModule = await import("./seedData.clean.mjs");
   const { initialUsers, initialStudents, initialCompanies, initialApplications } = seedModule;
 
   console.log("Creating tables in Neon PostgreSQL...");

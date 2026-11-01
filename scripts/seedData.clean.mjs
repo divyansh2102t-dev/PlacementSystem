@@ -3,7 +3,7 @@
 // ============================================================================
 // USERS (Admin + Student Accounts)
 // ============================================================================
-export const initialUsers: User[] = [
+export const initialUsers = [
   {
     id: 1,
     name: "Tanisha Roy",
@@ -58,7 +58,7 @@ export const initialUsers: User[] = [
 // ============================================================================
 // 10 DIVERSE RECRUITMENT COMPANIES & DRIVES
 // ============================================================================
-export const initialCompanies: CompanyDrive[] = [
+export const initialCompanies = [
   {
     id: 1,
     companyName: "Google India",
@@ -284,7 +284,7 @@ export const initialCompanies: CompanyDrive[] = [
 // ============================================================================
 // 50 REALISTIC STUDENTS ACROSS DEPARTMENTS
 // ============================================================================
-export const initialStudents: Student[] = [
+export const initialStudents = [
   {
     id: 1,
     rollNo: "21CS001",
@@ -1051,7 +1051,7 @@ export const initialStudents: Student[] = [
 // ============================================================================
 // INITIAL APPLICATIONS CONNECTING STUDENTS & COMPANIES
 // ============================================================================
-export const initialApplications: Application[] = [
+export const initialApplications = [
   {
     id: 1,
     studentId: 1,
@@ -1430,7 +1430,7 @@ GROUP BY a.application_status;`,
 // ============================================================================
 // OFFERS REVIEW ITEMS (Preserving the interactive Offer Review desk)
 // ============================================================================
-export const initialOffersReview: OfferReview[] = [
+export const initialOffersReview = [
   {
     id: "OFF-GOOG-01",
     driveId: 1,

@@ -10,7 +10,7 @@ if (typeof window === "undefined") {
     const resolver = new dns.promises.Resolver();
     resolver.setServers(["8.8.8.8", "1.1.1.1"]);
     const originalLookup = dns.lookup;
-    dns.lookup = (hostname, options, callback) => {
+    (dns as any).lookup = (hostname: string, options: any, callback: any) => {
       if (typeof options === "function") {
         callback = options;
         options = {};

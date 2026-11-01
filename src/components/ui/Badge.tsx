@@ -24,22 +24,26 @@ export function TierBadge({ tier }: { tier: CompanyTier }) {
 }
 
 export function StageBadge({ stage }: { stage: ApplicationStage }) {
-  const styles: Record<ApplicationStage, string> = {
-    Applied: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
-    "Under Review": "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
-    Shortlisted: "bg-teal-100 text-teal-800 dark:bg-teal-950 dark:text-teal-300",
-    "Online Assessment": "bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300",
-    "Technical Interview": "bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300",
-    "HR Round": "bg-cyan-100 text-cyan-800 dark:bg-cyan-950 dark:text-cyan-300",
-    Accepted: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
-    Rejected: "bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300",
-  };
+  const s = (stage || "").toLowerCase();
+  let colorClass = "bg-slate-100 text-slate-700 border-slate-200";
+
+  if (s.includes("hire") || s.includes("accept") || s.includes("offer")) {
+    colorClass = "bg-emerald-100 text-emerald-800 border-emerald-300";
+  } else if (s.includes("reject")) {
+    colorClass = "bg-rose-100 text-rose-800 border-rose-300";
+  } else if (s.includes("shortlist")) {
+    colorClass = "bg-teal-100 text-teal-800 border-teal-300";
+  } else if (s.includes("assess") || s.includes("test") || s.includes("coding")) {
+    colorClass = "bg-indigo-100 text-indigo-800 border-indigo-300";
+  } else if (s.includes("interview") || s.includes("round") || s.includes("discussion")) {
+    colorClass = "bg-purple-100 text-purple-800 border-purple-300";
+  } else if (s.includes("review") || s.includes("process")) {
+    colorClass = "bg-amber-100 text-amber-800 border-amber-300";
+  }
 
   return (
     <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
-        styles[stage] || styles["Applied"]
-      }`}
+      className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-bold ${colorClass}`}
     >
       {stage}
     </span>

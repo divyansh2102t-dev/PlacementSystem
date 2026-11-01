@@ -3,23 +3,28 @@
 import React, { useEffect, useState } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { ApplicationsTimeline } from "@/components/student/ApplicationsTimeline";
-import { Application } from "@/types";
+import { Application, CompanyDrive } from "@/types";
 import { getClientUser } from "@/lib/auth";
 import { Layers, RefreshCw } from "lucide-react";
 
 export default function StudentApplicationsPage() {
   const [applications, setApplications] = useState<Application[]>([]);
+  const [companies, setCompanies] = useState<CompanyDrive[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const loadApps = async () => {
+  const loadData = async () => {
     try {
       setLoading(true);
       const activeUser = getClientUser();
       const studentId = activeUser.studentId || 1;
 
-      const res = await fetch(`/api/applications?studentId=${studentId}`);
-      const data = await res.json();
-      if (Array.isArray(data)) setApplications(data);
+      const [resApps, resCompanies] = await Promise.all([
+        fetch(`/api/applications?studentId=${studentId}`).then((r) => r.json()),
+        fetch("/api/companies").then((r) => r.json()),
+      ]);
+
+      if (Array.isArray(resApps)) setApplications(resApps);
+      if (Array.isArray(resCompanies)) setCompanies(resCompanies);
     } catch (e) {
       console.error(e);
     } finally {
@@ -28,7 +33,7 @@ export default function StudentApplicationsPage() {
   };
 
   useEffect(() => {
-    loadApps();
+    loadData();
   }, []);
 
   return (
@@ -40,18 +45,18 @@ export default function StudentApplicationsPage() {
         {/* Header toolbar */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <Layers size={16} className="text-emerald-700 dark:text-emerald-400" />
+            <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <Layers size={16} className="text-emerald-700" />
               Application Milestones & Status Timeline
             </h2>
             <p className="text-xs text-slate-500">
-              Live updates sync automatically whenever an administrator or company changes your status
+              Live updates sync automatically whenever an administrator or recruiter updates your round
             </p>
           </div>
 
           <button
-            onClick={loadApps}
-            className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+            onClick={loadData}
+            className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition shadow-2xs"
           >
             <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
             <span>Refresh</span>
@@ -67,7 +72,7 @@ export default function StudentApplicationsPage() {
             </div>
           </div>
         ) : (
-          <ApplicationsTimeline applications={applications} />
+          <ApplicationsTimeline applications={applications} companies={companies} />
         )}
       </div>
     </DashboardLayout>

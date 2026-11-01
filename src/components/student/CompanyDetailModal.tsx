@@ -71,7 +71,7 @@ export function CompanyDetailModal({
         {/* Criteria Specifications */}
         <div className="rounded-xl border border-slate-200 p-3.5 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40">
           <h4 className="font-bold text-slate-900 dark:text-white mb-2">
-            Institutional Eligibility Rules (DBMS Check)
+            Institutional Eligibility Rules
           </h4>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 text-[11px]">
             <div>
@@ -100,6 +100,33 @@ export function CompanyDetailModal({
             </div>
           </div>
         </div>
+
+        {/* Recruitment Process Stages */}
+        {company.stages && company.stages.length > 0 && (
+          <div>
+            <h4 className="font-bold text-slate-900 dark:text-white mb-1.5">
+              Hiring Stages & Selection Workflow
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {company.stages
+                .slice()
+                .sort((a, b) => a.order - b.order)
+                .map((stg) => (
+                  <div
+                    key={stg.id}
+                    className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] shadow-2xs dark:border-slate-700 dark:bg-slate-800"
+                  >
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-100 text-[10px] font-bold text-emerald-700">
+                      {stg.order}
+                    </span>
+                    <span className="font-semibold text-slate-800 dark:text-slate-200">
+                      {stg.name}
+                    </span>
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
 
         {/* Required Technical Skills */}
         {company.requiredSkills && company.requiredSkills.length > 0 && (

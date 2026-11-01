@@ -170,8 +170,8 @@ export default function StudentCompaniesPage() {
                   }}
                   className={`rounded-full px-3 py-1 text-[11px] font-semibold transition ${
                     selectedTier === tier
-                      ? "bg-[#252a27] text-white shadow-xs"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-700/60 dark:text-slate-300"
+                      ? "bg-emerald-600 text-white shadow-xs"
+                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
                 >
                   {tier}
@@ -227,7 +227,7 @@ export default function StudentCompaniesPage() {
                 setSelectedDept("All");
                 setOnlyEligible(false);
               }}
-              className="mt-3 rounded-full bg-[#252a27] px-4 py-1.5 text-xs font-semibold text-white"
+              className="mt-3 rounded-full bg-emerald-600 px-4 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 transition"
             >
               Reset All Filters
             </button>

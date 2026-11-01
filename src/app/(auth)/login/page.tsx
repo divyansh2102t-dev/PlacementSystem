@@ -1,25 +1,25 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { setClientUser } from "@/lib/auth";
 import { initialUsers } from "@/data/seedData";
 import { useToast } from "@/components/ui/Toast";
 import {
-  Building2,
   GraduationCap,
   ShieldCheck,
   ArrowRight,
-  Database,
-  Lock,
+  ArrowLeft,
   Mail,
-  Sparkles,
+  Lock,
 } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
   const { notify } = useToast();
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
@@ -31,7 +31,7 @@ export default function LoginPage() {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
@@ -51,8 +51,9 @@ export default function LoginPage() {
     }
   };
 
-  const handleQuickDemoLogin = (userIndex: number) => {
-    const demoUser = initialUsers[userIndex];
+  const handleQuickDemoLogin = (roleType: "admin" | "student") => {
+    // Admin is index 0 (Tanisha Roy), student is index 1 (Aarav Sharma)
+    const demoUser = roleType === "admin" ? initialUsers[0] : initialUsers[1];
     setClientUser(demoUser);
     notify(`Logged in as ${demoUser.name} (${demoUser.role.toUpperCase()})`);
 
@@ -64,84 +65,98 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#d8eedf] p-4 font-sans text-slate-800 dark:bg-slate-950 dark:text-slate-100">
-      <div className="w-full max-w-md rounded-[22px] border-[3px] border-[#252a27] bg-[#f4f5ec] p-6 shadow-[0_8px_0_rgba(20,40,30,0.06)] dark:border-slate-800 dark:bg-slate-900 sm:p-8">
-        {/* Header */}
+    <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 p-4 font-sans text-slate-800">
+      {/* Return to Homepage Button */}
+      <div className="mb-4 w-full max-w-md">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-emerald-700 transition"
+        >
+          <ArrowLeft size={15} />
+          <span>Back to Home</span>
+        </Link>
+      </div>
+
+      <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+        {/* Header with Clickable Logo */}
         <div className="text-center">
-          <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-[#252a27] text-lg font-black text-emerald-300 shadow">
-            P
-          </div>
-          <h1 className="mt-3 text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-            PlaceHub Portal
+          <Link href="/" className="inline-block group" title="PlaceHub Home">
+            <div className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-emerald-600 text-lg font-black text-white shadow-xs group-hover:bg-emerald-700 transition">
+              P
+            </div>
+          </Link>
+          <h1 className="mt-3 text-xl font-bold tracking-tight text-slate-900">
+            Sign In to PlaceHub
           </h1>
-          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-            Campus Placement Management System · RDBMS MySQL 8.0 3NF
+          <p className="mt-1 text-xs text-slate-500">
+            University Campus Placement Portal
           </p>
         </div>
 
-        {/* Quick 1-Click Demo Login Roles */}
-        <div className="mt-6 rounded-2xl bg-white p-3.5 shadow-2xs dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1 mb-2.5">
-            <Sparkles size={12} className="text-emerald-600" />
-            Quick 1-Click Demo Logins
+        {/* 1-Click Demo Login Options */}
+        <div className="mt-6 rounded-xl border border-slate-200 bg-slate-50/70 p-3.5">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1 mb-2.5">
+            Quick 1-Click Demo Access
           </span>
 
           <div className="space-y-2">
             <button
-              onClick={() => handleQuickDemoLogin(0)}
-              className="flex w-full items-center justify-between rounded-xl bg-slate-50 p-2.5 text-left hover:bg-emerald-50 hover:border-emerald-300 border border-transparent dark:bg-slate-900/60 dark:hover:bg-emerald-950/40 transition group"
+              type="button"
+              onClick={() => handleQuickDemoLogin("admin")}
+              className="flex w-full items-center justify-between rounded-xl bg-white p-2.5 text-left border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/50 transition group shadow-2xs"
             >
               <div className="flex items-center gap-2.5">
-                <div className="grid h-8 w-8 place-items-center rounded-lg bg-purple-100 text-purple-900 dark:bg-purple-950 dark:text-purple-300 font-bold text-xs">
+                <div className="grid h-8 w-8 place-items-center rounded-lg bg-emerald-100 text-emerald-800 font-bold text-xs">
                   <ShieldCheck size={16} />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-800 dark:group-hover:text-emerald-300">
-                    Administrator Login
+                  <p className="text-xs font-bold text-slate-900 group-hover:text-emerald-800">
+                    Demo Administrator
                   </p>
                   <p className="text-[10px] text-slate-400">
                     Tanisha Roy · Placement Cell Head
                   </p>
                 </div>
               </div>
-              <ArrowRight size={14} className="text-slate-400 group-hover:text-emerald-600" />
+              <ArrowRight size={14} className="text-slate-400 group-hover:text-emerald-700" />
             </button>
 
             <button
-              onClick={() => handleQuickDemoLogin(1)}
-              className="flex w-full items-center justify-between rounded-xl bg-slate-50 p-2.5 text-left hover:bg-emerald-50 hover:border-emerald-300 border border-transparent dark:bg-slate-900/60 dark:hover:bg-emerald-950/40 transition group"
+              type="button"
+              onClick={() => handleQuickDemoLogin("student")}
+              className="flex w-full items-center justify-between rounded-xl bg-white p-2.5 text-left border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/50 transition group shadow-2xs"
             >
               <div className="flex items-center gap-2.5">
-                <div className="grid h-8 w-8 place-items-center rounded-lg bg-emerald-100 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-300 font-bold text-xs">
+                <div className="grid h-8 w-8 place-items-center rounded-lg bg-teal-100 text-teal-800 font-bold text-xs">
                   <GraduationCap size={16} />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-800 dark:group-hover:text-emerald-300">
-                    Student Login (Candidate)
+                  <p className="text-xs font-bold text-slate-900 group-hover:text-teal-800">
+                    Demo Student (Candidate)
                   </p>
                   <p className="text-[10px] text-slate-400">
                     Aarav Sharma · 21CS001 (CGPA 9.35)
                   </p>
                 </div>
               </div>
-              <ArrowRight size={14} className="text-slate-400 group-hover:text-emerald-600" />
+              <ArrowRight size={14} className="text-slate-400 group-hover:text-teal-700" />
             </button>
           </div>
         </div>
 
         {/* Divider */}
         <div className="my-5 flex items-center gap-3">
-          <div className="h-[1px] flex-1 bg-slate-200 dark:bg-slate-800" />
+          <div className="h-[1px] flex-1 bg-slate-200" />
           <span className="text-[10px] uppercase font-bold text-slate-400">
             Or sign in with email
           </span>
-          <div className="h-[1px] flex-1 bg-slate-200 dark:bg-slate-800" />
+          <div className="h-[1px] flex-1 bg-slate-200" />
         </div>
 
         {/* Manual Email Login Form */}
-        <form onSubmit={handleLoginSubmit} className="space-y-3 text-xs">
+        <form onSubmit={handleLoginSubmit} className="space-y-3.5 text-xs">
           <div>
-            <label className="font-bold text-slate-700 dark:text-slate-300">
+            <label className="font-semibold text-slate-700">
               College Email
             </label>
             <div className="relative mt-1">
@@ -152,7 +167,23 @@ export default function LoginPage() {
                 placeholder="admin@placehub.edu or student@placehub.edu"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-3 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 focus:border-emerald-500 focus:outline-none"
+                className="w-full rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-3 text-xs text-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition shadow-2xs"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="font-semibold text-slate-700">
+              Password
+            </label>
+            <div className="relative mt-1">
+              <Lock size={14} className="absolute left-3 top-3 text-slate-400" />
+              <input
+                type="password"
+                placeholder="Enter your password (optional for demo)"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-3 text-xs text-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition shadow-2xs"
               />
             </div>
           </div>
@@ -160,16 +191,21 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 rounded-xl bg-emerald-700 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-emerald-800 transition disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-2 rounded-xl bg-emerald-600 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-emerald-700 transition disabled:opacity-50"
           >
             {loading ? "Authenticating..." : "Sign In to Portal"}
           </button>
         </form>
 
-        {/* Security & RDBMS note */}
-        <div className="mt-5 text-center text-[10px] text-slate-400">
-          <p>Role automatically determines landing destination.</p>
-          <p className="mt-0.5">Students ➔ User Panel · Admins ➔ TPO Management Panel</p>
+        {/* Link to Signup */}
+        <div className="mt-5 text-center text-xs text-slate-500">
+          <span>Don't have an account yet? </span>
+          <Link
+            href="/signup"
+            className="font-bold text-emerald-700 hover:text-emerald-800 transition"
+          >
+            Create Student Account
+          </Link>
         </div>
       </div>
     </div>

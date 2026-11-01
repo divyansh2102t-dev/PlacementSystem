@@ -229,3 +229,144 @@ SELECT * FROM companies ORDER BY id ASC;
 -- [2026-10-31T14:30:19.087Z] SELECT Applications
 -- ============================================================================
 SELECT * FROM applications ORDER BY id ASC;
+
+-- ============================================================================
+-- [2026-11-01T16:01:08.100Z] DDL: CREATE TABLE users
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS users (
+    id INT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(120) NOT NULL UNIQUE,
+    role VARCHAR(20) NOT NULL,
+    student_id INT,
+    active BOOLEAN NOT NULL DEFAULT true,
+    avatar VARCHAR(10),
+    created_at DATE NOT NULL DEFAULT CURRENT_DATE
+);
+
+-- ============================================================================
+-- [2026-11-01T16:01:08.880Z] DDL: CREATE TABLE students
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS students (
+    id INT PRIMARY KEY,
+    roll_no VARCHAR(20) NOT NULL UNIQUE,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(120) NOT NULL UNIQUE,
+    phone VARCHAR(25),
+    department VARCHAR(20) NOT NULL,
+    batch VARCHAR(10) NOT NULL DEFAULT '2027',
+    cgpa NUMERIC(4, 2) NOT NULL CHECK (cgpa >= 0.00 AND cgpa <= 10.00),
+    active_backlogs INT NOT NULL DEFAULT 0,
+    skills JSONB NOT NULL DEFAULT '[]'::jsonb,
+    resume_url TEXT,
+    status VARCHAR(30) NOT NULL DEFAULT 'Unplaced',
+    offers_count INT NOT NULL DEFAULT 0,
+    highest_offer_lpa NUMERIC(6, 2)
+);
+
+-- ============================================================================
+-- [2026-11-01T16:01:09.135Z] DDL: CREATE TABLE companies
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS companies (
+    id INT PRIMARY KEY,
+    company_name VARCHAR(120) NOT NULL,
+    logo VARCHAR(20),
+    industry VARCHAR(100) NOT NULL,
+    tier VARCHAR(30) NOT NULL,
+    role_title VARCHAR(120) NOT NULL,
+    role_type VARCHAR(40) NOT NULL DEFAULT 'Full-Time',
+    ctc_lpa NUMERIC(6, 2) NOT NULL CHECK (ctc_lpa > 0),
+    stipend_monthly NUMERIC(10, 2) NOT NULL DEFAULT 0,
+    location VARCHAR(120) NOT NULL,
+    min_cgpa NUMERIC(4, 2) NOT NULL DEFAULT 6.00,
+    max_backlogs INT NOT NULL DEFAULT 0,
+    eligible_depts JSONB NOT NULL DEFAULT '[]'::jsonb,
+    eligible_batch VARCHAR(10) NOT NULL DEFAULT '2027',
+    required_skills JSONB NOT NULL DEFAULT '[]'::jsonb,
+    deadline DATE NOT NULL,
+    drive_date DATE NOT NULL,
+    status VARCHAR(30) NOT NULL DEFAULT 'Upcoming',
+    description TEXT,
+    applicants_count INT NOT NULL DEFAULT 0
+);
+
+-- ============================================================================
+-- [2026-11-01T16:01:09.377Z] DDL: CREATE TABLE applications
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS applications (
+    id INT PRIMARY KEY,
+    student_id INT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    student_name VARCHAR(100),
+    roll_no VARCHAR(20),
+    department VARCHAR(20),
+    cgpa NUMERIC(4, 2),
+    drive_id INT NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
+    company_name VARCHAR(120),
+    role_title VARCHAR(120),
+    ctc_lpa NUMERIC(6, 2),
+    applied_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    stage VARCHAR(40) NOT NULL DEFAULT 'Applied',
+    remarks TEXT,
+    resume_url TEXT,
+    history JSONB NOT NULL DEFAULT '[]'::jsonb,
+    CONSTRAINT uk_student_drive UNIQUE (student_id, drive_id)
+);
+
+-- ============================================================================
+-- [2026-11-01T16:01:09.752Z] VIEW: vw_placed_students_summary
+-- ============================================================================
+CREATE OR REPLACE VIEW vw_placed_students_summary AS
+SELECT 
+    s.id AS student_id,
+    s.roll_no,
+    s.name AS student_name,
+    s.department,
+    s.cgpa,
+    s.status AS placement_status,
+    s.highest_offer_lpa
+FROM students s
+WHERE s.status = 'Placed';
+
+-- ============================================================================
+-- [2026-11-01T16:01:10.317Z] VIEW: vw_branch_wise_placement_stats
+-- ============================================================================
+CREATE OR REPLACE VIEW vw_branch_wise_placement_stats AS
+SELECT 
+    s.department,
+    COUNT(s.id) AS total_students,
+    SUM(CASE WHEN s.status = 'Placed' THEN 1 ELSE 0 END) AS total_placed,
+    ROUND(
+      CASE WHEN COUNT(s.id) > 0 
+           THEN (SUM(CASE WHEN s.status = 'Placed' THEN 1 ELSE 0 END) * 100.0) / COUNT(s.id) 
+           ELSE 0 END,
+      2
+    ) AS placement_percentage,
+    ROUND(AVG(s.highest_offer_lpa), 2) AS average_ctc_lpa,
+    MAX(s.highest_offer_lpa) AS highest_ctc_lpa
+FROM students s
+GROUP BY s.department;
+
+-- ============================================================================
+-- [2026-11-01T16:01:10.570Z] DML: TRUNCATE TABLES
+-- ============================================================================
+TRUNCATE TABLE applications, companies, students, users CASCADE;
+
+-- ============================================================================
+-- [2026-11-01T16:01:11.326Z] DML: INSERT 3 Users
+-- ============================================================================
+-- Inserted 3 users into 'users' table;
+
+-- ============================================================================
+-- [2026-11-01T16:01:16.836Z] DML: INSERT 3 Students
+-- ============================================================================
+-- Inserted 3 students into 'students' table;
+
+-- ============================================================================
+-- [2026-11-01T16:01:23.284Z] DML: INSERT 3 Companies
+-- ============================================================================
+-- Inserted 3 companies into 'companies' table;
+
+-- ============================================================================
+-- [2026-11-01T16:01:24.095Z] DML: INSERT 3 Applications
+-- ============================================================================
+-- Inserted 3 applications into 'applications' table;

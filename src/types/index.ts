@@ -10,15 +10,22 @@ export type PlacementStatus = "Placed" | "In Process" | "Unplaced" | "Higher Stu
 
 export type CompanyTier = "Super Dream" | "Dream" | "Core" | "Mass Recruiter";
 
-export type ApplicationStage =
-  | "Applied"
-  | "Under Review"
-  | "Shortlisted"
-  | "Online Assessment"
-  | "Technical Interview"
-  | "HR Round"
-  | "Accepted"
-  | "Rejected";
+export interface CompanyStage {
+  id: string;
+  name: string;
+  order: number;
+}
+
+export const DEFAULT_COMPANY_STAGES: CompanyStage[] = [
+  { id: "stg-1", name: "Applied", order: 1 },
+  { id: "stg-2", name: "Shortlisting", order: 2 },
+  { id: "stg-3", name: "Online Assessment", order: 3 },
+  { id: "stg-4", name: "Technical Interview", order: 4 },
+  { id: "stg-5", name: "HR Interview", order: 5 },
+  { id: "stg-6", name: "Hired", order: 6 },
+];
+
+export type ApplicationStage = string;
 
 export interface User {
   id: number;
@@ -69,6 +76,7 @@ export interface CompanyDrive {
   status: "Upcoming" | "Active" | "Completed";
   description: string;
   applicantsCount: number;
+  stages?: CompanyStage[];
 }
 
 export interface ApplicationHistoryItem {

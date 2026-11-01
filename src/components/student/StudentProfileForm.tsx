@@ -83,7 +83,7 @@ export function StudentProfileForm({
         <div>
           <p className="font-bold">Dynamic Drive Eligibility Linking</p>
           <p className="mt-0.5 text-[11px] leading-relaxed opacity-90">
-            Updating your Department, CGPA, or Backlogs will instantly re-calculate your eligibility status across all 10 campus company recruitment drives.
+            Updating your Department, CGPA, or Backlogs will instantly re-calculate your eligibility status across all campus company recruitment drives.
           </p>
         </div>
       </div>
@@ -92,14 +92,14 @@ export function StudentProfileForm({
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div>
           <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
-            Roll Number (UK Constraint)
+            Roll Number
           </label>
           <input
             disabled
             value={student.rollNo}
             className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-100 p-2 text-xs font-mono font-bold text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 cursor-not-allowed"
           />
-          <span className="text-[9px] text-slate-400">Institutional Unique Key</span>
+          <span className="text-[9px] text-slate-400">Official Student ID</span>
         </div>
 
         <div>

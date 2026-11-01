@@ -89,6 +89,20 @@ export async function PATCH(request: Request) {
       });
     }
 
+    if (action === "changeRole" || action === "toggleRole") {
+      const user = PlaceHubStore.getUserById(parseInt(id, 10));
+      if (!user) {
+        return NextResponse.json({ error: "User not found" }, { status: 404 });
+      }
+      const newRole = body.role || (user.role === "admin" ? "student" : "admin");
+      const updated = PlaceHubStore.updateUserRole(user.id, newRole);
+      return NextResponse.json({
+        success: true,
+        message: `Granted ${newRole === "admin" ? "Administrator" : "Student"} access to ${user.name}!`,
+        user: updated,
+      });
+    }
+
     if (action === "resetPassword") {
       const user = PlaceHubStore.getUserById(parseInt(id, 10));
       if (!user) {

@@ -64,6 +64,32 @@ export function AdminUserManagement() {
     }
   };
 
+  const handleToggleRole = async (user: User) => {
+    const newRole: UserRole = user.role === "admin" ? "student" : "admin";
+    if (
+      !confirm(
+        `Are you sure you want to grant ${newRole === "admin" ? "Administrator" : "Student"} access to ${user.name}?`
+      )
+    )
+      return;
+    try {
+      const res = await fetch("/api/users", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: user.id, action: "changeRole", role: newRole }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+
+      setUsers((prev) =>
+        prev.map((u) => (u.id === user.id ? { ...u, role: newRole } : u))
+      );
+      notify(data.message);
+    } catch (err: any) {
+      notify(err.message || "Failed to update role", "error");
+    }
+  };
+
   const handleResetPassword = async (user: User) => {
     try {
       const res = await fetch("/api/users", {
@@ -254,6 +280,18 @@ export function AdminUserManagement() {
                 </td>
                 <td className="p-3 text-right">
                   <div className="flex items-center justify-end gap-1.5">
+                    <button
+                      title={user.role === "admin" ? "Demote to Student" : "Grant Administrator Access"}
+                      onClick={() => handleToggleRole(user)}
+                      className={`flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-bold transition border ${
+                        user.role === "admin"
+                          ? "bg-purple-50 text-purple-800 border-purple-200 hover:bg-purple-100"
+                          : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200"
+                      }`}
+                    >
+                      <Shield size={12} />
+                      <span>{user.role === "admin" ? "Admin" : "Make Admin"}</span>
+                    </button>
                     <button
                       title="Reset Password"
                       onClick={() => handleResetPassword(user)}

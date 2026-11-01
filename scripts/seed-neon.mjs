@@ -39,6 +39,12 @@ function logQuery(title, sqlString) {
 
 // 3. Main Seeding Function
 async function seedNeon() {
+  if (!process.env.DATABASE_URL && fs.existsSync(".env")) {
+    const envContent = fs.readFileSync(".env", "utf8");
+    const match = envContent.match(/DATABASE_URL=["']?([^"'\r\n]+)["']?/);
+    if (match) process.env.DATABASE_URL = match[1];
+  }
+
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
     console.error("Error: DATABASE_URL not found in environment.");
@@ -169,8 +175,10 @@ SELECT
     COUNT(s.id) AS total_students,
     SUM(CASE WHEN s.status = 'Placed' THEN 1 ELSE 0 END) AS total_placed,
     ROUND(
-        (SUM(CASE WHEN s.status = 'Placed' THEN 1 ELSE 0 END) * 100.0) / COUNT(s.id),
-        2
+      CASE WHEN COUNT(s.id) > 0 
+           THEN (SUM(CASE WHEN s.status = 'Placed' THEN 1 ELSE 0 END) * 100.0) / COUNT(s.id) 
+           ELSE 0 END,
+      2
     ) AS placement_percentage,
     ROUND(AVG(s.highest_offer_lpa), 2) AS average_ctc_lpa,
     MAX(s.highest_offer_lpa) AS highest_ctc_lpa
@@ -179,7 +187,7 @@ GROUP BY s.department`;
   await sql.query(view2);
   logQuery("VIEW: vw_branch_wise_placement_stats", view2);
 
-  console.log("Truncating existing data (with cascade) for fresh seed...");
+  console.log("Truncating existing data (with cascade) for fresh clean seed...");
   await sql`TRUNCATE TABLE applications, companies, students, users CASCADE;`;
   logQuery("DML: TRUNCATE TABLES", "TRUNCATE TABLE applications, companies, students, users CASCADE");
 

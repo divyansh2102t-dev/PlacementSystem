@@ -8,9 +8,11 @@ import {
   Application,
   ApplicationStage,
   CompanyDrive,
+  CompanyTier,
   PlacementAnalyticsSummary,
   Student,
   User,
+  UserRole,
 } from "@/types";
 import { checkEligibility } from "./eligibility";
 import {
@@ -42,11 +44,9 @@ if (!global.__placehub_store__) {
     companies: [...initialCompanies],
     applications: [...initialApplications],
     websiteVisits: [
-      { page: "/student/companies", views: 420 },
-      { page: "/student/dashboard", views: 380 },
-      { page: "/student/applications", views: 290 },
-      { page: "/admin/companies", views: 180 },
-      { page: "/admin/dashboard", views: 150 },
+      { page: "/student/companies", views: 24 },
+      { page: "/student/dashboard", views: 18 },
+      { page: "/student/applications", views: 12 },
     ],
   };
 }
@@ -117,12 +117,24 @@ VALUES (${newUser.id}, '${newUser.name.replace(/'/g, "''")}', '${newUser.email}'
     const sql = getDb();
     if (sql) {
       const user = store.users[index];
-      const q = `UPDATE users SET name = '${user.name.replace(/'/g, "''")}', active = ${user.active} WHERE id = ${id}`;
+      const q = `UPDATE users SET name = '${user.name.replace(/'/g, "''")}', active = ${user.active}, role = '${user.role}' WHERE id = ${id}`;
       logExecutedQuery("UPDATE User", q);
       sql.query(q).catch((e) => console.error("Neon User Update Error:", e));
     }
 
     return store.users[index];
+  },
+  updateUserRole(id: number, role: UserRole): User | null {
+    const user = store.users.find((u) => u.id === id);
+    if (!user) return null;
+    user.role = role;
+    const sql = getDb();
+    if (sql) {
+      const q = `UPDATE users SET role = '${role}' WHERE id = ${id}`;
+      logExecutedQuery("UPDATE User Role", q);
+      sql.query(q).catch((e) => console.error("Neon User Role Update Error:", e));
+    }
+    return user;
   },
 
   // ================= STUDENTS =================
@@ -207,12 +219,26 @@ VALUES (${newCompany.id}, '${newCompany.companyName.replace(/'/g, "''")}', '${ne
     const sql = getDb();
     if (sql) {
       const c = store.companies[index];
-      const q = `UPDATE companies SET role_title = '${c.roleTitle.replace(/'/g, "''")}', ctc_lpa = ${c.ctcLpa}, deadline = '${c.deadline}', status = '${c.status}' WHERE id = ${id}`;
+      const q = `UPDATE companies SET role_title = '${c.roleTitle.replace(/'/g, "''")}', ctc_lpa = ${c.ctcLpa}, deadline = '${c.deadline}', status = '${c.status}', stages = '${JSON.stringify(c.stages || [])}' WHERE id = ${id}`;
       logExecutedQuery("UPDATE Company", q);
       sql.query(q).catch((e) => console.error("Neon Company Update Error:", e));
     }
 
     return store.companies[index];
+  },
+  updateCompanyStages(id: number, stages: any[]): CompanyDrive | null {
+    const company = store.companies.find((c) => c.id === id);
+    if (!company) return null;
+    company.stages = stages;
+
+    const sql = getDb();
+    if (sql) {
+      const q = `UPDATE companies SET stages = '${JSON.stringify(stages)}' WHERE id = ${id}`;
+      logExecutedQuery("UPDATE Company Stages", q);
+      sql.query(q).catch((e) => console.error("Neon Company Stages Update Error:", e));
+    }
+
+    return company;
   },
   deleteCompany(id: number): boolean {
     const index = store.companies.findIndex((c) => c.id === id);
@@ -345,8 +371,9 @@ VALUES (${newApp.id}, ${newApp.studentId}, '${newApp.studentName.replace(/'/g, "
       note: remarks || `Status changed to ${stage} by placement team.`,
     });
 
-    // If accepted/offered, update student record
-    if (stage === "Accepted") {
+    // If accepted/hired, update student record
+    const isOffer = stage === "Accepted" || stage === "Hired" || stage.toLowerCase().includes("hired") || stage.toLowerCase().includes("offer");
+    if (isOffer) {
       const student = this.getStudentById(app.studentId);
       if (student) {
         student.status = "Placed";
@@ -355,6 +382,13 @@ VALUES (${newApp.id}, ${newApp.studentId}, '${newApp.studentName.replace(/'/g, "
           student.highestOfferLpa || 0,
           app.ctcLpa
         );
+        // Also sync student status update to Neon
+        const sql = getDb();
+        if (sql) {
+          const q = `UPDATE students SET status = 'Placed', offers_count = ${student.offersCount}, highest_offer_lpa = ${student.highestOfferLpa} WHERE id = ${student.id}`;
+          logExecutedQuery("UPDATE Student Placement Status", q);
+          sql.query(q).catch((e) => console.error("Neon Student Placement Sync Error:", e));
+        }
       }
     }
 
@@ -428,28 +462,15 @@ VALUES (${newApp.id}, ${newApp.studentId}, '${newApp.studentName.replace(/'/g, "
     });
 
     // Tier stats
-    const tierStats: { tier: any; count: number; percentage: number }[] = [
-      {
-        tier: "Super Dream",
-        count: store.companies.filter((c) => c.tier === "Super Dream").length,
-        percentage: 40,
-      },
-      {
-        tier: "Dream",
-        count: store.companies.filter((c) => c.tier === "Dream").length,
-        percentage: 20,
-      },
-      {
-        tier: "Core",
-        count: store.companies.filter((c) => c.tier === "Core").length,
-        percentage: 20,
-      },
-      {
-        tier: "Mass Recruiter",
-        count: store.companies.filter((c) => c.tier === "Mass Recruiter").length,
-        percentage: 20,
-      },
-    ];
+    const allTiers: CompanyTier[] = ["Super Dream", "Dream", "Core", "Mass Recruiter"];
+    const tierStats = allTiers.map((tier) => {
+      const count = store.companies.filter((c) => c.tier === tier).length;
+      return {
+        tier,
+        count,
+        percentage: totalCompanies > 0 ? Math.round((count / totalCompanies) * 100) : 0,
+      };
+    });
 
     return {
       totalStudents,
@@ -465,16 +486,14 @@ VALUES (${newApp.id}, ${newApp.studentId}, '${newApp.studentName.replace(/'/g, "
       branchStats,
       tierStats,
       recentApplicationsTrend: [
-        { date: "Oct 16", applications: 4, acceptances: 1 },
-        { date: "Oct 18", applications: 7, acceptances: 3 },
-        { date: "Oct 20", applications: 12, acceptances: 4 },
-        { date: "Oct 22", applications: 9, acceptances: 2 },
-        { date: "Oct 24", applications: 15, acceptances: 5 },
+        { date: "Oct 15", applications: 1, acceptances: 0 },
+        { date: "Oct 16", applications: 1, acceptances: 0 },
+        { date: "Oct 18", applications: 1, acceptances: 1 },
       ],
       websiteStats: {
-        activeUsers: 84,
-        dailyLogins: 142,
-        mostVisitedPages: store.websiteVisits,
+        activeUsers: store.users.length,
+        dailyLogins: store.users.length * 2,
+        mostVisitedPages: store.websiteVisits.slice(0, 3),
       },
     };
   },

@@ -132,6 +132,7 @@ export async function neonGetCompanies(): Promise<CompanyDrive[]> {
     status: r.status,
     description: r.description ?? "",
     applicantsCount: Number(r.applicants_count ?? 0),
+    stages: typeof r.stages === "string" ? JSON.parse(r.stages) : r.stages ?? [],
   }));
 }
 

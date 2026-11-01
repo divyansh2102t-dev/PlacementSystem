@@ -3,7 +3,7 @@
 import React from "react";
 import { Application, Student } from "@/types";
 import { DonutChart } from "@/components/charts/DonutChart";
-import { CheckCircle2, Clock, XCircle, Award, Sparkles, TrendingUp, ShieldCheck } from "lucide-react";
+import { CheckCircle2, Clock, XCircle, Award, TrendingUp, ShieldCheck } from "lucide-react";
 
 interface StudentAnalyticsProps {
   student: Student;
@@ -12,8 +12,12 @@ interface StudentAnalyticsProps {
 
 export function StudentAnalytics({ student, applications }: StudentAnalyticsProps) {
   const totalApplied = applications.length;
-  const accepted = applications.filter((a) => a.stage === "Accepted").length;
-  const rejected = applications.filter((a) => a.stage === "Rejected").length;
+  const accepted = applications.filter(
+    (a) => a.stage === "Accepted" || a.stage.toLowerCase().includes("hired")
+  ).length;
+  const rejected = applications.filter((a) =>
+    a.stage.toLowerCase().includes("reject")
+  ).length;
   const pending = totalApplied - accepted - rejected;
 
   // Profile strength calculation
@@ -182,7 +186,7 @@ export function StudentAnalytics({ student, applications }: StudentAnalyticsProp
 
           <div className="mt-4 rounded-xl bg-emerald-50/70 p-3 text-[11px] text-emerald-950 dark:bg-emerald-950/40 dark:text-emerald-200">
             <span className="font-bold flex items-center gap-1">
-              <Sparkles size={12} className="text-emerald-600" />
+              <Award size={12} className="text-emerald-600" />
               Recommendation:
             </span>
             <p className="mt-0.5 opacity-90">

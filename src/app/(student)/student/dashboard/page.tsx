@@ -4,9 +4,10 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { CompanyVerticalCard } from "@/components/student/CompanyVerticalCard";
+import { ApplicationsTimeline } from "@/components/student/ApplicationsTimeline";
 import { ApplyModal } from "@/components/student/ApplyModal";
 import { CompanyDetailModal } from "@/components/student/CompanyDetailModal";
-import { CompanyDrive, Student, Application } from "@/types";
+import { CompanyDrive, Student, Application, User } from "@/types";
 import { getClientUser } from "@/lib/auth";
 import { useToast } from "@/components/ui/Toast";
 import { checkEligibility } from "@/lib/eligibility";
@@ -14,20 +15,26 @@ import {
   GraduationCap,
   Building2,
   Layers,
-  Calendar,
   CheckCircle2,
-  Clock,
   ArrowRight,
-  Sparkles,
-  ShieldAlert,
+  ShieldCheck,
+  TrendingUp,
+  Award,
+  Filter,
 } from "lucide-react";
 
 export default function StudentDashboardPage() {
   const { notify } = useToast();
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [student, setStudent] = useState<Student | null>(null);
   const [companies, setCompanies] = useState<CompanyDrive[]>([]);
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Active view button state
+  const [activeWindowTab, setActiveWindowTab] = useState<
+    "eligible" | "applications" | "all" | "superdream"
+  >("eligible");
 
   const [selectedCompanyForApply, setSelectedCompanyForApply] = useState<CompanyDrive | null>(null);
   const [selectedCompanyForDetail, setSelectedCompanyForDetail] = useState<CompanyDrive | null>(null);
@@ -35,6 +42,7 @@ export default function StudentDashboardPage() {
   const loadData = async () => {
     try {
       const activeUser = getClientUser();
+      setCurrentUser(activeUser);
       const studentId = activeUser.studentId || 1;
 
       const [resStudent, resCompanies, resApps] = await Promise.all([
@@ -75,16 +83,18 @@ export default function StudentDashboardPage() {
     }
   };
 
-  // Eligibility summary
+  // Filter groups
   const eligibleCompanies = companies.filter((c) => {
     if (!student) return false;
     const res = checkEligibility(student, c);
     return res.eligible;
   });
 
-  const appliedDriveIds = applications.map((a) => a.driveId);
+  const superDreamCompanies = companies.filter(
+    (c) => c.tier === "Super Dream" || c.ctcLpa >= 20.0
+  );
 
-  // Profile completion meter
+  // Profile completion calculation
   let profileCompletion = 50;
   if (student?.skills && student.skills.length >= 3) profileCompletion += 20;
   if (student?.phone) profileCompletion += 15;
@@ -92,29 +102,40 @@ export default function StudentDashboardPage() {
 
   return (
     <DashboardLayout
-      title="Student Dashboard"
-      subtitle="Overview of your placement eligibility, active drives, and application statuses"
+      title="Student Placement Dashboard"
+      subtitle="Interactive placement desk · Review drives, eligibility, and custom stage milestones"
     >
       <div className="space-y-4">
-        {/* Welcome & Profile Completion Banner */}
-        <div className="rounded-2xl bg-gradient-to-br from-emerald-800 to-[#1b4332] p-4 sm:p-5 text-white shadow-md">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        {/* Welcome & Role Verification Banner */}
+        <div className="rounded-2xl bg-gradient-to-br from-emerald-800 to-emerald-950 p-4 sm:p-5 text-white shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-[10px] font-bold text-emerald-200 border border-emerald-400/30">
-                Placement Batch 2023–2027
-              </span>
-              <h2 className="mt-1.5 text-lg font-bold">
-                Welcome, {student?.name || "Student"}!
+              <div className="flex items-center gap-2">
+                <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-[10px] font-bold text-emerald-200 border border-emerald-400/30">
+                  Role: {currentUser?.role === "admin" ? "Administrator" : "Student (Candidate)"}
+                </span>
+                {currentUser?.role === "admin" && (
+                  <Link
+                    href="/admin/dashboard"
+                    className="rounded-full bg-white/20 px-2.5 py-0.5 text-[10px] font-bold text-white hover:bg-white/30 transition"
+                  >
+                    Switch to Admin View →
+                  </Link>
+                )}
+              </div>
+              <h2 className="mt-2 text-xl font-bold">
+                Welcome back, {student?.name || currentUser?.name || "Student"}!
               </h2>
-              <p className="text-xs text-emerald-100/80 leading-relaxed">
-                Department: <strong>{student?.department}</strong> · Verified CGPA:{" "}
-                <strong>{student?.cgpa}</strong> · Active Backlogs:{" "}
-                <strong>{student?.activeBacklogs}</strong>
+              <p className="mt-1 text-xs text-emerald-100/90 leading-relaxed">
+                Department: <strong>{student?.department || "CSE"}</strong> · Roll No:{" "}
+                <strong>{student?.rollNo || "21CS001"}</strong> · Verified CGPA:{" "}
+                <strong>{student?.cgpa || "9.35"}</strong> · Active Backlogs:{" "}
+                <strong>{student?.activeBacklogs || 0}</strong>
               </p>
             </div>
 
             {/* Profile Completion Dial */}
-            <div className="rounded-xl bg-white/10 p-3 backdrop-blur-xs min-w-[200px]">
+            <div className="rounded-xl bg-white/10 p-3.5 backdrop-blur-xs min-w-[210px] border border-white/10">
               <div className="flex items-center justify-between text-xs mb-1.5 font-bold">
                 <span>Profile Completion</span>
                 <span className="text-emerald-300">{profileCompletion}%</span>
@@ -135,104 +156,248 @@ export default function StudentDashboardPage() {
           </div>
         </div>
 
-        {/* 4 Metric Summary Cards */}
-        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-          <div className="rounded-2xl border border-slate-200/80 bg-white p-3.5 shadow-xs dark:border-slate-800 dark:bg-slate-800/90">
+        {/* 4 KPI Summary Cards */}
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-xs">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-[10px] font-bold uppercase tracking-wider">Eligible Drives</span>
-              <span className="text-emerald-700 dark:text-emerald-400">
+              <span className="text-emerald-700">
                 <CheckCircle2 size={16} />
               </span>
             </div>
-            <p className="mt-1 text-2xl font-black text-emerald-700 dark:text-emerald-400">
+            <p className="mt-1 text-2xl font-black text-emerald-700">
               {eligibleCompanies.length}
             </p>
-            <p className="text-[10px] text-slate-400">Of {companies.length} total drives</p>
+            <p className="text-[10px] text-slate-400">Of {companies.length} active drives</p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200/80 bg-white p-3.5 shadow-xs dark:border-slate-800 dark:bg-slate-800/90">
+          <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-xs">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-[10px] font-bold uppercase tracking-wider">Submitted Applications</span>
-              <span className="text-emerald-700 dark:text-emerald-400">
+              <span className="text-[10px] font-bold uppercase tracking-wider">My Applications</span>
+              <span className="text-slate-600">
                 <Layers size={16} />
               </span>
             </div>
-            <p className="mt-1 text-2xl font-black text-slate-900 dark:text-white">
+            <p className="mt-1 text-2xl font-black text-slate-900">
               {applications.length}
             </p>
-            <p className="text-[10px] text-slate-400">Active submissions</p>
+            <p className="text-[10px] text-slate-400">Submitted drives</p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200/80 bg-white p-3.5 shadow-xs dark:border-slate-800 dark:bg-slate-800/90">
+          <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-xs">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-[10px] font-bold uppercase tracking-wider">Accepted Offers</span>
               <span className="text-emerald-600">
-                <Sparkles size={16} />
+                <Award size={16} />
               </span>
             </div>
-            <p className="mt-1 text-2xl font-black text-emerald-700 dark:text-emerald-400">
-              {applications.filter((a) => a.stage === "Accepted").length}
+            <p className="mt-1 text-2xl font-black text-emerald-700">
+              {applications.filter((a) => a.stage === "Accepted" || a.stage.toLowerCase().includes("hired")).length}
             </p>
             <p className="text-[10px] text-slate-400">Verified placement offers</p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200/80 bg-white p-3.5 shadow-xs dark:border-slate-800 dark:bg-slate-800/90">
+          <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-xs">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-[10px] font-bold uppercase tracking-wider">Placement Status</span>
-              <span className="text-emerald-700 dark:text-emerald-400">
+              <span className="text-emerald-700">
                 <GraduationCap size={16} />
               </span>
             </div>
-            <p className="mt-1 text-lg font-black text-slate-900 dark:text-white truncate">
-              {student?.status || "Unplaced"}
+            <p className="mt-1 text-lg font-black text-slate-900 truncate">
+              {student?.status || "In Process"}
             </p>
-            <p className="text-[10px] text-emerald-700 dark:text-emerald-400 font-semibold truncate">
+            <p className="text-[10px] text-emerald-700 font-semibold truncate">
               {student?.highestOfferLpa ? `₹${student.highestOfferLpa} LPA Offer` : "Actively Eligible"}
             </p>
           </div>
         </div>
 
-        {/* Vertical Stack Company Drives for Student */}
-        <div className="space-y-3 pt-2">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <Building2 size={16} className="text-emerald-700 dark:text-emerald-400" />
-                Featured Campus Recruitment Drives (Vertical Stack)
-              </h3>
-              <p className="text-xs text-slate-500">
-                Showing all campus hiring opportunities with live eligibility check for your profile
-              </p>
+        {/* =========================================================================
+            INTERACTIVE DISPLAY WINDOW WITH BUTTONS
+        ========================================================================== */}
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-xs">
+          {/* Header & Interactive Control Buttons */}
+          <div className="flex flex-col gap-3 pb-4 border-b border-slate-100">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                  <Building2 size={16} className="text-emerald-700" />
+                  Placement Window & Applications Desk
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Select a category button below to display corresponding recruitment drives and stage progress in this window.
+                </p>
+              </div>
+
+              <span className="text-[11px] font-bold text-slate-400 flex items-center gap-1 self-start sm:self-auto">
+                <Filter size={12} />
+                <span>Active Filter: {activeWindowTab.toUpperCase()}</span>
+              </span>
             </div>
-            <Link
-              href="/student/companies"
-              className="flex items-center gap-1 text-xs font-bold text-emerald-700 hover:text-emerald-800 dark:text-emerald-400"
-            >
-              <span>View All ({companies.length})</span>
-              <ArrowRight size={13} />
-            </Link>
+
+            {/* BUTTONS BAR IN THE WINDOW */}
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => setActiveWindowTab("eligible")}
+                className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition border ${
+                  activeWindowTab === "eligible"
+                    ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
+                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                }`}
+              >
+                <CheckCircle2 size={14} />
+                <span>Eligible for Me ({eligibleCompanies.length})</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveWindowTab("applications")}
+                className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition border ${
+                  activeWindowTab === "applications"
+                    ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
+                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                }`}
+              >
+                <Layers size={14} />
+                <span>My Applications & Stages ({applications.length})</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveWindowTab("all")}
+                className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition border ${
+                  activeWindowTab === "all"
+                    ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
+                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                }`}
+              >
+                <Building2 size={14} />
+                <span>All Available Drives ({companies.length})</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveWindowTab("superdream")}
+                className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition border ${
+                  activeWindowTab === "superdream"
+                    ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
+                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                }`}
+              >
+                <Award size={14} />
+                <span>Super Dream (₹20+ LPA) ({superDreamCompanies.length})</span>
+              </button>
+            </div>
           </div>
 
-          <div className="space-y-3">
-            {companies.slice(0, 4).map((company) => {
-              const existingApp = applications.find((a) => a.driveId === company.id);
+          {/* DISPLAY WINDOW VIEW CONTENT */}
+          <div className="pt-4">
+            {/* View 1: Eligible Companies */}
+            {activeWindowTab === "eligible" && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
+                  <span>Displaying verified companies matching your academic criteria:</span>
+                  <Link
+                    href="/student/companies"
+                    className="font-bold text-emerald-700 hover:underline flex items-center gap-1"
+                  >
+                    <span>Browse with full filters</span>
+                    <ArrowRight size={12} />
+                  </Link>
+                </div>
 
-              return (
-                <CompanyVerticalCard
-                  key={company.id}
-                  company={company}
-                  student={student}
-                  existingApplication={existingApp}
-                  onApply={(c) => setSelectedCompanyForApply(c)}
-                  onViewDetails={(c) => setSelectedCompanyForDetail(c)}
-                />
-              );
-            })}
+                {eligibleCompanies.map((company) => {
+                  const existingApp = applications.find((a) => a.driveId === company.id);
+                  return (
+                    <CompanyVerticalCard
+                      key={company.id}
+                      company={company}
+                      student={student}
+                      existingApplication={existingApp}
+                      onApply={(c) => setSelectedCompanyForApply(c)}
+                      onViewDetails={(c) => setSelectedCompanyForDetail(c)}
+                    />
+                  );
+                })}
+
+                {eligibleCompanies.length === 0 && (
+                  <div className="p-8 text-center text-slate-400 bg-slate-50 rounded-xl border border-slate-200">
+                    No eligible drives at this moment. Check requirements in the "All Available Drives" tab.
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* View 2: My Applications & Custom Stage Progress */}
+            {activeWindowTab === "applications" && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
+                  <span>Live round-by-round hiring progress for your submitted applications:</span>
+                  <Link
+                    href="/student/applications"
+                    className="font-bold text-emerald-700 hover:underline flex items-center gap-1"
+                  >
+                    <span>Full application history</span>
+                    <ArrowRight size={12} />
+                  </Link>
+                </div>
+
+                <ApplicationsTimeline applications={applications} companies={companies} />
+              </div>
+            )}
+
+            {/* View 3: All Available Companies */}
+            {activeWindowTab === "all" && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
+                  <span>All recruitment drives published for the current academic season:</span>
+                </div>
+
+                {companies.map((company) => {
+                  const existingApp = applications.find((a) => a.driveId === company.id);
+                  return (
+                    <CompanyVerticalCard
+                      key={company.id}
+                      company={company}
+                      student={student}
+                      existingApplication={existingApp}
+                      onApply={(c) => setSelectedCompanyForApply(c)}
+                      onViewDetails={(c) => setSelectedCompanyForDetail(c)}
+                    />
+                  );
+                })}
+              </div>
+            )}
+
+            {/* View 4: Super Dream Tier */}
+            {activeWindowTab === "superdream" && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
+                  <span>High-package recruitment opportunities (CTC ≥ ₹20.0 LPA):</span>
+                </div>
+
+                {superDreamCompanies.map((company) => {
+                  const existingApp = applications.find((a) => a.driveId === company.id);
+                  return (
+                    <CompanyVerticalCard
+                      key={company.id}
+                      company={company}
+                      student={student}
+                      existingApplication={existingApp}
+                      onApply={(c) => setSelectedCompanyForApply(c)}
+                      onViewDetails={(c) => setSelectedCompanyForDetail(c)}
+                    />
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* MODAL: Confirm Apply */}
+      {/* MODAL: Apply Confirmation */}
       <ApplyModal
         isOpen={!!selectedCompanyForApply}
         onClose={() => setSelectedCompanyForApply(null)}

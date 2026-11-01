@@ -298,7 +298,7 @@ export function AdminCompanyModal({
                     onClick={() => handleDeptToggle(d)}
                     className={`rounded-lg px-2.5 py-1 text-[11px] font-bold transition ${
                       isSelected
-                        ? "bg-[#252a27] text-white"
+                        ? "bg-emerald-600 text-white shadow-xs"
                         : "bg-white text-slate-600 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
                     }`}
                   >

@@ -269,8 +269,8 @@ export default function AdminCompaniesPage() {
                   }}
                   className={`rounded-full px-3 py-1 text-[11px] font-semibold transition ${
                     selectedTier === tier
-                      ? "bg-[#252a27] text-white shadow-xs"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-700/60 dark:text-slate-300"
+                      ? "bg-emerald-600 text-white shadow-xs"
+                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
                 >
                   {tier}

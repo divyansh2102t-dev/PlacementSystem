@@ -178,48 +178,48 @@ export function AdminAnalyticsView() {
           <BarChart items={branchBarItems} />
         </div>
 
-        {/* Website Web Traffic & Activity Analytics (Requirement 5) */}
-        <div className="lg:col-span-5 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-800 space-y-4">
+        {/* Portal Activity Overview */}
+        <div className="lg:col-span-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
               <Globe size={14} className="text-emerald-600" />
-              Website & Portal Telemetry
+              Portal Activity Overview
             </h3>
-            <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-700 dark:text-emerald-400">
+            <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-700">
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              Live Online
+              Live Active
             </span>
           </div>
 
           <div className="grid grid-cols-2 gap-2 text-xs">
-            <div className="rounded-xl bg-slate-50 p-3 dark:bg-slate-900/60">
-              <span className="text-[10px] text-slate-400">Active Concurrent Users</span>
-              <p className="text-lg font-black text-slate-900 dark:text-white">
+            <div className="rounded-xl bg-slate-50 p-3">
+              <span className="text-[10px] text-slate-400">Active Students Online</span>
+              <p className="text-lg font-black text-slate-900">
                 {data.websiteStats.activeUsers}
               </p>
             </div>
-            <div className="rounded-xl bg-slate-50 p-3 dark:bg-slate-900/60">
-              <span className="text-[10px] text-slate-400">Daily Student Logins</span>
-              <p className="text-lg font-black text-slate-900 dark:text-white">
+            <div className="rounded-xl bg-slate-50 p-3">
+              <span className="text-[10px] text-slate-400">Daily Portal Visits</span>
+              <p className="text-lg font-black text-slate-900">
                 {data.websiteStats.dailyLogins}
               </p>
             </div>
           </div>
 
           <div>
-            <h4 className="text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-2">
-              Most Visited Portal Routes
+            <h4 className="text-[11px] font-bold text-slate-700 mb-2">
+              Most Accessed Portal Pages
             </h4>
             <div className="space-y-1.5 text-xs">
               {data.websiteStats.mostVisitedPages.map((p) => (
                 <div
                   key={p.page}
-                  className="flex items-center justify-between rounded-lg bg-slate-50 px-2.5 py-1.5 dark:bg-slate-900/40"
+                  className="flex items-center justify-between rounded-lg bg-slate-50 px-2.5 py-1.5"
                 >
-                  <span className="font-mono text-[11px] text-slate-700 dark:text-slate-300">
+                  <span className="text-[11px] text-slate-700 font-medium">
                     {p.page}
                   </span>
-                  <span className="font-bold text-emerald-700 dark:text-emerald-400 text-[11px]">
+                  <span className="font-bold text-emerald-700 text-[11px]">
                     {p.views} views
                   </span>
                 </div>

@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full">
-      <body className={`${dmSans.variable} ${manrope.variable} min-h-screen bg-[#edf5f0] text-slate-800 antialiased font-sans`}>
+      <body className={`${dmSans.variable} ${manrope.variable} min-h-screen bg-slate-50 text-slate-800 antialiased font-sans`}>
         {children}
       </body>
     </html>

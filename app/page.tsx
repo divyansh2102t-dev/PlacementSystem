@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Activity,
   ArrowLeft,
   ArrowRight,
   Award,
-  Bell,
   Bookmark,
   BriefcaseBusiness,
   Building2,
@@ -23,6 +22,7 @@ import {
   Eye,
   FileCheck,
   FileCode2,
+  FileSpreadsheet,
   FileText,
   Filter,
   GraduationCap,
@@ -30,23 +30,37 @@ import {
   LayoutDashboard,
   Menu,
   MessageSquareText,
+  Moon,
   Plus,
   RefreshCw,
   Search,
   Settings,
   ShieldAlert,
+  ShieldCheck,
   SlidersHorizontal,
   Sparkles,
+  Sun,
   TrendingUp,
   UserCheck,
   Users,
   X,
   Zap,
 } from "lucide-react";
+import AdminPanelView from "./components/AdminPanel";
 
 // ============================================================================
 // DATA MODELS & TYPES (Matching DBMS Relational Schema)
 // ============================================================================
+
+export type NavView =
+  | "Dashboard"
+  | "Offers"
+  | "Companies"
+  | "Students"
+  | "Applications"
+  | "Reports"
+  | "Admin Panel"
+  | "DBMS Explorer";
 
 export type StudentDepartment = "CSE" | "IT" | "ECE" | "EEE" | "MECH" | "CIVIL";
 export type PlacementStatus = "Placed" | "In Process" | "Unplaced" | "Higher Studies";
@@ -707,13 +721,11 @@ const sampleQueries = [
 // ============================================================================
 
 export default function PlacementSystemApp() {
-  // Navigation & Theme
+  // Navigation
   const [activeNav, setActiveNav] = useState<
     "Dashboard" | "Offers" | "Companies" | "Students" | "Applications" | "Reports" | "DBMS Explorer"
   >("Dashboard");
-  const [dark, setDark] = useState<boolean>(false);
   const [mobileNav, setMobileNav] = useState<boolean>(false);
-  const [toast, setToast] = useState<string>("");
 
   // Search & Global state
   const [search, setSearch] = useState<string>("");
@@ -741,11 +753,8 @@ export default function PlacementSystemApp() {
   const [queryExecutionMessage, setQueryExecutionMessage] = useState<string>("");
   const [selectedSchemaTable, setSelectedSchemaTable] = useState<string>("Students");
 
-  // Notifications
-  const notify = (msg: string) => {
-    setToast(msg);
-    window.setTimeout(() => setToast(""), 2800);
-  };
+  // Notifications (disabled)
+  const notify = (_msg?: string) => {};
 
   // Filtered offers for the Offers Review carousel
   const filteredOffers = useMemo(() => {
@@ -904,20 +913,16 @@ export default function PlacementSystemApp() {
   ] as const;
 
   return (
-    <main
-      className={`min-h-screen px-3 py-3 transition-colors sm:px-6 sm:py-5 lg:px-8 font-sans ${
-        dark ? "bg-slate-950 text-slate-100" : "bg-[#d8eedf] text-[#242926]"
-      }`}
-    >
-      <div className="mx-auto flex min-h-[calc(100vh-1.5rem)] max-w-[1550px] flex-col">
+    <main className="min-h-screen bg-slate-50 text-slate-800 font-sans p-3 sm:p-5 lg:p-6">
+      <div className="mx-auto flex min-h-[calc(100vh-2.5rem)] max-w-[1550px] flex-col">
         {/* Top Header Bar */}
-        <header className="flex items-center justify-between pb-2 text-[10px] font-semibold tracking-wider uppercase text-emerald-950/70">
+        <header className="flex items-center justify-between pb-3 text-[10px] font-semibold tracking-wider uppercase text-slate-500">
           <div className="flex items-center gap-2">
             <span className="flex h-2 w-2 rounded-full bg-emerald-600 animate-pulse" />
             <span>CAMPUS PLACEMENT MANAGEMENT SYSTEM · DBMS PROJECT</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="rounded bg-emerald-700/10 px-2 py-0.5 text-[9px] font-mono text-emerald-900">
+            <span className="rounded bg-emerald-100/70 px-2 py-0.5 text-[9px] font-mono font-semibold text-emerald-800">
               RDBMS: MySQL 8.0
             </span>
             <span>ACADEMIC BATCH 2023–2027</span>
@@ -925,27 +930,19 @@ export default function PlacementSystemApp() {
         </header>
 
         {/* Main Application Container */}
-        <div
-          className={`flex flex-1 gap-2.5 rounded-[22px] border-[3px] p-2.5 shadow-[0_8px_0_rgba(20,40,30,0.06)] transition-colors ${
-            dark ? "border-slate-800 bg-slate-900" : "border-[#252a27] bg-[#f4f5ec]"
-          }`}
-        >
+        <div className="flex flex-1 gap-3 rounded-2xl bg-white p-3 shadow-xs">
           {/* Sidebar Navigation */}
-          <aside
-            className={`hidden w-12 shrink-0 flex-col items-center gap-3 rounded-2xl py-3 sm:flex transition-colors ${
-              dark ? "bg-slate-800/80 text-slate-300" : "bg-[#fbfcf5] text-slate-700"
-            }`}
-          >
+          <aside className="hidden w-12 shrink-0 flex-col items-center gap-3 rounded-xl bg-slate-50/80 py-3 sm:flex">
             {/* Logo */}
             <div
               onClick={() => setActiveNav("Dashboard")}
-              className="grid h-8 w-8 cursor-pointer place-items-center rounded-xl bg-[#252a27] text-sm font-black text-emerald-300 shadow"
+              className="grid h-8 w-8 cursor-pointer place-items-center rounded-xl bg-emerald-600 text-sm font-black text-white shadow-sm hover:bg-emerald-700 transition"
               title="PlaceHub Home"
             >
               P
             </div>
 
-            <div className="my-1 h-[1px] w-6 bg-slate-200 dark:bg-slate-700" />
+            <div className="my-1 h-[1px] w-6 bg-slate-200" />
 
             {/* Nav icons */}
             {navItems.map(({ label, icon: Icon }) => (
@@ -953,13 +950,12 @@ export default function PlacementSystemApp() {
                 key={label}
                 onClick={() => {
                   setActiveNav(label);
-                  notify(`Opened ${label} view`);
                 }}
                 title={label}
                 className={`group relative grid h-8 w-8 place-items-center rounded-xl transition ${
                   activeNav === label
-                    ? "bg-[#252a27] text-emerald-300 shadow-sm"
-                    : "text-slate-500 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 hover:text-slate-900 dark:hover:text-white"
+                    ? "bg-slate-900 text-white shadow-sm"
+                    : "text-slate-500 hover:bg-slate-200/60 hover:text-slate-900"
                 }`}
               >
                 <Icon size={16} />
@@ -971,43 +967,34 @@ export default function PlacementSystemApp() {
 
             <div className="flex-1" />
 
-            {/* Help & Settings */}
+            {/* Help */}
             <button
               title="DBMS Project Docs & Help"
-              onClick={() =>
-                notify("DBMS Placement System: Schema, Triggers, Views & DDL/DML are active.")
-              }
+              onClick={() => {}}
               className="grid h-8 w-8 place-items-center rounded-xl text-slate-400 hover:bg-slate-200/50 hover:text-slate-800"
             >
               <CircleHelp size={16} />
-            </button>
-            <button
-              title={dark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-              onClick={() => setDark((prev) => !prev)}
-              className="grid h-8 w-8 place-items-center rounded-xl text-slate-400 hover:bg-slate-200/50 hover:text-slate-800"
-            >
-              <Settings size={16} />
             </button>
           </aside>
 
           {/* Main Content Area */}
           <section className="flex min-w-0 flex-1 flex-col px-1 pb-1 sm:px-2">
             {/* Top Toolbar */}
-            <header className="flex min-h-11 items-center justify-between gap-3 border-b border-slate-200/60 pb-2.5 dark:border-slate-800">
+            <header className="flex min-h-11 items-center justify-between gap-3 border-b border-slate-100 pb-2.5">
               <div className="flex items-center gap-2">
                 <button
-                  className="rounded-lg bg-slate-200/70 p-2 sm:hidden dark:bg-slate-800"
+                  className="rounded-lg bg-slate-100 p-2 sm:hidden"
                   onClick={() => setMobileNav((prev) => !prev)}
                   aria-label="Toggle navigation"
                 >
                   <Menu size={16} />
                 </button>
                 <div className="flex items-center gap-2">
-                  <span className="grid h-6 w-6 place-items-center rounded-lg bg-[#e2e8da] dark:bg-slate-800 text-xs font-bold text-emerald-800 dark:text-emerald-400">
+                  <span className="grid h-6 w-6 place-items-center rounded-lg bg-emerald-50 text-xs font-bold text-emerald-700">
                     ❖
                   </span>
                   <div>
-                    <h1 className="text-sm font-bold tracking-tight text-slate-900 dark:text-white sm:text-base">
+                    <h1 className="text-sm font-bold tracking-tight text-slate-900 sm:text-base">
                       {activeNav}
                     </h1>
                   </div>
@@ -1019,32 +1006,21 @@ export default function PlacementSystemApp() {
                 <button
                   aria-label="Search"
                   onClick={() => setSearchOpen((prev) => !prev)}
-                  className="flex items-center gap-1.5 rounded-full border border-slate-300/80 bg-[#fffef9] px-3 py-1.5 text-xs text-slate-600 shadow-sm hover:bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
+                  className="flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-600 shadow-xs hover:bg-slate-50"
                 >
                   <Search size={13} />
                   <span className="hidden md:inline">Search...</span>
-                  <kbd className="hidden rounded bg-slate-100 px-1 text-[9px] font-mono text-slate-400 dark:bg-slate-700 md:inline">
+                  <kbd className="hidden rounded bg-slate-100 px-1 text-[9px] font-mono text-slate-400 md:inline">
                     /
                   </kbd>
                 </button>
 
-                <button
-                  aria-label="Notifications"
-                  onClick={() =>
-                    notify("4 New placement drive notifications received today!")
-                  }
-                  className="relative grid h-8 w-8 place-items-center rounded-full border border-slate-300/80 bg-[#fffef9] text-slate-600 shadow-sm hover:bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
-                >
-                  <Bell size={14} />
-                  <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald-500" />
-                </button>
-
-                <div className="flex items-center gap-2 rounded-full border border-slate-300/80 bg-[#fffef9] py-1 pl-1.5 pr-3 shadow-sm dark:border-slate-700 dark:bg-slate-800">
-                  <div className="grid h-6 w-6 place-items-center rounded-full bg-emerald-200 text-xs font-black text-emerald-900 dark:bg-emerald-800 dark:text-emerald-100">
+                <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white py-1 pl-1.5 pr-3 shadow-xs">
+                  <div className="grid h-6 w-6 place-items-center rounded-full bg-emerald-600 text-xs font-black text-white">
                     T
                   </div>
                   <div className="hidden sm:block text-left text-[11px] leading-tight">
-                    <p className="font-semibold text-slate-800 dark:text-slate-200">
+                    <p className="font-semibold text-slate-800">
                       Tanisha Roy
                     </p>
                     <p className="text-[9px] text-slate-400">Placement Cell Head</p>
@@ -1055,7 +1031,7 @@ export default function PlacementSystemApp() {
 
             {/* Mobile Nav Drawer */}
             {mobileNav && (
-              <div className="my-2 flex flex-wrap gap-1.5 rounded-xl bg-white p-2.5 shadow-md dark:bg-slate-800 sm:hidden">
+              <div className="my-2 flex flex-wrap gap-1.5 rounded-xl bg-white p-2.5 shadow-md border border-slate-100 sm:hidden">
                 {navItems.map(({ label, icon: Icon }) => (
                   <button
                     key={label}
@@ -1065,8 +1041,8 @@ export default function PlacementSystemApp() {
                     }}
                     className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium ${
                       activeNav === label
-                        ? "bg-[#252a27] text-white"
-                        : "bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200"
+                        ? "bg-slate-900 text-white"
+                        : "bg-slate-100 text-slate-700 hover:bg-slate-200/70"
                     }`}
                   >
                     <Icon size={14} /> {label}
@@ -1195,13 +1171,13 @@ export default function PlacementSystemApp() {
         </div>
 
         {/* Bottom Status Footer */}
-        <footer className="flex flex-wrap items-center justify-between px-2 pt-2 text-[10px] text-emerald-950/70 dark:text-emerald-400/60 font-medium">
+        <footer className="flex flex-wrap items-center justify-between px-2 pt-3 text-[10px] text-slate-500 font-medium">
           <div className="flex items-center gap-2">
             <span>PLACEHUB SYSTEM</span>
             <span>·</span>
             <span>STATUS: DATABASE ONLINE</span>
             <span>·</span>
-            <span className="font-mono">schema.sql verified</span>
+            <span className="font-mono text-emerald-700 font-semibold">schema.sql verified</span>
           </div>
           <div className="flex items-center gap-3">
             <span>COLLEGE CAMPUS RECRUITMENT 2026–2027</span>
@@ -1219,7 +1195,7 @@ export default function PlacementSystemApp() {
           <div
             role="dialog"
             aria-modal="true"
-            className="w-full max-w-xl rounded-2xl bg-[#fffef9] p-6 text-slate-800 shadow-2xl dark:bg-slate-900 dark:text-slate-100"
+            className="w-full max-w-xl rounded-2xl bg-white p-6 text-slate-800 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start justify-between">
@@ -1691,16 +1667,6 @@ export default function PlacementSystemApp() {
         </div>
       )}
 
-      {/* Notification Toast */}
-      {toast && (
-        <div
-          role="status"
-          className="fixed bottom-6 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-[#252a27] px-5 py-2.5 text-xs font-medium text-white shadow-2xl flex items-center gap-2 border border-emerald-500/30"
-        >
-          <Sparkles size={14} className="text-emerald-400" />
-          <span>{toast}</span>
-        </div>
-      )}
     </main>
   );
 }
@@ -1994,8 +1960,8 @@ function OffersReviewView({
               onClick={() => setFilter(tab)}
               className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition ${
                 filter === tab
-                  ? "bg-[#252a27] text-white shadow-xs"
-                  : "bg-white text-slate-600 hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-300"
+                  ? "bg-slate-900 text-white shadow-xs"
+                  : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200/80"
               }`}
             >
               <span>{tab}</span>
@@ -2034,7 +2000,7 @@ function OffersReviewView({
           <p className="mt-1 text-xs text-slate-400">Try changing your filter or clearing search.</p>
           <button
             onClick={() => setFilter("All offers")}
-            className="mt-3 rounded-full bg-[#252a27] px-4 py-1.5 text-xs font-semibold text-white"
+            className="mt-3 rounded-full bg-slate-900 hover:bg-slate-800 transition px-4 py-1.5 text-xs font-semibold text-white"
           >
             Reset Filters
           </button>
@@ -2246,8 +2212,8 @@ function CompaniesView({
               onClick={() => setSelectedTier(tier)}
               className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
                 selectedTier === tier
-                  ? "bg-[#252a27] text-white"
-                  : "bg-white text-slate-600 hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-300"
+                  ? "bg-slate-900 text-white"
+                  : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200/80"
               }`}
             >
               {tier}
@@ -2849,8 +2815,8 @@ function DbmsExplorerView({
                   onClick={() => setSelectedTable(t.name)}
                   className={`flex flex-col rounded-xl p-2.5 text-left text-xs transition ${
                     selectedTable === t.name
-                      ? "bg-[#252a27] text-white shadow-xs"
-                      : "bg-slate-50 text-slate-700 hover:bg-slate-100 dark:bg-slate-900/60 dark:text-slate-200"
+                      ? "bg-slate-900 text-white shadow-xs"
+                      : "bg-slate-50 text-slate-700 hover:bg-slate-100"
                   }`}
                 >
                   <span className="font-mono font-bold">{t.name}</span>

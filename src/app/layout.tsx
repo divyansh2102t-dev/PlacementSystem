@@ -1,24 +1,26 @@
 import type { Metadata } from "next";
-import { DM_Sans, Manrope } from "next/font/google";
+import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/components/ui/Toast";
+import { SvgBackground } from "@/components/ui/SvgBackground";
 
-const dmSans = DM_Sans({
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-dm-sans",
+  variable: "--font-jakarta",
   display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-const manrope = Manrope({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-manrope",
+  variable: "--font-inter",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "PlaceHub | Campus Placement Management System (DBMS)",
+  title: "PlaceHub | University Campus Placement Portal",
   description:
-    "University campus placement database management system for students, drives, applications, and placement analytics.",
+    "Comprehensive university campus placement portal for students, corporate recruitment drives, dynamic selection stages, and placement analytics.",
   icons: {
     icon: "/logo.svg",
   },
@@ -30,10 +32,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className="h-full scroll-smooth">
       <body
-        className={`${dmSans.variable} ${manrope.variable} min-h-screen bg-[#edf5f0] text-slate-800 antialiased font-sans`}
+        className={`${plusJakarta.variable} ${inter.variable} min-h-screen bg-slate-50 text-slate-800 antialiased font-sans relative`}
       >
+        <SvgBackground />
         <ToastProvider>{children}</ToastProvider>
       </body>
     </html>

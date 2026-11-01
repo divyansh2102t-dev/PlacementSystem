@@ -13,6 +13,8 @@ import {
   Student,
   User,
   UserRole,
+  HeadlineStatsConfig,
+  DEFAULT_HEADLINE_STATS,
 } from "@/types";
 import { checkEligibility } from "./eligibility";
 import {
@@ -22,6 +24,8 @@ import {
   neonGetCompanies,
   neonGetStudents,
   neonGetUsers,
+  neonGetHeadlineStats,
+  neonSaveHeadlineStats,
 } from "./db";
 
 // Global in-memory storage singleton that persists during the server lifecycle
@@ -33,6 +37,7 @@ declare global {
     companies: CompanyDrive[];
     applications: Application[];
     websiteVisits: { page: string; views: number }[];
+    headlineStats: HeadlineStatsConfig;
     hydratedFromNeon?: boolean;
   } | undefined;
 }
@@ -48,6 +53,7 @@ if (!global.__placehub_store__) {
       { page: "/student/dashboard", views: 18 },
       { page: "/student/applications", views: 12 },
     ],
+    headlineStats: { ...DEFAULT_HEADLINE_STATS },
   };
 }
 
@@ -58,17 +64,19 @@ export async function ensureNeonHydrated(): Promise<void> {
   if (!sql || store.hydratedFromNeon) return;
 
   try {
-    const [neonUsers, neonStudents, neonCompanies, neonApps] = await Promise.all([
+    const [neonUsers, neonStudents, neonCompanies, neonApps, neonStats] = await Promise.all([
       neonGetUsers(),
       neonGetStudents(),
       neonGetCompanies(),
       neonGetApplications(),
+      neonGetHeadlineStats(),
     ]);
 
     if (neonUsers.length > 0) store.users = neonUsers;
     if (neonStudents.length > 0) store.students = neonStudents;
     if (neonCompanies.length > 0) store.companies = neonCompanies;
     if (neonApps.length > 0) store.applications = neonApps;
+    if (neonStats) store.headlineStats = neonStats;
 
     store.hydratedFromNeon = true;
   } catch (err) {
@@ -496,5 +504,16 @@ VALUES (${newApp.id}, ${newApp.studentId}, '${newApp.studentName.replace(/'/g, "
         mostVisitedPages: store.websiteVisits.slice(0, 3),
       },
     };
+  },
+
+  // ================= HEADLINE STATS =================
+  getHeadlineStats(): HeadlineStatsConfig {
+    return store.headlineStats || DEFAULT_HEADLINE_STATS;
+  },
+
+  async updateHeadlineStats(stats: HeadlineStatsConfig): Promise<HeadlineStatsConfig> {
+    store.headlineStats = { ...stats };
+    await neonSaveHeadlineStats(stats);
+    return store.headlineStats;
   },
 };

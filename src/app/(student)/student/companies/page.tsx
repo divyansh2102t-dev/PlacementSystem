@@ -41,7 +41,7 @@ export default function StudentCompaniesPage() {
   const loadData = async () => {
     try {
       const activeUser = getClientUser();
-      const studentId = activeUser.studentId || 1;
+      const studentId = activeUser?.studentId || 1;
 
       const [resStudent, resCompanies, resApps] = await Promise.all([
         fetch(`/api/students?id=${studentId}`).then((r) => r.json()),

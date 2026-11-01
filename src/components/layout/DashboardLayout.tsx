@@ -25,6 +25,10 @@ export function DashboardLayout({
 
   useEffect(() => {
     const active = getClientUser();
+    if (!active) {
+      window.location.href = "/login";
+      return;
+    }
     setUser(active);
 
     if (active.role === "student" && active.studentId) {

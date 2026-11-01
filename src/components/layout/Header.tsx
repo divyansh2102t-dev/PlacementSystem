@@ -23,7 +23,7 @@ export function Header({ user, student, title, subtitle, onSearch }: HeaderProps
   const handleLogout = () => {
     clearClientUser();
     notify("Logged out successfully");
-    router.push("/login");
+    window.location.href = "/login";
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {

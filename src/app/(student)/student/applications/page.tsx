@@ -16,7 +16,7 @@ export default function StudentApplicationsPage() {
     try {
       setLoading(true);
       const activeUser = getClientUser();
-      const studentId = activeUser.studentId || 1;
+      const studentId = activeUser?.studentId || 1;
 
       const [resApps, resCompanies] = await Promise.all([
         fetch(`/api/applications?studentId=${studentId}`).then((r) => r.json()),

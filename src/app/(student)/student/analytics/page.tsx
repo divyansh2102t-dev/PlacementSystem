@@ -13,7 +13,7 @@ export default function StudentAnalyticsPage() {
 
   useEffect(() => {
     const activeUser = getClientUser();
-    const studentId = activeUser.studentId || 1;
+    const studentId = activeUser?.studentId || 1;
 
     Promise.all([
       fetch(`/api/students?id=${studentId}`).then((r) => r.json()),

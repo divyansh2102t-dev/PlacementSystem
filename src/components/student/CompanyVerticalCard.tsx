@@ -45,19 +45,19 @@ export function CompanyVerticalCard({
 
   return (
     <article
-      className="group relative flex flex-col w-full rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-xs hover:border-emerald-400 hover:shadow-md transition-all duration-150 dark:border-slate-800 dark:bg-slate-800/90"
+      className="group relative flex flex-col w-full rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-xs hover:-translate-y-1.5 hover:shadow-xl hover:border-emerald-400 hover:ring-2 hover:ring-emerald-400/20 transition-all duration-300 ease-out dark:border-slate-800 dark:bg-slate-800/90"
     >
       {/* Top Header Row: Company + Package + Actions */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        {/* Left: Logo, Company Name, Role, Tier */}
+        {/* Left: Monogram, Company Name, Role, Tier */}
         <div className="flex items-start gap-3.5 min-w-0">
-          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-emerald-100 text-base font-black text-emerald-900 dark:bg-emerald-950 dark:text-emerald-200 shadow-xs border border-emerald-200/50 dark:border-emerald-800/50">
-            {company.logo || company.companyName.slice(0, 2).toUpperCase()}
+          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-emerald-100 via-teal-100 to-emerald-200 text-base font-black text-emerald-950 dark:from-emerald-950 dark:to-teal-900 dark:text-emerald-200 shadow-xs border border-emerald-300/60 dark:border-emerald-700/60 group-hover:scale-105 group-hover:rotate-1 transition-transform duration-300">
+            {company.companyName.slice(0, 2).toUpperCase()}
           </div>
 
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
-              <h3 className="text-base font-bold text-slate-900 dark:text-white truncate">
+              <h3 className="text-base font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors duration-200 dark:text-white truncate">
                 {company.companyName}
               </h3>
               <TierBadge tier={company.tier} />

@@ -2,7 +2,7 @@ import dns from "node:dns";
 import fs from "node:fs";
 import path from "node:path";
 import { neon, NeonQueryFunction } from "@neondatabase/serverless";
-import { Application, CompanyDrive, Student, User } from "@/types";
+import { Application, CompanyDrive, Student, User, HeadlineStatsConfig, DEFAULT_HEADLINE_STATS } from "@/types";
 
 // Setup custom DNS resolver for reliable Neon endpoint resolution across ISP environments
 if (typeof window === "undefined") {
@@ -159,4 +159,32 @@ export async function neonGetApplications(): Promise<Application[]> {
     resumeUrl: r.resume_url ?? undefined,
     history: typeof r.history === "string" ? JSON.parse(r.history) : r.history ?? [],
   }));
+}
+
+export async function neonGetHeadlineStats(): Promise<HeadlineStatsConfig> {
+  const sql = getDb();
+  if (!sql) return DEFAULT_HEADLINE_STATS;
+  try {
+    const rows = (await sql.query("SELECT value FROM site_settings WHERE key = 'headline_stats'")) as any[];
+    if (rows && rows.length > 0 && rows[0].value) {
+      return typeof rows[0].value === "string" ? JSON.parse(rows[0].value) : rows[0].value;
+    }
+  } catch (e) {
+    console.error("Error reading headline_stats from Neon:", e);
+  }
+  return DEFAULT_HEADLINE_STATS;
+}
+
+export async function neonSaveHeadlineStats(stats: HeadlineStatsConfig): Promise<boolean> {
+  const sql = getDb();
+  if (!sql) return false;
+  try {
+    const q = `INSERT INTO site_settings (key, value) VALUES ('headline_stats', '${JSON.stringify(stats)}') ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`;
+    logExecutedQuery("UPSERT Headline Stats", q);
+    await sql.query(q);
+    return true;
+  } catch (e) {
+    console.error("Error saving headline_stats to Neon:", e);
+    return false;
+  }
 }

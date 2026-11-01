@@ -13,7 +13,7 @@ export default function StudentProfilePage() {
   const loadStudent = async () => {
     try {
       const activeUser = getClientUser();
-      const studentId = activeUser.studentId || 1;
+      const studentId = activeUser?.studentId || 1;
       const res = await fetch(`/api/students?id=${studentId}`);
       const data = await res.json();
       if (!data.error) setStudent(data);

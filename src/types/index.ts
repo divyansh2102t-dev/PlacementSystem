@@ -25,6 +25,42 @@ export const DEFAULT_COMPANY_STAGES: CompanyStage[] = [
   { id: "stg-6", name: "Hired", order: 6 },
 ];
 
+export interface HeadlineStatItem {
+  value: string;
+  label: string;
+  subtext: string;
+}
+
+export interface HeadlineStatsConfig {
+  highestPackage: HeadlineStatItem;
+  averageCtc: HeadlineStatItem;
+  placementRate: HeadlineStatItem;
+  recruitingPartners: HeadlineStatItem;
+}
+
+export const DEFAULT_HEADLINE_STATS: HeadlineStatsConfig = {
+  highestPackage: {
+    value: "₹45.0 LPA",
+    label: "HIGHEST PACKAGE",
+    subtext: "Super Dream Tier",
+  },
+  averageCtc: {
+    value: "₹14.2 LPA",
+    label: "AVERAGE CTC",
+    subtext: "All Engineering Branches",
+  },
+  placementRate: {
+    value: "86.4%",
+    label: "PLACEMENT RATE",
+    subtext: "2026 Graduating Cohort",
+  },
+  recruitingPartners: {
+    value: "120+",
+    label: "RECRUITING PARTNERS",
+    subtext: "Global Tech & Enterprise",
+  },
+};
+
 export type ApplicationStage = string;
 
 export interface User {

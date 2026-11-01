@@ -13,8 +13,11 @@ import {
   ArrowLeft,
   GraduationCap,
   ShieldCheck,
+  LogOut,
 } from "lucide-react";
 import { UserRole } from "@/types";
+import { clearClientUser } from "@/lib/auth";
+import { LogoIcon } from "@/components/ui/Logo";
 
 interface NavItem {
   label: string;
@@ -76,19 +79,15 @@ export function ExpandableSidebar({ role }: ExpandableSidebarProps) {
         <Link
           href="/"
           title="Return to Home"
-          className="flex items-center gap-3 px-1.5 pb-2 group"
+          className="flex items-center gap-3 px-1 pb-2 group"
         >
-          <div
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-600 text-base font-black text-white shadow-sm group-hover:bg-emerald-700 transition"
-          >
-            P
-          </div>
+          <LogoIcon size={38} />
           {isExpanded && (
             <div className="overflow-hidden transition-all duration-200">
-              <h2 className="text-sm font-bold leading-none tracking-tight text-slate-900 group-hover:text-emerald-700 transition">
-                PlaceHub
+              <h2 className="text-sm font-extrabold leading-none tracking-tight text-slate-900 group-hover:text-emerald-700 transition">
+                Place<span className="text-emerald-600">Hub</span>
               </h2>
-              <span className="text-[10px] font-semibold text-emerald-700">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 block mt-0.5">
                 {role === "admin" ? "Admin Portal" : "Student Portal"}
               </span>
             </div>
@@ -152,7 +151,7 @@ export function ExpandableSidebar({ role }: ExpandableSidebarProps) {
         </nav>
 
         {/* Role Badge Indicator */}
-        <div className="mt-auto flex flex-col gap-1 pt-2 border-t border-slate-100">
+        <div className="mt-auto flex flex-col gap-1.5 pt-2 border-t border-slate-100">
           <div className="rounded-xl bg-slate-50 p-2 text-[11px] text-slate-600 flex items-center gap-2">
             {role === "admin" ? (
               <ShieldCheck size={16} className="text-emerald-600 shrink-0" />
@@ -168,6 +167,19 @@ export function ExpandableSidebar({ role }: ExpandableSidebarProps) {
               </div>
             )}
           </div>
+
+          {/* Quick Sign Out Button */}
+          <button
+            onClick={() => {
+              clearClientUser();
+              window.location.href = "/login";
+            }}
+            title="Sign Out"
+            className="flex items-center gap-2.5 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition border border-transparent hover:border-rose-200"
+          >
+            <LogOut size={16} className="shrink-0 text-slate-400 group-hover:text-rose-600" />
+            {isExpanded && <span className="truncate">Sign Out</span>}
+          </button>
         </div>
       </aside>
 

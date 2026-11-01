@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { setClientUser } from "@/lib/auth";
 import { initialUsers } from "@/data/seedData";
 import { useToast } from "@/components/ui/Toast";
+import { Logo } from "@/components/ui/Logo";
 import {
   GraduationCap,
   ShieldCheck,
@@ -65,7 +66,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 p-4 font-sans text-slate-800">
+    <div className="relative flex min-h-screen flex-col items-center justify-center bg-transparent p-4 font-sans text-slate-800">
       {/* Return to Homepage Button */}
       <div className="mb-4 w-full max-w-md">
         <Link
@@ -77,16 +78,12 @@ export default function LoginPage() {
         </Link>
       </div>
 
-      <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+      <div className="w-full max-w-md rounded-2xl border border-slate-200/80 bg-white/95 backdrop-blur-md p-6 shadow-sm sm:p-8">
         {/* Header with Clickable Logo */}
-        <div className="text-center">
-          <Link href="/" className="inline-block group" title="PlaceHub Home">
-            <div className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-emerald-600 text-lg font-black text-white shadow-xs group-hover:bg-emerald-700 transition">
-              P
-            </div>
-          </Link>
+        <div className="text-center flex flex-col items-center">
+          <Logo href="/" size="lg" showText={false} />
           <h1 className="mt-3 text-xl font-bold tracking-tight text-slate-900">
-            Sign In to PlaceHub
+            Sign In to Place<span className="text-emerald-600">Hub</span>
           </h1>
           <p className="mt-1 text-xs text-slate-500">
             University Campus Placement Portal

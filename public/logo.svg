@@ -1,5 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <rect width="100" height="100" rx="24" fill="#252a27"/>
-  <path d="M30 75V25h22c12 0 20 7 20 18s-8 18-20 18H44v14H30zm14-26h8c5.5 0 9-3 9-8s-3.5-8-9-8h-8v16z" fill="#6ee7b7"/>
-  <circle cx="75" cy="25" r="7" fill="#10b981"/>
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="ph-logo-grad" x1="2" y1="2" x2="46" y2="46" gradientUnits="userSpaceOnUse">
+      <stop stopColor="#059669" />
+      <stop offset="0.45" stopColor="#10b981" />
+      <stop offset="1" stopColor="#0d9488" />
+    </linearGradient>
+    <linearGradient id="ph-arrow-grad" x1="16" y1="12" x2="36" y2="34" gradientUnits="userSpaceOnUse">
+      <stop stopColor="#ffffff" />
+      <stop offset="1" stopColor="#d1fae5" />
+    </linearGradient>
+  </defs>
+  <rect x="3" y="3" width="42" height="42" rx="13" fill="url(#ph-logo-grad)" />
+  <rect x="4.2" y="4.2" width="39.6" height="39.6" rx="11.8" stroke="#ffffff" stroke-opacity="0.28" stroke-width="1.4" />
+  <path d="M16 34V14C16 13.4477 16.4477 13 17 13H25C29.4183 13 33 16.5817 33 21C33 25.4183 29.4183 29 25 29H18.5" stroke="url(#ph-arrow-grad)" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M21 21L27 15L33 21" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="27" cy="15" r="2.2" fill="#ffffff" />
+  <circle cx="27" cy="15" r="4.5" stroke="#ffffff" stroke-opacity="0.4" stroke-width="1" />
 </svg>

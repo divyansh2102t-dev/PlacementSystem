@@ -7,6 +7,7 @@ import { CompanyVerticalCard } from "@/components/student/CompanyVerticalCard";
 import { AdminCompanyModal } from "@/components/admin/AdminCompanyModal";
 import { AdminCompanyApplicantsModal } from "@/components/admin/AdminCompanyApplicantsModal";
 import { CompanyStagesModal } from "@/components/admin/CompanyStagesModal";
+import { HeadlineStatsModal } from "@/components/admin/HeadlineStatsModal";
 import { CompanyDetailModal } from "@/components/student/CompanyDetailModal";
 import { CompanyDrive, Application, Student } from "@/types";
 import { useToast } from "@/components/ui/Toast";
@@ -22,6 +23,7 @@ import {
   CheckCircle2,
   Settings,
   Filter,
+  BarChart3,
 } from "lucide-react";
 
 export default function AdminDashboardPage() {
@@ -42,6 +44,7 @@ export default function AdminDashboardPage() {
   const [companyForApplicants, setCompanyForApplicants] = useState<CompanyDrive | null>(null);
   const [companyForStages, setCompanyForStages] = useState<CompanyDrive | null>(null);
   const [companyForDetail, setCompanyForDetail] = useState<CompanyDrive | null>(null);
+  const [isHeadlineModalOpen, setIsHeadlineModalOpen] = useState(false);
 
   const loadAll = async () => {
     try {
@@ -225,15 +228,24 @@ export default function AdminDashboardPage() {
                 </p>
               </div>
 
-              <button
-                onClick={() => {
-                  setCompanyToEdit(null);
-                  setIsCompanyModalOpen(true);
-                }}
-                className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-xs font-bold text-slate-950 hover:bg-emerald-400 transition shadow-xs shrink-0"
-              >
-                <Plus size={14} /> Add New Drive
-              </button>
+              <div className="flex flex-wrap items-center gap-2 shrink-0">
+                <button
+                  onClick={() => setIsHeadlineModalOpen(true)}
+                  className="flex items-center gap-1.5 rounded-xl border border-emerald-400/50 bg-emerald-900/60 px-3.5 py-2 text-xs font-bold text-white hover:bg-emerald-800 transition shadow-xs"
+                  title="Configure Highest Package, Average CTC, Placement Rate & Recruiting Partners"
+                >
+                  <BarChart3 size={14} /> Manage Homepage Stats
+                </button>
+                <button
+                  onClick={() => {
+                    setCompanyToEdit(null);
+                    setIsCompanyModalOpen(true);
+                  }}
+                  className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-xs font-bold text-slate-950 hover:bg-emerald-400 transition shadow-xs shrink-0"
+                >
+                  <Plus size={14} /> Add New Drive
+                </button>
+              </div>
             </div>
 
             <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
@@ -613,6 +625,12 @@ export default function AdminDashboardPage() {
         isOpen={!!companyForDetail}
         onClose={() => setCompanyForDetail(null)}
         company={companyForDetail}
+      />
+
+      {/* MODAL: Manage Headline Stats (Highest Package, Average CTC, Placement Rate, etc.) */}
+      <HeadlineStatsModal
+        isOpen={isHeadlineModalOpen}
+        onClose={() => setIsHeadlineModalOpen(false)}
       />
     </DashboardLayout>
   );

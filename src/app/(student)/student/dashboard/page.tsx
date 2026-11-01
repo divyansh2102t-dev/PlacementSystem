@@ -43,7 +43,7 @@ export default function StudentDashboardPage() {
     try {
       const activeUser = getClientUser();
       setCurrentUser(activeUser);
-      const studentId = activeUser.studentId || 1;
+      const studentId = activeUser?.studentId || 1;
 
       const [resStudent, resCompanies, resApps] = await Promise.all([
         fetch(`/api/students?id=${studentId}`).then((r) => r.json()),

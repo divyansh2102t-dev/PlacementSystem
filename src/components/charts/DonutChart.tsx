@@ -33,7 +33,7 @@ export function DonutChart({ data, totalLabel = "Total", size = 160 }: DonutChar
             r={radius}
             fill="transparent"
             stroke="currentColor"
-            className="text-slate-100 dark:text-slate-800"
+            className="text-slate-100"
             strokeWidth={strokeWidth}
           />
           {total > 0 &&
@@ -61,7 +61,7 @@ export function DonutChart({ data, totalLabel = "Total", size = 160 }: DonutChar
 
         {/* Center label */}
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <span className="text-xl font-black text-slate-900 dark:text-white leading-none">
+          <span className="text-xl font-black text-slate-900 leading-none">
             {total}
           </span>
           <span className="text-[10px] font-semibold uppercase text-slate-400">
@@ -80,10 +80,10 @@ export function DonutChart({ data, totalLabel = "Total", size = 160 }: DonutChar
                 className="h-2.5 w-2.5 rounded-full shrink-0"
                 style={{ backgroundColor: slice.color }}
               />
-              <span className="text-slate-600 dark:text-slate-300 font-medium">
+              <span className="text-slate-600 font-medium">
                 {slice.label}:
               </span>
-              <strong className="text-slate-800 dark:text-slate-100 font-bold ml-auto pl-2">
+              <strong className="text-slate-800 font-bold ml-auto pl-2">
                 {slice.value} ({pct}%)
               </strong>
             </div>

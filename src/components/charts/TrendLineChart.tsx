@@ -49,7 +49,7 @@ export function TrendLineChart({ data }: TrendLineChartProps) {
             x2={width - padding}
             y2={padding}
             stroke="currentColor"
-            className="text-slate-200 dark:text-slate-800"
+            className="text-slate-200"
             strokeDasharray="4 4"
           />
           <line
@@ -58,7 +58,7 @@ export function TrendLineChart({ data }: TrendLineChartProps) {
             x2={width - padding}
             y2={height / 2}
             stroke="currentColor"
-            className="text-slate-200 dark:text-slate-800"
+            className="text-slate-200"
             strokeDasharray="4 4"
           />
           <line
@@ -67,7 +67,7 @@ export function TrendLineChart({ data }: TrendLineChartProps) {
             x2={width - padding}
             y2={height - padding}
             stroke="currentColor"
-            className="text-slate-200 dark:text-slate-800"
+            className="text-slate-200"
           />
 
           {/* Applications Line */}
@@ -88,7 +88,7 @@ export function TrendLineChart({ data }: TrendLineChartProps) {
                 cy={y}
                 r="4"
                 fill="#10b981"
-                className="stroke-white dark:stroke-slate-900"
+                className="stroke-white"
                 strokeWidth="2"
               />
             );
@@ -112,7 +112,7 @@ export function TrendLineChart({ data }: TrendLineChartProps) {
                 cy={y}
                 r="4"
                 fill="#0ea5e9"
-                className="stroke-white dark:stroke-slate-900"
+                className="stroke-white"
                 strokeWidth="2"
               />
             );
@@ -139,11 +139,11 @@ export function TrendLineChart({ data }: TrendLineChartProps) {
         <div className="flex items-center justify-center gap-6 mt-2 text-xs">
           <div className="flex items-center gap-2">
             <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
-            <span className="text-slate-600 dark:text-slate-300">Applications Submitted</span>
+            <span className="text-slate-600">Applications Submitted</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="h-2.5 w-2.5 rounded-full bg-sky-500" />
-            <span className="text-slate-600 dark:text-slate-300">Offers Extended</span>
+            <span className="text-slate-600">Offers Extended</span>
           </div>
         </div>
       </div>

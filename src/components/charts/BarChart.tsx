@@ -36,14 +36,14 @@ export function BarChart({ items, title }: BarChartProps) {
           return (
             <div key={item.label} className="text-xs">
               <div className="flex items-center justify-between mb-1">
-                <span className="font-semibold text-slate-700 dark:text-slate-300 truncate">
+                <span className="font-semibold text-slate-700 truncate">
                   {item.label}
                 </span>
                 <span className="text-slate-500 font-medium">
                   {item.secondaryLabel || `${item.value} (${pct}%)`}
                 </span>
               </div>
-              <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700/60">
+              <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
                 <div
                   className={`h-full rounded-full transition-all duration-500 ${
                     item.color || "bg-gradient-to-r from-emerald-500 to-teal-400"

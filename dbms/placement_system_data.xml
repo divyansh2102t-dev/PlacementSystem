@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ========================================================================== -->
+<!-- PLACEHUB CAMPUS RECRUITMENT MANAGEMENT SYSTEM                              -->
+<!-- DATA EXPORT FORMAT (SECTION F: QUERY NOS. 1, 3, AND 4)                     -->
+<!-- Generated: 2026-11-02T08:49:31.501Z                                     -->
+<!-- Database: Neon PostgreSQL (neondb)                                         -->
+<!-- ========================================================================== -->
+<PlacementSystemDataExport xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <!-- ====================================================================== -->
+  <!-- QUERY 1: ALL DATA FROM MAIN TABLE (students)                           -->
+  <!-- Execution Time: 1274.78 ms                                         -->
+  <!-- Total Records: 3                                  -->
+  <!-- ====================================================================== -->
+  <Query1_AllStudentsData executionTime="1274.78 ms" recordCount="3">
+    <Student id="1">
+      <RollNumber>21CS001</RollNumber>
+      <FullName>Aarav Sharma</FullName>
+      <Email>student@placehub.edu</Email>
+      <Department>CSE</Department>
+      <GraduationBatch>2027</GraduationBatch>
+      <CGPA>9.35</CGPA>
+      <ActiveBacklogs>0</ActiveBacklogs>
+      <PlacementStatus>Placed</PlacementStatus>
+      <OffersCount>1</OffersCount>
+      <HighestOfferLPA>34.00</HighestOfferLPA>
+    </Student>
+    <Student id="2">
+      <RollNumber>21IT014</RollNumber>
+      <FullName>Diya Patel</FullName>
+      <Email>diya.patel@placehub.edu</Email>
+      <Department>IT</Department>
+      <GraduationBatch>2027</GraduationBatch>
+      <CGPA>8.80</CGPA>
+      <ActiveBacklogs>0</ActiveBacklogs>
+      <PlacementStatus>In Process</PlacementStatus>
+      <OffersCount>0</OffersCount>
+      <HighestOfferLPA>0.00</HighestOfferLPA>
+    </Student>
+    <Student id="3">
+      <RollNumber>21EC025</RollNumber>
+      <FullName>Rohan Kulkarni</FullName>
+      <Email>rohan.kulkarni@placehub.edu</Email>
+      <Department>ECE</Department>
+      <GraduationBatch>2027</GraduationBatch>
+      <CGPA>7.90</CGPA>
+      <ActiveBacklogs>0</ActiveBacklogs>
+      <PlacementStatus>Unplaced</PlacementStatus>
+      <OffersCount>0</OffersCount>
+      <HighestOfferLPA>0.00</HighestOfferLPA>
+    </Student>
+  </Query1_AllStudentsData>
+
+  <!-- ====================================================================== -->
+  <!-- QUERY 3: AGGREGATE FUNCTION RESULTS FROM MAIN TABLE                    -->
+  <!-- Execution Time: 301.36 ms                                         -->
+  <!-- Metrics: Average CGPA, Highest CGPA, Lowest CGPA, Total Students       -->
+  <!-- ====================================================================== -->
+  <Query3_AggregateMetrics executionTime="301.36 ms">
+    <CohortCGPAStatistics>
+      <AverageCGPA>8.81</AverageCGPA>
+      <MaximumCGPA>9.35</MaximumCGPA>
+      <MinimumCGPA>7.90</MinimumCGPA>
+      <TotalCandidatesEvaluated>4</TotalCandidatesEvaluated>
+      <InstitutionStandard>NAAC A++ Benchmark</InstitutionStandard>
+    </CohortCGPAStatistics>
+  </Query3_AggregateMetrics>
+
+  <!-- ====================================================================== -->
+  <!-- QUERY 4: CONDITIONAL FILTER RESULTS                                    -->
+  <!-- Condition: CGPA >= 8.50 AND active_backlogs = 0                         -->
+  <!-- Execution Time: 334.57 ms                                         -->
+  <!-- Filtered Candidates: 3                         -->
+  <!-- ====================================================================== -->
+  <Query4_ConditionalFilterData executionTime="334.57 ms" criteria="CGPA &gt;= 8.50 AND Backlogs == 0">
+    <EligibleCandidate>
+      <RollNumber>21CS001</RollNumber>
+      <CandidateName>Aarav Sharma</CandidateName>
+      <Department>CSE</Department>
+      <CGPA>9.35</CGPA>
+      <ActiveBacklogs>0</ActiveBacklogs>
+      <CurrentStatus>Placed</CurrentStatus>
+      <SuperDreamEligible>true</SuperDreamEligible>
+    </EligibleCandidate>
+    <EligibleCandidate>
+      <RollNumber>23CS999</RollNumber>
+      <CandidateName>Aditya Singhania</CandidateName>
+      <Department>CSE</Department>
+      <CGPA>9.20</CGPA>
+      <ActiveBacklogs>0</ActiveBacklogs>
+      <CurrentStatus>Unplaced</CurrentStatus>
+      <SuperDreamEligible>true</SuperDreamEligible>
+    </EligibleCandidate>
+    <EligibleCandidate>
+      <RollNumber>21IT014</RollNumber>
+      <CandidateName>Diya Patel</CandidateName>
+      <Department>IT</Department>
+      <CGPA>8.80</CGPA>
+      <ActiveBacklogs>0</ActiveBacklogs>
+      <CurrentStatus>In Process</CurrentStatus>
+      <SuperDreamEligible>true</SuperDreamEligible>
+    </EligibleCandidate>
+  </Query4_ConditionalFilterData>
+
+</PlacementSystemDataExport>

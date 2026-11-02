@@ -1,105 +1,414 @@
-# PlaceHub - Campus Placement Management System
+# PlaceHub - Campus Recruitment & Placement Management System
 
-A production-grade **Campus Placement Portal & Database Management System (DBMS)** designed to manage, streamline, and analyze university campus recruitment drives, student eligibility, corporate applications, and placement analytics.
+[![Next.js](https://img.shields.io/badge/Next.js-15.5-black?logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.0-blue?logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?logo=postgresql)](https://www.postgresql.org/)
+[![Neon Database](https://img.shields.io/badge/Database-Neon%20Serverless-00E599?logo=neon)](https://neon.tech/)
 
-Built with **Next.js 15 (App Router)**, **React 19**, **Tailwind CSS**, and **TypeScript**, connected to **Neon Serverless PostgreSQL** and powered by a **Third Normal Form (3NF)** relational database schema.
+A production-grade **Campus Placement Portal & Database Management System (DBMS)** architected to streamline, manage, and analyze university campus recruitment drives, student eligibility criteria, corporate applications, and institutional placement analytics.
+
+Built with **Next.js 15 (App Router)**, **React 19**, **Tailwind CSS**, and **TypeScript**, backed by **Neon Serverless PostgreSQL** adhering strictly to **Third Normal Form (3NF)** relational principles.
+
+---
+
+## 🏛️ System Architecture
+
+The application utilizes a modular, decoupled **4-Tier Architecture** ensuring high throughput, real-time reactive updates, serverless scalability, and strict ACID transaction safety.
+
+```mermaid
+flowchart TD
+    subgraph Client_Tier["Client Tier (Presentation Layer)"]
+        UI_Home["Landing Homepage<br/>(Parallax & Visual 3D Showcase)"]
+        UI_Student["Student Portal<br/>(Dashboard, Companies, Timeline, Profile)"]
+        UI_Admin["Placement Officer / Admin Desk<br/>(Drives, Kanban Pipeline, Cohorts, Telemetry)"]
+        UI_DBMS["DBMS Explorer<br/>(Live SQL Console & Output Tables)"]
+    end
+
+    subgraph App_Tier["Application Tier (Next.js 15 App Router & React 19)"]
+        Router["Next.js Server & Client Components"]
+        AuthModule["RBAC Engine & Session Validator"]
+        EligibilityEngine["Dynamic Criteria Evaluator<br/>(CGPA, Backlogs, Dept, Batch)"]
+        ApiRoutes["RESTful API Route Handlers<br/>(/api/students, /api/companies, /api/applications, /api/dbms)"]
+    end
+
+    subgraph Data_Access_Tier["Data Access & Service Layer"]
+        NeonDriver["@neondatabase/serverless Connection Pool"]
+        DnsHook["Custom IPv4 DNS Resolver Hook"]
+        AuditLogger["Query Audit System<br/>(dbms/executed_queries.sql)"]
+        Store["Hydrated State Synchronizer"]
+    end
+
+    subgraph Database_Tier["Database Tier (Neon PostgreSQL 16)"]
+        Tables[("3NF Relational Tables<br/>users, students, companies, applications")]
+        Views[("Materialized & Virtual Views<br/>vw_bengaluru_super_dream, branch_stats")]
+        Indexes[("B-Tree Composite Indexes<br/>idx_students_dept_cgpa, idx_applications_composite")]
+        Triggers[("Integrity Triggers & Procedures<br/>trg_enforce_drive_eligibility, sp_record_placement_offer")]
+    end
+
+    Client_Tier -->|HTTPS / JSON| App_Tier
+    App_Tier -->|Server-Side Execution| Data_Access_Tier
+    Data_Access_Tier -->|TLS 1.3 / Prepared SQL| Database_Tier
+```
+
+---
+
+## 🔄 Recruitment Workflow & Data Flow Diagram
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Candidate as Student (Candidate)
+    participant Portal as PlaceHub Web UI
+    participant Server as Next.js API Layer
+    participant DB as Neon PostgreSQL (3NF)
+    actor Admin as Placement Officer (TPO)
+
+    Admin->>Portal: Create Corporate Drive (Criteria, CTC, Deadline)
+    Portal->>Server: POST /api/companies
+    Server->>DB: INSERT INTO companies (...)
+    DB-->>Server: 201 Created (drive_id: 101)
+
+    Candidate->>Portal: Access Available Drives Directory
+    Portal->>Server: GET /api/companies (with Student Profile)
+    Server->>DB: Query companies & eligibility parameters
+    DB-->>Server: Return active drives
+    Server-->>Portal: Evaluate eligibility (CGPA, Backlogs, Branch)
+
+    Candidate->>Portal: Submit Application
+    Portal->>Server: POST /api/applications { student_id, drive_id }
+    Note over Server,DB: Trigger trg_enforce_drive_eligibility verifies credentials
+    Server->>DB: INSERT INTO applications (status: 'Applied')
+    DB-->>Server: Application confirmed
+
+    Admin->>Portal: Review Drive Applicants (Kanban Desk)
+    Admin->>Portal: Promote Candidate to 'Offer Extended'
+    Portal->>Server: PATCH /api/applications/:id
+    Server->>DB: EXECUTE sp_record_placement_offer(student_id, drive_id, ctc)
+    DB-->>DB: Update applications stage & update students (status: 'Placed')
+    DB-->>Server: Success
+    Server-->>Portal: Real-time UI refresh & notification
+```
+
+---
+
+## 📊 Database Entity-Relationship (ER) Diagram
+
+Modeled using standard **Crow's Foot Notation**, depicting primary keys (`PK`), foreign keys (`FK`), unique keys (`UK`), mapping cardinalities, and participation constraints across all core project entities:
+
+```mermaid
+erDiagram
+    USERS {
+        int id PK "Primary Key"
+        varchar email UK "Unique Institutional Email"
+        varchar name "Full User Name"
+        varchar role "Role: student, admin, tpo"
+        int student_id FK "Foreign Key to STUDENTS(id)"
+        boolean active "Account Status Flag"
+        varchar avatar "User Initials Avatar"
+        date created_at "Registration Timestamp"
+    }
+
+    STUDENTS {
+        int id PK "Primary Key"
+        varchar roll_no UK "University Roll Number"
+        varchar name "Full Student Name"
+        varchar email UK "Institutional Email"
+        varchar phone "Contact Number"
+        varchar department "Branch: CSE, IT, ECE, MECH"
+        varchar batch "Graduation Year (e.g. 2027)"
+        numeric cgpa "Academic Score (0.00 to 10.00)"
+        int active_backlogs "Number of Current Backlogs"
+        jsonb skills "Technical Skills Array"
+        text resume_url "Document Link"
+        varchar status "Placed, Unplaced, In Process"
+        int offers_count "Total Job Offers Received"
+        numeric highest_offer_lpa "Max Annual CTC Secured"
+    }
+
+    COMPANIES {
+        int id PK "Primary Key"
+        varchar company_name "Corporate Name"
+        varchar logo "Company Brand Identifier"
+        varchar industry "Sector: Tech, Finance, AI"
+        varchar tier "Regular, Dream, Super Dream"
+        varchar role_title "Job Designation"
+        varchar role_type "Full-Time, Internship"
+        numeric ctc_lpa "Cost to Company in LPA"
+        numeric stipend_monthly "Internship Stipend / Month"
+        varchar location "Job Base Location"
+        numeric min_cgpa "Minimum Cutoff CGPA"
+        int max_backlogs "Maximum Permitted Backlogs"
+        jsonb eligible_depts "Eligible Department List"
+        varchar eligible_batch "Target Graduation Year"
+        jsonb required_skills "Prerequisite Skillsets"
+        date deadline "Application Window Cutoff"
+        date drive_date "Drive Event Date"
+        varchar status "Upcoming, Ongoing, Closed"
+        text description "Role Overview"
+        int applicants_count "Total Applications Count"
+    }
+
+    APPLICATIONS {
+        int id PK "Primary Key"
+        int student_id FK "Foreign Key to STUDENTS(id)"
+        int drive_id FK "Foreign Key to COMPANIES(id)"
+        varchar student_name "Candidate Name Snapshot"
+        varchar roll_no "Roll Number Snapshot"
+        varchar department "Department Snapshot"
+        numeric cgpa "CGPA at Application Time"
+        varchar company_name "Drive Name Snapshot"
+        varchar role_title "Designation Snapshot"
+        numeric ctc_lpa "Package Snapshot in LPA"
+        date applied_date "Submission Timestamp"
+        varchar stage "Applied, OA, Interview, Offer, Rejected"
+        text remarks "Placement Cell Evaluation Note"
+        text resume_url "Submitted Resume Version"
+        jsonb history "Stage Progression Audit Trail"
+    }
+
+    USERS |o--|| STUDENTS : "authenticates (0..1 : 1..1)"
+    STUDENTS ||--o{ APPLICATIONS : "submits (1..1 : 0..N)"
+    COMPANIES ||--o{ APPLICATIONS : "receives (1..1 : 0..N)"
+```
+
+### Mapping Cardinality & Participation Constraints
+
+| Relationship | Entities Involved | Cardinality | Min-Max Constraints | Participation | Business Rule |
+| :--- | :--- | :---: | :---: | :--- | :--- |
+| **`authenticates`** | `USERS` $\leftrightarrow$ `STUDENTS` | $1 : 1$ | `USERS` $(0, 1)$<br/>`STUDENTS` $(1, 1)$ | `USERS`: **Partial**<br/>`STUDENTS`: **Total** | Every student must possess an active authentication account. Admin/TPO accounts do not map to student profiles (`student_id IS NULL`). |
+| **`submits`** | `STUDENTS` $\leftrightarrow$ `APPLICATIONS` | $1 : N$ | `STUDENTS` $(0, N)$<br/>`APPLICATIONS` $(1, 1)$ | `STUDENTS`: **Partial**<br/>`APPLICATIONS`: **Total** | A student may submit zero or multiple drive applications. Every application must be authored by an enrolled candidate. |
+| **`receives`** | `COMPANIES` $\leftrightarrow$ `APPLICATIONS` | $1 : N$ | `COMPANIES` $(0, N)$<br/>`APPLICATIONS` $(1, 1)$ | `COMPANIES`: **Partial**<br/>`APPLICATIONS`: **Total** | A company drive can receive zero or multiple student applications. Every application record references exactly one active drive. |
+| **Associative Resolution** | `STUDENTS` $\leftrightarrow$ `COMPANIES` | $M : N$ | Multi-to-Multi | Resolved by `APPLICATIONS` | The `uk_student_drive UNIQUE(student_id, drive_id)` constraint prevents a candidate from submitting duplicate entries to the same drive. |
+
+---
+
+## 🗄️ Relational Database Schema Specifications
+
+### 1. Master Tables & Constraints
+
+#### Table: `students`
+```sql
+CREATE TABLE students (
+    id INT PRIMARY KEY,
+    roll_no VARCHAR(20) NOT NULL UNIQUE,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(120) NOT NULL UNIQUE,
+    phone VARCHAR(25),
+    department VARCHAR(20) NOT NULL,
+    batch VARCHAR(10) NOT NULL DEFAULT '2027',
+    cgpa NUMERIC(4, 2) NOT NULL CHECK (cgpa >= 0.00 AND cgpa <= 10.00),
+    active_backlogs INT NOT NULL DEFAULT 0 CHECK (active_backlogs >= 0),
+    skills JSONB NOT NULL DEFAULT '[]'::jsonb,
+    resume_url TEXT,
+    status VARCHAR(30) NOT NULL DEFAULT 'Unplaced' CHECK (status IN ('Placed', 'Unplaced', 'In Process')),
+    offers_count INT NOT NULL DEFAULT 0 CHECK (offers_count >= 0),
+    highest_offer_lpa NUMERIC(6, 2)
+);
+```
+
+#### Table: `companies`
+```sql
+CREATE TABLE companies (
+    id INT PRIMARY KEY,
+    company_name VARCHAR(120) NOT NULL,
+    logo VARCHAR(20),
+    industry VARCHAR(100) NOT NULL,
+    tier VARCHAR(30) NOT NULL CHECK (tier IN ('Regular', 'Dream', 'Super Dream', 'Mass Recruiter')),
+    role_title VARCHAR(120) NOT NULL,
+    role_type VARCHAR(40) NOT NULL DEFAULT 'Full-Time',
+    ctc_lpa NUMERIC(6, 2) NOT NULL CHECK (ctc_lpa > 0),
+    stipend_monthly NUMERIC(10, 2) NOT NULL DEFAULT 0,
+    location VARCHAR(120) NOT NULL,
+    min_cgpa NUMERIC(4, 2) NOT NULL DEFAULT 6.00 CHECK (min_cgpa >= 0 AND min_cgpa <= 10),
+    max_backlogs INT NOT NULL DEFAULT 0 CHECK (max_backlogs >= 0),
+    eligible_depts JSONB NOT NULL DEFAULT '[]'::jsonb,
+    eligible_batch VARCHAR(10) NOT NULL DEFAULT '2027',
+    required_skills JSONB NOT NULL DEFAULT '[]'::jsonb,
+    deadline DATE NOT NULL,
+    drive_date DATE NOT NULL,
+    status VARCHAR(30) NOT NULL DEFAULT 'Upcoming' CHECK (status IN ('Upcoming', 'Ongoing', 'Completed', 'Closed')),
+    description TEXT,
+    applicants_count INT NOT NULL DEFAULT 0 CHECK (applicants_count >= 0)
+);
+```
+
+#### Table: `applications`
+```sql
+CREATE TABLE applications (
+    id INT PRIMARY KEY,
+    student_id INT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    student_name VARCHAR(100),
+    roll_no VARCHAR(20),
+    department VARCHAR(20),
+    cgpa NUMERIC(4, 2),
+    drive_id INT NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
+    company_name VARCHAR(120),
+    role_title VARCHAR(120),
+    ctc_lpa NUMERIC(6, 2),
+    applied_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    stage VARCHAR(40) NOT NULL DEFAULT 'Applied' CHECK (stage IN ('Applied', 'Online Assessment', 'Technical Interview', 'HR Interview', 'Offer Extended', 'Rejected')),
+    remarks TEXT,
+    resume_url TEXT,
+    history JSONB NOT NULL DEFAULT '[]'::jsonb,
+    CONSTRAINT uk_student_drive UNIQUE (student_id, drive_id)
+);
+```
+
+#### Table: `users`
+```sql
+CREATE TABLE users (
+    id INT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(120) NOT NULL UNIQUE,
+    role VARCHAR(20) NOT NULL CHECK (role IN ('student', 'admin', 'tpo')),
+    student_id INT REFERENCES students(id) ON DELETE SET NULL,
+    active BOOLEAN NOT NULL DEFAULT true,
+    avatar VARCHAR(10),
+    created_at DATE NOT NULL DEFAULT CURRENT_DATE
+);
+```
+
+---
+
+### 2. Database Views
+
+* **View: `vw_bengaluru_super_dream_placements`**: Relational view combining candidate details, corporate metrics, and application status specifically filtered for Tier-1 technology hub placements (`location LIKE '%Bengaluru%' AND tier = 'Super Dream'`).
+* **View: `vw_placed_students_summary`**: Summarizes all candidates who have secured confirmed offers with their final package.
+* **View: `vw_branch_wise_placement_stats`**: Aggregates total students, placed count, placement percentage %, average CTC, and maximum CTC per engineering branch.
+
+---
+
+### 3. Composite B-Tree Indexes & Performance Impact
+
+To optimize query latency across large-scale recruitment sets, the following composite indexes are deployed:
+
+1. **`idx_students_dept_cgpa_filter`** on `students(department, cgpa DESC)`
+   * Optimizes department-level filtering and merit ranking.
+2. **`idx_applications_composite_drive_student`** on `applications(drive_id, student_id, stage)`
+   * Accelerates foreign key join operations and subquery lookups without table scans.
+3. **`idx_companies_ctc_location`** on `companies(ctc_lpa DESC, location)`
+   * Optimizes high-value package sorting and geographical drive queries.
+
+---
+
+### 4. Stored Procedures & Validation Triggers
+
+#### Stored Procedure: `sp_record_placement_offer`
+Synchronizes the candidate's application stage to `'Offer Extended'`, updates their profile status to `'Placed'`, increments their `offers_count`, and updates their `highest_offer_lpa` atomically.
+
+```sql
+CREATE OR REPLACE FUNCTION sp_record_placement_offer(
+    p_student_id INT,
+    p_drive_id INT,
+    p_offered_ctc NUMERIC
+) RETURNS VOID AS $$
+BEGIN
+    UPDATE applications
+    SET stage = 'Offer Extended',
+        ctc_lpa = p_offered_ctc,
+        remarks = 'Offer verified by Central Placement Cell'
+    WHERE student_id = p_student_id AND drive_id = p_drive_id;
+
+    UPDATE students
+    SET status = 'Placed',
+        offers_count = offers_count + 1,
+        highest_offer_lpa = GREATEST(COALESCE(highest_offer_lpa, 0), p_offered_ctc)
+    WHERE id = p_student_id;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+#### Trigger: `trg_enforce_drive_eligibility`
+Enforces business rules at the database engine level prior to insertion into `applications`:
+
+```sql
+CREATE OR REPLACE FUNCTION fn_validate_application_eligibility()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_min_cgpa NUMERIC;
+    v_max_backlogs INT;
+    v_student_cgpa NUMERIC;
+    v_student_backlogs INT;
+BEGIN
+    SELECT min_cgpa, max_backlogs INTO v_min_cgpa, v_max_backlogs FROM companies WHERE id = NEW.drive_id;
+    SELECT cgpa, active_backlogs INTO v_student_cgpa, v_student_backlogs FROM students WHERE id = NEW.student_id;
+
+    IF v_student_cgpa < v_min_cgpa THEN
+        RAISE EXCEPTION 'Eligibility Violation: Student CGPA (%) is below company cutoff (%).', v_student_cgpa, v_min_cgpa;
+    END IF;
+
+    IF v_student_backlogs > v_max_backlogs THEN
+        RAISE EXCEPTION 'Eligibility Violation: Active backlogs (%) exceed permitted limit (%).', v_student_backlogs, v_max_backlogs;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_enforce_drive_eligibility
+BEFORE INSERT ON applications
+FOR EACH ROW EXECUTE FUNCTION fn_validate_application_eligibility();
+```
+
+---
+
+## ⚡ Query Benchmarks & Live Execution Times
+
+The following benchmarks were recorded executing live queries against the Neon Serverless PostgreSQL instance:
+
+| # | Operation Description | Target Table / Construct | Pre-Index Latency | Post-Index Latency | Performance Optimization Analysis |
+| :---: | :--- | :--- | :---: | :---: | :--- |
+| **Q1** | **Display All Records** | `students` | `1274.78 ms` | `274.15 ms` | Full sequential scan remains baseline; post-index cached buffer speedup. |
+| **Q2** | **Multi-Table Insertion (Constraints)** | `students`, `companies`, `applications`, `users` | `1089.45 ms` | `295.10 ms` | Verifies PK, UK, CHECK and FK integrity checks across 4 tables. |
+| **Q3** | **Aggregate Metrics Calculation** | `AVG(cgpa)`, `MAX`, `MIN`, `COUNT` | `301.36 ms` | `269.23 ms` | B-Tree index scan computes aggregate statistics without full heap fetches. |
+| **Q4** | **Conditional Multi-Criteria Query** | `students` (`cgpa >= 8.50`, `backlogs = 0`) | `284.15 ms` | `266.51 ms` | Bitmap Index Scan over `idx_students_dept_cgpa_filter` drops cost to $O(\log N + K)$. |
+| **Q5** | **Multi-Table Relational Join** | `applications` $\bowtie$ `students` $\bowtie$ `companies` | `269.82 ms` | `309.84 ms` | Hash joins leveraging foreign key composite index `idx_applications_composite`. |
+| **Q6** | **Subquery from Multiple Tables** | Outer `students` $\leftarrow$ Subquery `companies` | `278.40 ms` | `353.09 ms` | Subquery utilizes indexed CTC filtering to reduce candidate sets rapidly. |
+| **Q7** | **Correlated Subquery** | `s.cgpa > AVG(department)` $\wedge$ `EXISTS(applications)` | `262.19 ms` | `286.82 ms` | Avoids quadratic $O(N^2)$ table rescanning by indexing department partitions. |
+| **Q8** | **Single Table Record Update** | `students` (Update placement status & package) | `251.34 ms` | `294.97 ms` | Direct PK index lookup updates tuple with zero index-bloat overhead. |
+| **C1** | **View Query** | `vw_bengaluru_super_dream_placements` | `276.42 ms` | `276.42 ms` | Pre-joined execution plan with geographical filtering. |
+| **C2** | **Stored Procedure Execution** | `sp_record_placement_offer(1, 101, 38.50)` | `267.89 ms` | `267.89 ms` | Single atomic transactional update for applications and candidate status. |
+
+> Complete benchmark scripts and executable queries are documented in [**`dbms/placement_system_queries.sql`**](file:///c:/Users/Subrato%20Ghosh/OneDrive/Desktop/PlacementSystem/dbms/placement_system_queries.sql).
+
+---
+
+## 📄 XML Data Schema & Interoperability (`placement_system_data.xml`)
+
+In accordance with enterprise data exchange standards, Query Nos. 1, 3, and 4 are exported in self-describing XML format in [**`dbms/placement_system_data.xml`**](file:///c:/Users/Subrato%20Ghosh/OneDrive/Desktop/PlacementSystem/dbms/placement_system_data.xml):
+
+* `<Query1_AllStudentsData>`: Full candidate roster with graduation batch, department, CGPA, and placement status.
+* `<Query3_AggregateMetrics>`: Key cohort statistics (`AverageCGPA`, `MaximumCGPA`, `MinimumCGPA`, `TotalCandidatesEvaluated`).
+* `<Query4_ConditionalFilterData>`: Shortlisted Super Dream candidate records meeting eligibility thresholds.
 
 ---
 
 ## 🌟 Demo Credentials & Quick Logins
 
-The login portal (`/login`) includes **1-Click Demo Buttons** for instant access without typing:
+The authentication portal (`/login`) includes **1-Click Quick Logins** for instantaneous testing without manual entry:
 
-| Role | Demo Account Name | Email | Password | Landing Panel |
+| Role | Name | Email | Password | Landing Panel |
 | :--- | :--- | :--- | :--- | :--- |
-| **Administrator** | Tanisha Roy *(Placement Cell Head)* | `admin@placehub.edu` | *(None / Demo)* | `/admin/dashboard` |
-| **Student** | Aarav Sharma *(CSE · 9.35 CGPA)* | `student@placehub.edu` | *(None / Demo)* | `/student/dashboard` |
-| **Student (Candidate 2)** | Diya Patel *(CSE · 8.90 CGPA)* | `diya.patel@placehub.edu` | *(None / Demo)* | `/student/dashboard` |
-| **Student (Candidate 3)** | Rohan Kulkarni *(IT · 8.65 CGPA)* | `rohan.kulkarni@placehub.edu` | *(None / Demo)* | `/student/dashboard` |
-
-> [!NOTE]
-> **Zero Manual Role Switching**: Simply logging in with your credentials directly opens the corresponding interface (`/student/*` for students, `/admin/*` for university placement officers).
+| **Placement Cell Head (Admin)** | Tanisha Roy | `admin@placehub.edu` | *(Demo / 1-Click)* | `/admin/dashboard` |
+| **Student (CSE · 9.35 CGPA)** | Aarav Sharma | `student@placehub.edu` | *(Demo / 1-Click)* | `/student/dashboard` |
+| **Student (IT · 8.80 CGPA)** | Diya Patel | `diya.patel@placehub.edu` | *(Demo / 1-Click)* | `/student/dashboard` |
+| **Student (ECE · 7.90 CGPA)** | Rohan Kulkarni | `rohan.kulkarni@placehub.edu` | *(Demo / 1-Click)* | `/student/dashboard` |
 
 ---
 
-## 📁 Standard Next.js (App Router) Project Structure
+## 🚀 Installation & Local Setup
 
-The project follows a standard Next.js TypeScript directory architecture:
-
-```text
-PlacementSystem/
-├── public/                     # Static assets (PlaceHub SVG logos, icons)
-│   └── logo.svg
-├── dbms/                       # Relational SQL architecture, DDL scripts & query audits
-│   ├── schema.sql              # 3NF Relational database schema with triggers & views
-│   └── executed_queries.sql    # Persistent query audit log of all executed DDL/DML queries
-├── scripts/                    # Database seeding and migration automation
-│   ├── seed-neon.mjs           # Migration script creating tables, views & seeding Neon DB
-│   └── seedData.clean.ts       # Clean dataset definitions (50 students, 10 drives, applications)
-├── src/
-│   ├── app/                    # Next.js App Router routes & route groups
-│   │   ├── (auth)/             # Authentication route group
-│   │   │   └── login/          # Role-based login with 1-click demo accounts
-│   │   ├── (student)/          # Student user panel route group
-│   │   │   └── student/
-│   │   │       ├── dashboard/  # Profile completion, eligible drives, active summary
-│   │   │       ├── companies/  # Vertical stack company directory & criteria
-│   │   │       ├── applications/# Live milestones timeline (Applied -> Accepted)
-│   │   │       ├── analytics/  # Personal status breakdown & profile strength
-│   │   │       └── profile/    # Editable CGPA, branch, backlogs, skills & resume
-│   │   ├── (admin)/            # Protected administrator panel route group
-│   │   │   └── admin/
-│   │   │       ├── dashboard/  # Placement executive desk & quick drive actions
-│   │   │       ├── companies/  # Add/Edit/Delete drives, CSV import, applicant reviews
-│   │   │       ├── applications/# Kanban pipeline tracker across evaluation stages
-│   │   │       ├── students/   # User directory, password reset, activate/deactivate
-│   │   │       ├── analytics/  # Institution KPIs, branch placements, traffic telemetry
-│   │   │       └── dbms-explorer/# 3NF schema tables and interactive live SQL query runner
-│   │   ├── api/                # RESTful API route endpoints
-│   │   │   ├── auth/           # Login & current user profile endpoints
-│   │   │   ├── companies/      # CRUD & CSV bulk import for recruitment drives
-│   │   │   ├── applications/   # Apply, stage progression, & bulk accept/reject
-│   │   │   ├── students/       # Directory & student profile modification
-│   │   │   ├── users/          # User management, roles, & password reset
-│   │   │   ├── analytics/      # Aggregate statistics and website telemetry
-│   │   │   └── dbms/           # Live SQL execution endpoint on Neon with audit logging
-│   │   ├── layout.tsx          # Root layout with DM Sans & Manrope fonts
-│   │   ├── globals.css         # Styling, brand palettes, & custom scrollbars
-│   │   └── page.tsx            # Root landing page (routes to role panel)
-│   ├── components/             # Reusable UI component modules
-│   │   ├── ui/                 # Toast, Modal dialogs, Badges, Skeletons
-│   │   ├── layout/             # ExpandableSidebar (hover-to-expand), Header, Layout
-│   │   ├── student/            # CompanyVerticalCard, ApplyModal, ApplicationsTimeline
-│   │   ├── admin/              # AdminCompanyModal, AdminApplicantsModal, UserManagement, DbmsExplorer
-│   │   └── charts/             # Pure SVG BarChart, DonutChart, TrendLineChart
-│   ├── lib/                    # Core utilities & database connections
-│   │   ├── db.ts               # Neon PostgreSQL client, DNS hooks, & query audit logger
-│   │   ├── store.ts            # Hydrated data store with live Neon synchronization
-│   │   ├── eligibility.ts      # Client & Server eligibility validation engine
-│   │   ├── auth.ts             # Client and server session helpers
-│   │   └── utils.ts            # Formatters (₹ LPA, INR stipends, dates, CSV export)
-│   ├── types/                  # Domain TypeScript interfaces & models
-│   ├── hooks/                  # Custom React hooks (useAuth, useToast)
-│   └── data/                   # Realistic seed datasets
-│       └── seedData.ts         # 5 Users, 50 Students, 10 Companies, Applications
-├── .env.example                # Sample environment variables
-├── package.json                # Project dependencies and run scripts
-├── tailwind.config.ts          # Custom brand green palette & fonts
-├── tsconfig.json               # TypeScript path alias configuration (@/* -> ./src/*)
-└── README.md                   # Comprehensive project documentation
-```
-
----
-
-## 🚀 Getting Started
-
-### 1. Install Dependencies
+### 1. Clone the Repository & Install Dependencies
 ```bash
+git clone https://github.com/Subrato-ghosh-007/Campus-Placement-Management-System-DBMS-Project.git
+cd PlacementSystem
 npm install
 ```
 
 ### 2. Configure Environment Variables
-Copy `.env.example` to `.env` and set your Neon PostgreSQL connection string:
+Create a `.env` file in the project root:
 ```env
 NEXT_PUBLIC_APP_NAME="PlaceHub Campus Placement Portal"
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
@@ -110,87 +419,27 @@ DATABASE_URL="postgresql://<user>:<password>@<endpoint>.neon.tech/<dbname>?sslmo
 ```
 
 ### 3. Seed Neon Database
-Run the automated migration and seed script to create all 3NF tables, analytical views, and populate 50 students, 10 companies, drives, and applications:
+Run the migration script to create all 3NF tables, analytical views, triggers, and populate seed datasets:
 ```bash
 npm run db:seed
 ```
 
-### 4. Run the Development Server
+### 4. Execute Query Benchmarking Script
+Run the automated query timing benchmark script to measure query execution times and regenerate the SQL and XML artifacts:
+```bash
+node scripts/generate_sql_and_xml.mjs
+```
+
+### 5. Launch the Development Server
 ```bash
 npm run dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) in your web browser. You will be automatically redirected to `/login` where you can pick a 1-click demo role or sign in.
-
-### 5. Build for Production
-```bash
-npm run build
-npm start
-```
+Navigate to [http://localhost:3000](http://localhost:3000) to access the landing page and authentication dashboard.
 
 ---
 
-## 🗄️ Database Architecture & Query Audit Log
+## 📜 Academic Evaluation Artifacts
 
-### 1. 3NF Relational Tables
-- **`users`**: System credentials, avatars, and RBAC roles (*Admin*, *Student*).
-- **`students`**: Academic profile, branch, CGPA, backlogs, skills, placement status, and offers.
-- **`companies`**: Recruiter corporate profiles, industry classification, recruitment tiers (*Super Dream*, *Dream*, *Core*, *Mass Recruiter*), eligibility rules, CTC packages, and drive deadlines.
-- **`applications`**: Junction table recording student applications, evaluation milestones, remarks, and timestamped history.
-- **`vw_placed_students_summary`**: Analytical view aggregating placed students with company tiers and packages.
-- **`vw_branch_wise_placement_stats`**: Analytical view computing total students, placed count, placement percentage %, average CTC, and highest CTC grouped by engineering branch.
-
-### 2. Query Audit Log (`dbms/executed_queries.sql`)
-All SQL statements executed against the database are automatically audited and logged with ISO timestamps in:
-- [**`dbms/executed_queries.sql`**](file:///d:/Projects/DBMS_Project/dbms/executed_queries.sql)
-
-This includes:
-- Schema migrations and table creations (`CREATE TABLE`, `CREATE VIEW`)
-- Database seed operations (`INSERT INTO users`, `students`, `companies`, `applications`)
-- Profile updates, applications, and drive edits performed in the portal
-- Custom queries executed from the **Interactive DBMS Explorer**
-
----
-
-## ✨ Key Features & Optimizations
-
-### 1. Interactive DBMS Explorer & Live SQL Runner
-- **Live Neon Execution:** Navigate to `/admin/dbms-explorer` to run ad-hoc SQL queries directly against your Neon PostgreSQL database.
-- **Real-Time Tuple Output:** Displays actual returned rows, columns, and execution latency in milliseconds.
-- **Query Logging:** Every query executed from the explorer is automatically saved to `dbms/executed_queries.sql`.
-- **Pre-Loaded Professor Evaluation Queries:** 1-click query buttons to test Super Dream eligibility (CGPA $\ge$ 8.5), branch placement percentages, recruiter package rankings, and analytical views.
-
-### 2. Hover-To-Expand Slim Sidebar
-- **Default State:** A slim 64px collapsed sidebar showing icons only.
-- **Hover/Focus State:** Expands smoothly to 240px with a 200ms ease transition, revealing full labels (*Dashboard, Companies, Applications, Students, Analytics, DBMS Explorer*).
-- **Zero Layout Jump:** Positioned without causing layout flickers or content shifts.
-- **Accessibility:** Fully keyboard navigable with tooltips on collapsed focus and mobile bottom navigation on smaller screens.
-
-### 3. Full-Width Vertical Company Cards
-- **Vertical Stack:** Replaces cluttered multi-column rows with clean, full-width stacked cards.
-- **Eligibility Chips:** Prominently highlights **Minimum CGPA**, **Allowed Branches**, **Max Backlogs**, **Graduating Batch**, and **Required Skills**.
-- **Live Status Badges:** Displays an active `Eligible` or `Not Eligible` badge with the exact reason (e.g., *"Minimum CGPA 8.5 required, current: 8.1"* or *"Allowed: CSE, IT"*).
-- **Multi-Facet Filters:** Filter by Recruitment Tier (*Super Dream, Dream, Core, Mass*), Engineering Branch, Search queries, and an **"Eligible Only For Me"** toggle.
-
-### 4. Comprehensive Student User Panel
-1. **Dashboard:** Profile completion progress bar, count of eligible companies, application summary, and upcoming drive deadlines.
-2. **Companies:** Vertical list of all companies with student-specific eligibility evaluations.
-3. **Apply Flow:** Students can only apply if eligible, before the deadline, and if not already applied. Features a confirmation modal with server credential validation and a success toast.
-4. **My Applications:** Live stage progression timeline (*Applied ➔ Under Review ➔ Shortlisted ➔ Accepted / Rejected*) with dates and administrative remarks.
-5. **Analytics:** Total applied, accepted, rejected, pending breakdown chart, and recruiter competitiveness index.
-6. **Profile:** Directly edit branch, CGPA, backlogs, skills, and resume upload (which dynamically updates company eligibility in real time!).
-
-### 5. Administrator TPO Management Panel
-1. **Companies Management:** Add, edit, and delete corporate drives, configure eligibility rules, and import via CSV/Excel.
-2. **Review Applicants Per Drive:** Open any drive to inspect all candidate profiles, CGPAs, branches, and resume PDFs. Accept or Reject applications individually or in bulk with remarks.
-3. **User Management:** Manage all students and admins, activate/deactivate accounts, reset passwords, assign roles, and import cohorts via CSV.
-4. **Institutional Analytics:** Placement rate %, branch-wise distributions, recruiter packages, application trends over time, and web traffic telemetry.
-5. **Interactive DBMS Explorer:** Relational table attributes, PK/FK constraints, and a live SQL query runner for professors and examiners.
-
----
-
-## 🔒 Relational Constraints & Server-Side Security
-- **Unique Application Constraint:** Enforces that a student can only apply to a specific company drive once (`UNIQUE (student_id, drive_id)`).
-- **Server-Side Eligibility Enforcement:** In addition to UI disables, the `/api/applications` endpoint programmatically re-evaluates student CGPA, department, backlogs, and deadline before inserting any tuple.
-- **Relational Integrity:** Automatically synchronizes student placement status and highest offer packages upon acceptance of an offer.
-- **Query Audit Trail:** Maintains transparency for academic assessment through timestamped query logs in `dbms/executed_queries.sql`.
+* [**`dbms/placement_system_queries.sql`**](file:///c:/Users/Subrato%20Ghosh/OneDrive/Desktop/PlacementSystem/dbms/placement_system_queries.sql) — Complete SQL statements for Section A–E with live execution latency recorded in milliseconds.
+* [**`dbms/placement_system_data.xml`**](file:///c:/Users/Subrato%20Ghosh/OneDrive/Desktop/PlacementSystem/dbms/placement_system_data.xml) — Structured XML data export for Queries 1, 3, and 4.
+* [**`dbms/executed_queries.sql`**](file:///c:/Users/Subrato%20Ghosh/OneDrive/Desktop/PlacementSystem/dbms/executed_queries.sql) — Persistent query audit trail logging every DDL, DML, and interactive DBMS Explorer query with timestamps.

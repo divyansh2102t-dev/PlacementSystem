@@ -50,32 +50,32 @@ export function Modal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-3 sm:p-4 backdrop-blur-xs animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-3 sm:p-4 backdrop-blur-xs animate-in fade-in duration-150"
       onClick={onClose}
     >
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
-        className={`w-full ${widthClasses} max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-5 sm:p-6 shadow-2xl transition-all dark:bg-slate-900 border border-slate-200 dark:border-slate-800`}
+        className={`w-full ${widthClasses} max-h-[90vh] overflow-y-auto rounded-3xl bg-white/95 backdrop-blur-xl p-6 sm:p-7 shadow-2xl transition-all border border-slate-200/80`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-start justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-          <div className="flex items-center gap-2.5">
+        <div className="flex items-start justify-between pb-3.5 border-b border-slate-200/60">
+          <div className="flex items-center gap-3">
             {icon && (
-              <div className="grid h-8 w-8 place-items-center rounded-xl bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+              <div className="grid h-9 w-9 place-items-center rounded-2xl bg-gradient-to-br from-emerald-100 to-teal-100 text-emerald-800 border border-emerald-200 shadow-2xs">
                 {icon}
               </div>
             )}
             <div>
               <h2
                 id="modal-title"
-                className="text-base font-bold text-slate-900 dark:text-white"
+                className="text-base font-extrabold text-slate-900 tracking-tight"
               >
                 {title}
               </h2>
               {subtitle && (
-                <p className="text-xs text-slate-500 dark:text-slate-400">
+                <p className="text-xs text-slate-500 font-medium">
                   {subtitle}
                 </p>
               )}
@@ -83,7 +83,7 @@ export function Modal({
           </div>
           <button
             onClick={onClose}
-            className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-600 dark:hover:text-slate-200 transition"
+            className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition"
             aria-label="Close dialog"
           >
             <X size={16} />

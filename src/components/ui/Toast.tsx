@@ -48,12 +48,12 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           <div
             key={toast.id}
             role="alert"
-            className={`pointer-events-auto flex items-center justify-between gap-3 rounded-xl border p-3.5 shadow-lg backdrop-blur-md transition-all animate-in slide-in-from-bottom-2 text-xs font-medium ${
+            className={`pointer-events-auto flex items-center justify-between gap-3 rounded-2xl border p-3.5 shadow-xl backdrop-blur-xl transition-all animate-in slide-in-from-bottom-2 text-xs font-semibold ${
               toast.type === "error"
-                ? "border-rose-300 bg-rose-50 text-rose-900 dark:border-rose-800 dark:bg-rose-950/90 dark:text-rose-200"
+                ? "border-rose-200/80 bg-rose-50/95 text-rose-950 shadow-rose-500/10"
                 : toast.type === "info"
-                ? "border-sky-300 bg-sky-50 text-sky-900 dark:border-sky-800 dark:bg-sky-950/90 dark:text-sky-200"
-                : "border-emerald-300 bg-emerald-50 text-emerald-950 dark:border-emerald-800 dark:bg-emerald-950/90 dark:text-emerald-200"
+                ? "border-sky-200/80 bg-sky-50/95 text-sky-950 shadow-sky-500/10"
+                : "border-emerald-200/80 bg-emerald-50/95 text-emerald-950 shadow-emerald-500/10"
             }`}
           >
             <div className="flex items-center gap-2.5 min-w-0">
@@ -68,7 +68,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             </div>
             <button
               onClick={() => removeToast(toast.id)}
-              className="rounded p-1 hover:bg-black/5 dark:hover:bg-white/10 shrink-0 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              className="rounded-lg p-1 hover:bg-black/5 shrink-0 text-slate-400 hover:text-slate-700 transition"
               aria-label="Close notification"
             >
               <X size={14} />

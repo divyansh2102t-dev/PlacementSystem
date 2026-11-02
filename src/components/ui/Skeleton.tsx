@@ -3,14 +3,14 @@ import React from "react";
 export function Skeleton({ className = "" }: { className?: string }) {
   return (
     <div
-      className={`animate-pulse rounded-lg bg-slate-200/80 dark:bg-slate-700/60 ${className}`}
+      className={`animate-pulse rounded-xl bg-slate-200/70 ${className}`}
     />
   );
 }
 
 export function CompanyCardSkeleton() {
   return (
-    <div className="flex flex-col rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-800/90 space-y-4">
+    <div className="flex flex-col rounded-3xl border border-slate-200/80 bg-white/85 backdrop-blur-md p-5 shadow-xs space-y-4">
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
           <Skeleton className="h-12 w-12 rounded-2xl" />

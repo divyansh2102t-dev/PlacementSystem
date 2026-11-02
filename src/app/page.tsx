@@ -8,6 +8,7 @@ import { getClientUser, AUTH_CHANGE_EVENT } from "@/lib/auth";
 import { User, CompanyDrive, HeadlineStatsConfig, DEFAULT_HEADLINE_STATS } from "@/types";
 import { TierBadge } from "@/components/ui/Badge";
 import { formatCurrencyLpa, formatDate } from "@/lib/utils";
+import { ParallaxCard } from "@/components/ui/ParallaxCard";
 import {
   Building2,
   GraduationCap,
@@ -165,7 +166,7 @@ export default function LandingPage() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 text-center divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
               {/* Metric 1: Highest Package */}
-              <div className="group pt-4 lg:pt-0 px-4 space-y-1.5 transition-transform duration-200 hover:-translate-y-1 cursor-default">
+              <ParallaxCard maxTilt={6} scale={1.03} className="pt-4 lg:pt-0 px-4 space-y-1.5 cursor-default group">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 group-hover:text-emerald-700 transition-colors block">
                   {headlineStats.highestPackage?.label || "HIGHEST PACKAGE"}
                 </span>
@@ -175,10 +176,10 @@ export default function LandingPage() {
                 <span className="text-xs sm:text-sm text-slate-500 font-medium block">
                   {headlineStats.highestPackage?.subtext || "Super Dream Tier"}
                 </span>
-              </div>
+              </ParallaxCard>
 
               {/* Metric 2: Average CTC */}
-              <div className="group pt-4 lg:pt-0 px-4 space-y-1.5 transition-transform duration-200 hover:-translate-y-1 cursor-default">
+              <ParallaxCard maxTilt={6} scale={1.03} className="pt-4 lg:pt-0 px-4 space-y-1.5 cursor-default group">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 group-hover:text-slate-800 transition-colors block">
                   {headlineStats.averageCtc?.label || "AVERAGE CTC"}
                 </span>
@@ -188,10 +189,10 @@ export default function LandingPage() {
                 <span className="text-xs sm:text-sm text-slate-500 font-medium block">
                   {headlineStats.averageCtc?.subtext || "All Engineering Branches"}
                 </span>
-              </div>
+              </ParallaxCard>
 
               {/* Metric 3: Placement Rate */}
-              <div className="group pt-4 lg:pt-0 px-4 space-y-1.5 transition-transform duration-200 hover:-translate-y-1 cursor-default">
+              <ParallaxCard maxTilt={6} scale={1.03} className="pt-4 lg:pt-0 px-4 space-y-1.5 cursor-default group">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 group-hover:text-emerald-700 transition-colors block">
                   {headlineStats.placementRate?.label || "PLACEMENT RATE"}
                 </span>
@@ -201,10 +202,10 @@ export default function LandingPage() {
                 <span className="text-xs sm:text-sm text-slate-500 font-medium block">
                   {headlineStats.placementRate?.subtext || "2026 Graduating Cohort"}
                 </span>
-              </div>
+              </ParallaxCard>
 
               {/* Metric 4: Recruiting Partners */}
-              <div className="group pt-4 lg:pt-0 px-4 space-y-1.5 transition-transform duration-200 hover:-translate-y-1 cursor-default">
+              <ParallaxCard maxTilt={6} scale={1.03} className="pt-4 lg:pt-0 px-4 space-y-1.5 cursor-default group">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 group-hover:text-slate-800 transition-colors block">
                   {headlineStats.recruitingPartners?.label || "RECRUITING PARTNERS"}
                 </span>
@@ -214,7 +215,7 @@ export default function LandingPage() {
                 <span className="text-xs sm:text-sm text-slate-500 font-medium block">
                   {headlineStats.recruitingPartners?.subtext || "Global Tech & Enterprise"}
                 </span>
-              </div>
+              </ParallaxCard>
             </div>
           </div>
         </section>
@@ -247,58 +248,61 @@ export default function LandingPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {companies.map((company) => (
-                <div
+                <ParallaxCard
                   key={company.id}
-                  className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white/95 backdrop-blur-xs p-6 shadow-2xs hover:border-emerald-300 hover:shadow-md transition-all duration-200"
+                  maxTilt={8}
+                  className="rounded-2xl"
                 >
-                  <div>
-                    <div className="flex items-start justify-between gap-3 mb-3">
-                      <div className="flex items-center gap-3">
-                        <div className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-emerald-50 to-teal-100 font-extrabold text-emerald-800 text-sm shadow-2xs border border-emerald-200/80">
-                          {company.companyName.slice(0, 2).toUpperCase()}
+                  <div className="h-full flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white/95 backdrop-blur-xs p-6 shadow-2xs hover:border-emerald-300 hover:shadow-md transition-all duration-200">
+                    <div>
+                      <div className="flex items-start justify-between gap-3 mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-emerald-50 to-teal-100 font-extrabold text-emerald-800 text-sm shadow-2xs border border-emerald-200/80">
+                            {company.companyName.slice(0, 2).toUpperCase()}
+                          </div>
+                          <div>
+                            <h3 className="text-sm font-bold text-slate-900">
+                              {company.companyName}
+                            </h3>
+                            <span className="text-[11px] text-slate-500">
+                              {company.industry} · {company.location}
+                            </span>
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="text-sm font-bold text-slate-900">
-                            {company.companyName}
-                          </h3>
-                          <span className="text-[11px] text-slate-500">
-                            {company.industry} · {company.location}
+                        <TierBadge tier={company.tier} />
+                      </div>
+
+                      <div className="rounded-xl bg-slate-50 p-3 mb-3.5 space-y-1 border border-slate-100">
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="font-semibold text-slate-700">{company.roleTitle}</span>
+                          <span className="font-extrabold text-emerald-700 text-sm">
+                            {formatCurrencyLpa(company.ctcLpa)}
                           </span>
                         </div>
-                      </div>
-                      <TierBadge tier={company.tier} />
-                    </div>
-
-                    <div className="rounded-xl bg-slate-50 p-3 mb-3.5 space-y-1 border border-slate-100">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="font-semibold text-slate-700">{company.roleTitle}</span>
-                        <span className="font-extrabold text-emerald-700 text-sm">
-                          {formatCurrencyLpa(company.ctcLpa)}
+                        <span className="text-[11px] text-slate-500 block">
+                          Min CGPA: {company.minCgpa.toFixed(2)} · Backlogs: {company.maxBacklogs}
                         </span>
                       </div>
-                      <span className="text-[11px] text-slate-500 block">
-                        Min CGPA: {company.minCgpa.toFixed(2)} · Backlogs: {company.maxBacklogs}
-                      </span>
+
+                      <p className="text-xs text-slate-600 line-clamp-2 mb-3 leading-relaxed">
+                        {company.description}
+                      </p>
                     </div>
 
-                    <p className="text-xs text-slate-600 line-clamp-2 mb-3 leading-relaxed">
-                      {company.description}
-                    </p>
+                    <div className="border-t border-slate-100 pt-3 flex items-center justify-between text-xs">
+                      <span className="flex items-center gap-1 text-[11px] text-slate-500">
+                        <Clock size={12} className="text-amber-500" />
+                        {formatDate(company.deadline)}
+                      </span>
+                      <Link
+                        href="/drives"
+                        className="font-bold text-emerald-700 hover:underline"
+                      >
+                        Explore Drive →
+                      </Link>
+                    </div>
                   </div>
-
-                  <div className="border-t border-slate-100 pt-3 flex items-center justify-between text-xs">
-                    <span className="flex items-center gap-1 text-[11px] text-slate-500">
-                      <Clock size={12} className="text-amber-500" />
-                      {formatDate(company.deadline)}
-                    </span>
-                    <Link
-                      href="/drives"
-                      className="font-bold text-emerald-700 hover:underline"
-                    >
-                      Explore Drive →
-                    </Link>
-                  </div>
-                </div>
+                </ParallaxCard>
               ))}
             </div>
           </div>
@@ -323,45 +327,53 @@ export default function LandingPage() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-2xs hover:border-emerald-300 transition">
-                <span className="font-mono text-2xl font-black text-emerald-600">01</span>
-                <h3 className="text-sm font-bold text-slate-900 mt-2 mb-1">
-                  Automated Eligibility
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  The portal validates CGPA, active backlogs, and engineering departments against company criteria.
-                </p>
-              </div>
+              <ParallaxCard maxTilt={8} className="rounded-2xl h-full">
+                <div className="h-full rounded-2xl border border-slate-200/80 bg-white/95 backdrop-blur-xs p-6 shadow-2xs hover:border-emerald-300 transition">
+                  <span className="font-mono text-2xl font-black text-emerald-600">01</span>
+                  <h3 className="text-sm font-bold text-slate-900 mt-2 mb-1">
+                    Automated Eligibility
+                  </h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    The portal validates CGPA, active backlogs, and engineering departments against company criteria.
+                  </p>
+                </div>
+              </ParallaxCard>
 
-              <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-2xs hover:border-emerald-300 transition">
-                <span className="font-mono text-2xl font-black text-emerald-600">02</span>
-                <h3 className="text-sm font-bold text-slate-900 mt-2 mb-1">
-                  Online Assessments
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Proctored coding and cognitive assessments with instant score validation and shortlisting.
-                </p>
-              </div>
+              <ParallaxCard maxTilt={8} className="rounded-2xl h-full">
+                <div className="h-full rounded-2xl border border-slate-200/80 bg-white/95 backdrop-blur-xs p-6 shadow-2xs hover:border-emerald-300 transition">
+                  <span className="font-mono text-2xl font-black text-emerald-600">02</span>
+                  <h3 className="text-sm font-bold text-slate-900 mt-2 mb-1">
+                    Online Assessments
+                  </h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Proctored coding and cognitive assessments with instant score validation and shortlisting.
+                  </p>
+                </div>
+              </ParallaxCard>
 
-              <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-2xs hover:border-emerald-300 transition">
-                <span className="font-mono text-2xl font-black text-emerald-600">03</span>
-                <h3 className="text-sm font-bold text-slate-900 mt-2 mb-1">
-                  Technical Interviews
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Multi-round technical depth evaluations covering algorithms, systems, and engineering fundamentals.
-                </p>
-              </div>
+              <ParallaxCard maxTilt={8} className="rounded-2xl h-full">
+                <div className="h-full rounded-2xl border border-slate-200/80 bg-white/95 backdrop-blur-xs p-6 shadow-2xs hover:border-emerald-300 transition">
+                  <span className="font-mono text-2xl font-black text-emerald-600">03</span>
+                  <h3 className="text-sm font-bold text-slate-900 mt-2 mb-1">
+                    Technical Interviews
+                  </h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Multi-round technical depth evaluations covering algorithms, systems, and engineering fundamentals.
+                  </p>
+                </div>
+              </ParallaxCard>
 
-              <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-2xs hover:border-emerald-300 transition">
-                <span className="font-mono text-2xl font-black text-emerald-600">04</span>
-                <h3 className="text-sm font-bold text-slate-900 mt-2 mb-1">
-                  Offer Confirmation
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Final Letter of Intent issued. Real-time status update to Placed with verified CTC records.
-                </p>
-              </div>
+              <ParallaxCard maxTilt={8} className="rounded-2xl h-full">
+                <div className="h-full rounded-2xl border border-slate-200/80 bg-white/95 backdrop-blur-xs p-6 shadow-2xs hover:border-emerald-300 transition">
+                  <span className="font-mono text-2xl font-black text-emerald-600">04</span>
+                  <h3 className="text-sm font-bold text-slate-900 mt-2 mb-1">
+                    Offer Confirmation
+                  </h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Final Letter of Intent issued. Real-time status update to Placed with verified CTC records.
+                  </p>
+                </div>
+              </ParallaxCard>
             </div>
 
             <div className="mt-8 text-center">
@@ -371,36 +383,6 @@ export default function LandingPage() {
               >
                 <span>Read Full Pipeline & Custom Stages Guide</span>
                 <ArrowRight size={14} />
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            BOTTOM CALL TO ACTION
-        ========================================================================== */}
-        <section className="py-14 sm:py-18 bg-slate-900 text-white relative overflow-hidden">
-          <div className="pointer-events-none absolute -top-24 -right-24 w-96 h-96 bg-emerald-600/20 rounded-full blur-3xl" />
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center relative z-10">
-            <h2 className="text-2xl sm:text-3xl font-extrabold">
-              Start Your Placement Journey Today
-            </h2>
-            <p className="mt-3 text-xs sm:text-sm text-slate-400 max-w-xl mx-auto leading-relaxed">
-              Sign up for student access, review your live eligibility across top tier companies,
-              and stay synchronized with every interview round.
-            </p>
-            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-              <Link
-                href="/signup"
-                className="rounded-xl bg-emerald-500 px-6 py-3 text-xs font-bold text-slate-950 shadow-sm hover:bg-emerald-400 transition"
-              >
-                Create Student Account
-              </Link>
-              <Link
-                href="/login"
-                className="rounded-xl border border-slate-700 bg-slate-800 px-6 py-3 text-xs font-bold text-slate-200 hover:bg-slate-700 transition"
-              >
-                Staff & Admin Sign In
               </Link>
             </div>
           </div>

@@ -161,7 +161,6 @@ export default function LoginPage() {
               <input
                 required
                 type="email"
-                placeholder="admin@placehub.edu or student@placehub.edu"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-3 text-xs text-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition shadow-2xs"
@@ -177,7 +176,6 @@ export default function LoginPage() {
               <Lock size={14} className="absolute left-3 top-3 text-slate-400" />
               <input
                 type="password"
-                placeholder="Enter your password (optional for demo)"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-3 text-xs text-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition shadow-2xs"

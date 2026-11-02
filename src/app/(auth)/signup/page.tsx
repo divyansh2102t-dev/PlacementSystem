@@ -147,7 +147,6 @@ export default function SignupPage() {
               <input
                 required
                 type="text"
-                placeholder="e.g. Diya Patel"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="w-full rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-3 text-xs text-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition shadow-2xs"
@@ -162,7 +161,6 @@ export default function SignupPage() {
               <input
                 required
                 type="email"
-                placeholder="e.g. diya.patel@placehub.edu"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-3 text-xs text-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition shadow-2xs"
@@ -191,7 +189,6 @@ export default function SignupPage() {
               <label className="font-semibold text-slate-700">Roll Number</label>
               <input
                 type="text"
-                placeholder="e.g. 21IT014"
                 value={rollNo}
                 onChange={(e) => setRollNo(e.target.value)}
                 className="mt-1 w-full rounded-xl border border-slate-200 bg-white py-2 px-3 text-xs text-slate-800 focus:border-emerald-500 focus:outline-none transition shadow-2xs"
@@ -207,7 +204,6 @@ export default function SignupPage() {
                 step="0.01"
                 min="0"
                 max="10"
-                placeholder="8.50"
                 value={cgpa}
                 onChange={(e) => setCgpa(e.target.value)}
                 className="mt-1 w-full rounded-xl border border-slate-200 bg-white py-2 px-3 text-xs text-slate-800 focus:border-emerald-500 focus:outline-none transition shadow-2xs"

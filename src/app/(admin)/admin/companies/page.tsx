@@ -209,12 +209,12 @@ export default function AdminCompaniesPage() {
     >
       <div className="space-y-4">
         {/* Toolbar: Search, Filters & Import/Export */}
-        <div className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-slate-800 space-y-3">
-          <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="rounded-3xl border border-slate-200/80 bg-white/85 backdrop-blur-md p-5 sm:p-6 shadow-xs space-y-3.5">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="relative flex-1 max-w-md">
               <Search
                 size={14}
-                className="absolute left-3 top-3 text-slate-400 pointer-events-none"
+                className="absolute left-3.5 top-3.5 text-slate-400 pointer-events-none"
               />
               <input
                 value={search}
@@ -222,8 +222,7 @@ export default function AdminCompaniesPage() {
                   setSearch(e.target.value);
                   setCurrentPage(1);
                 }}
-                placeholder="Search by company name, role, or location..."
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-xs dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
+                className="w-full rounded-xl border border-slate-200/80 bg-white/90 py-2.5 pl-9 pr-3 text-xs text-slate-800 shadow-2xs focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
               />
             </div>
 
@@ -232,13 +231,13 @@ export default function AdminCompaniesPage() {
                 onClick={() =>
                   downloadCsv("placehub-companies-export.csv", filtered)
                 }
-                className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                className="flex items-center gap-1.5 rounded-xl border border-slate-200/80 bg-white/90 px-3.5 py-2 text-xs font-bold text-slate-700 hover:bg-white hover:text-emerald-700 hover:border-emerald-300 shadow-2xs hover:shadow-xs hover:-translate-y-0.5 transition-all"
               >
                 <Download size={13} /> Export CSV
               </button>
               <button
                 onClick={() => setIsCsvImportOpen(true)}
-                className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                className="flex items-center gap-1.5 rounded-xl border border-slate-200/80 bg-white/90 px-3.5 py-2 text-xs font-bold text-slate-700 hover:bg-white hover:text-emerald-700 hover:border-emerald-300 shadow-2xs hover:shadow-xs hover:-translate-y-0.5 transition-all"
               >
                 <Upload size={13} /> Import CSV
               </button>
@@ -247,7 +246,7 @@ export default function AdminCompaniesPage() {
                   setCompanyToEdit(null);
                   setIsCompanyModalOpen(true);
                 }}
-                className="flex items-center gap-1.5 rounded-xl bg-emerald-700 px-4 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-emerald-800 transition"
+                className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 px-4 py-2 text-xs font-bold text-white shadow-xs hover:from-emerald-700 hover:to-teal-800 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
               >
                 <Plus size={14} /> Add Company Drive
               </button>
@@ -255,7 +254,7 @@ export default function AdminCompaniesPage() {
           </div>
 
           {/* Secondary Tier & Branch Filters */}
-          <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-200/60 text-xs">
             <div className="flex flex-wrap items-center gap-1.5">
               <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mr-1">
                 Tier:
@@ -267,10 +266,10 @@ export default function AdminCompaniesPage() {
                     setSelectedTier(tier);
                     setCurrentPage(1);
                   }}
-                  className={`rounded-full px-3 py-1 text-[11px] font-semibold transition ${
+                  className={`rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 ${
                     selectedTier === tier
-                      ? "bg-emerald-600 text-white shadow-xs"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      ? "bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xs border border-transparent"
+                      : "bg-white/90 text-slate-700 border border-slate-200/80 hover:bg-white hover:text-emerald-800 hover:border-emerald-300 shadow-2xs"
                   }`}
                 >
                   {tier}
@@ -278,7 +277,7 @@ export default function AdminCompaniesPage() {
               ))}
             </div>
 
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
               <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                 Department:
               </span>
@@ -288,9 +287,9 @@ export default function AdminCompaniesPage() {
                   setSelectedDept(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="rounded-xl border border-slate-200 bg-white px-2.5 py-1 text-xs dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 focus:outline-none"
+                className="rounded-xl border border-slate-200/80 bg-white/90 px-3 py-1.5 text-xs font-semibold text-slate-800 shadow-2xs focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
               >
-                <option value="All">All Departments</option>
+                <option value="All">All Branches</option>
                 <option value="CSE">CSE</option>
                 <option value="IT">IT</option>
                 <option value="ECE">ECE</option>
@@ -328,8 +327,8 @@ export default function AdminCompaniesPage() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-between rounded-xl bg-white p-3 shadow-xs dark:bg-slate-800 border border-slate-200/80 dark:border-slate-800 text-xs">
-            <span className="text-slate-500 text-[11px]">
+          <div className="flex items-center justify-between rounded-2xl bg-white/85 backdrop-blur-md p-3.5 shadow-xs border border-slate-200/80 text-xs">
+            <span className="text-slate-500 text-[11px] font-medium">
               Showing <strong>{(currentPage - 1) * pageSize + 1}</strong> –{" "}
               <strong>{Math.min(currentPage * pageSize, filtered.length)}</strong> of{" "}
               <strong>{filtered.length}</strong> companies
@@ -339,17 +338,17 @@ export default function AdminCompaniesPage() {
               <button
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                className="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                className="flex items-center gap-1 rounded-xl border border-slate-200/80 bg-white/90 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-white hover:text-emerald-700 disabled:opacity-40 transition shadow-2xs"
               >
                 <ChevronLeft size={14} /> Previous
               </button>
-              <span className="px-2 font-bold text-slate-800 dark:text-slate-200">
+              <span className="px-2 font-bold text-slate-800">
                 {currentPage} / {totalPages}
               </span>
               <button
                 disabled={currentPage >= totalPages}
                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                className="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                className="flex items-center gap-1 rounded-xl border border-slate-200/80 bg-white/90 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-white hover:text-emerald-700 disabled:opacity-40 transition shadow-2xs"
               >
                 Next <ChevronRight size={14} />
               </button>
@@ -396,33 +395,32 @@ export default function AdminCompaniesPage() {
         onClose={() => setIsCsvImportOpen(false)}
         title="Import Recruitment Drives from CSV"
         subtitle="Bulk create corporate hiring drives with eligibility criteria"
-        icon={<Upload size={18} />}
+        icon={<Upload size={18} className="text-emerald-600" />}
         maxWidth="lg"
       >
         <form onSubmit={handleCsvImport} className="space-y-3 text-xs">
-          <p className="text-slate-500 leading-relaxed">
-            Paste CSV formatted content with header: <code className="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded font-mono">companyName,industry,roleTitle,ctcLpa,minCgpa,maxBacklogs,deadline</code>
+          <p className="text-slate-500 leading-relaxed font-medium">
+            Paste CSV formatted content with header: <code className="bg-slate-100 px-1.5 py-0.5 rounded-lg text-emerald-800 font-mono text-[11px]">companyName,industry,roleTitle,ctcLpa,minCgpa,maxBacklogs,deadline</code>
           </p>
 
           <textarea
             rows={6}
             value={csvText}
             onChange={(e) => setCsvText(e.target.value)}
-            placeholder={`companyName,industry,roleTitle,ctcLpa,minCgpa,maxBacklogs,deadline\nQualcomm,Hardware,ASIC Design Engineer,18.0,7.5,0,2026-12-18\nAdobe India,Cloud,Software Engineer,25.0,8.0,0,2026-12-20`}
-            className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 font-mono text-xs dark:border-slate-700 dark:bg-slate-900"
+            className="w-full rounded-2xl border border-slate-200/80 bg-white/95 p-3.5 font-mono text-xs text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition"
           />
 
-          <div className="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <div className="flex justify-end gap-2.5 pt-3 border-t border-slate-100">
             <button
               type="button"
               onClick={() => setIsCsvImportOpen(false)}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+              className="rounded-xl border border-slate-200/80 bg-white px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 transition"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="rounded-xl bg-emerald-700 px-5 py-2 text-xs font-bold text-white hover:bg-emerald-800 transition"
+              className="rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 px-5 py-2 text-xs font-bold text-white shadow-md hover:shadow-lg hover:brightness-105 active:scale-95 transition"
             >
               Import Drives
             </button>

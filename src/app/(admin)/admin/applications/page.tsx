@@ -87,14 +87,13 @@ export default function AdminApplicationsPage() {
     >
       <div className="space-y-4">
         {/* Toolbar */}
-        <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-3xl border border-slate-200/80 bg-white/85 backdrop-blur-md p-5 sm:p-6 shadow-xs">
           <div className="relative flex-1 max-w-md">
-            <Search size={14} className="absolute left-3 top-3 text-slate-400" />
+            <Search size={14} className="absolute left-3.5 top-3.5 text-slate-400 pointer-events-none" />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by student, roll number, or company..."
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-xs focus:outline-none focus:border-emerald-500"
+              className="w-full rounded-xl border border-slate-200/80 bg-white/90 py-2.5 pl-9 pr-3 text-xs text-slate-800 shadow-2xs focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
             />
           </div>
 
@@ -106,10 +105,10 @@ export default function AdminApplicationsPage() {
               <button
                 key={stage}
                 onClick={() => setSelectedStage(stage)}
-                className={`rounded-full px-3 py-1 text-[11px] font-semibold transition ${
+                className={`rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 ${
                   selectedStage === stage
-                    ? "bg-emerald-600 text-white shadow-xs"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    ? "bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xs border border-transparent"
+                    : "bg-white/90 text-slate-700 border border-slate-200/80 hover:bg-white hover:text-emerald-800 hover:border-emerald-300 shadow-2xs"
                 }`}
               >
                 {stage}
@@ -126,39 +125,39 @@ export default function AdminApplicationsPage() {
             return (
               <div
                 key={stage}
-                className="rounded-2xl border border-slate-200/80 bg-slate-50/70 p-3 dark:border-slate-800 dark:bg-slate-900/50 min-h-[220px]"
+                className="rounded-3xl border border-slate-200/80 bg-white/70 backdrop-blur-md p-3.5 shadow-2xs min-h-[220px]"
               >
-                <div className="mb-2.5 flex items-center justify-between border-b pb-2 dark:border-slate-800">
-                  <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                <div className="mb-3 flex items-center justify-between border-b border-slate-200/60 pb-2.5">
+                  <span className="text-xs font-extrabold text-slate-900">
                     {stage}
                   </span>
-                  <span className="rounded-full bg-slate-200 px-2 py-0.2 text-[10px] font-bold text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                  <span className="rounded-full bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 text-[10px] font-extrabold text-emerald-800">
                     {stageApps.length}
                   </span>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2.5">
                   {stageApps.map((app) => (
                     <div
                       key={app.id}
-                      className="rounded-xl border border-slate-200/80 bg-white p-2.5 shadow-2xs dark:border-slate-700 dark:bg-slate-800"
+                      className="rounded-2xl border border-slate-200/80 bg-white/95 p-3 shadow-2xs hover:border-emerald-300 hover:shadow-xs hover:-translate-y-0.5 transition-all"
                     >
                       <div className="flex items-start justify-between">
                         <div>
-                          <p className="text-xs font-bold text-slate-900 dark:text-white">
+                          <p className="text-xs font-extrabold text-slate-900">
                             {app.studentName}
                           </p>
                           <p className="text-[10px] text-slate-400">
                             {app.rollNo} · {app.department} (CGPA {app.cgpa})
                           </p>
                         </div>
-                        <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400">
+                        <span className="text-[10px] font-extrabold text-emerald-700">
                           {formatCurrencyLpa(app.ctcLpa)}
                         </span>
                       </div>
 
-                      <div className="mt-2 rounded bg-slate-50 p-1.5 text-[10px] dark:bg-slate-900/60">
-                        <span className="font-semibold text-slate-700 dark:text-slate-300">
+                      <div className="mt-2 rounded-xl bg-slate-50/80 border border-slate-100 p-2 text-[10px]">
+                        <span className="font-bold text-slate-800">
                           {app.companyName}
                         </span>
                         <p className="text-slate-400 truncate">{app.roleTitle}</p>
@@ -171,11 +170,11 @@ export default function AdminApplicationsPage() {
                       )}
 
                       {/* Stage Progression Buttons */}
-                      <div className="mt-2.5 flex items-center justify-between gap-1 border-t border-slate-100 pt-2 dark:border-slate-700/60 text-[10px]">
+                      <div className="mt-2.5 flex items-center justify-between gap-1 border-t border-slate-100 pt-2 text-[10px]">
                         {stage !== "Accepted" && (
                           <button
                             onClick={() => handleUpdateStatus(app.id, "Accepted")}
-                            className="flex items-center gap-0.5 rounded bg-emerald-100 px-2 py-0.5 font-bold text-emerald-800 hover:bg-emerald-200 dark:bg-emerald-950 dark:text-emerald-300"
+                            className="flex items-center gap-0.5 rounded-lg bg-emerald-50 border border-emerald-200/60 px-2 py-1 font-bold text-emerald-800 hover:bg-emerald-600 hover:text-white transition"
                           >
                             <Check size={10} /> Accept
                           </button>
@@ -183,7 +182,7 @@ export default function AdminApplicationsPage() {
                         {stage !== "Rejected" && (
                           <button
                             onClick={() => handleUpdateStatus(app.id, "Rejected")}
-                            className="flex items-center gap-0.5 rounded bg-rose-100 px-2 py-0.5 font-bold text-rose-800 hover:bg-rose-200 dark:bg-rose-950 dark:text-rose-300"
+                            className="flex items-center gap-0.5 rounded-lg bg-rose-50 border border-rose-200/60 px-2 py-1 font-bold text-rose-800 hover:bg-rose-600 hover:text-white transition"
                           >
                             <X size={10} /> Reject
                           </button>
@@ -191,7 +190,7 @@ export default function AdminApplicationsPage() {
                         {stage === "Applied" && (
                           <button
                             onClick={() => handleUpdateStatus(app.id, "Under Review")}
-                            className="rounded bg-slate-100 px-2 py-0.5 text-slate-700 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-200 ml-auto"
+                            className="rounded-lg bg-slate-100 px-2 py-1 font-bold text-slate-700 hover:bg-slate-200 ml-auto transition"
                           >
                             Review →
                           </button>
@@ -199,7 +198,7 @@ export default function AdminApplicationsPage() {
                         {stage === "Under Review" && (
                           <button
                             onClick={() => handleUpdateStatus(app.id, "Shortlisted")}
-                            className="rounded bg-teal-100 px-2 py-0.5 text-teal-800 hover:bg-teal-200 dark:bg-teal-950 dark:text-teal-300 ml-auto"
+                            className="rounded-lg bg-teal-50 border border-teal-200/60 px-2 py-1 font-bold text-teal-800 hover:bg-teal-600 hover:text-white ml-auto transition"
                           >
                             Shortlist →
                           </button>
@@ -209,7 +208,7 @@ export default function AdminApplicationsPage() {
                   ))}
 
                   {stageApps.length === 0 && (
-                    <div className="py-8 text-center text-[10px] text-slate-400">
+                    <div className="py-8 text-center text-[10px] text-slate-400 font-medium">
                       No applications
                     </div>
                   )}

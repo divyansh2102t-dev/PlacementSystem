@@ -160,67 +160,68 @@ export default function AdminDashboardPage() {
       <div className="space-y-4">
         {/* Top 4 KPI Metrics */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-xs">
+          <div className="rounded-2xl border border-slate-200/80 bg-white/85 backdrop-blur-md p-4 shadow-xs hover:shadow-xl hover:border-emerald-300 hover:-translate-y-1 transition-all duration-300 group space-y-1">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-[10px] font-bold uppercase tracking-wider">Placement Rate</span>
-              <span className="text-emerald-700">
+              <span className="text-[11px] font-bold uppercase tracking-wider group-hover:text-emerald-700 transition-colors">Placement Rate</span>
+              <span className="grid h-8 w-8 place-items-center rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200/60 group-hover:bg-emerald-600 group-hover:text-white group-hover:border-transparent transition-all duration-200">
                 <Award size={16} />
               </span>
             </div>
-            <p className="mt-1 text-2xl font-black text-emerald-700">
+            <p className="text-2xl sm:text-3xl font-extrabold text-emerald-700 group-hover:scale-105 transition-transform duration-200">
               {placementRate}%
             </p>
-            <p className="text-[10px] text-slate-400">
+            <p className="text-[11px] text-slate-500 font-medium">
               {placedStudents.length} of {students.length} students placed
             </p>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-xs">
+          <div className="rounded-2xl border border-slate-200/80 bg-white/85 backdrop-blur-md p-4 shadow-xs hover:shadow-xl hover:border-emerald-300 hover:-translate-y-1 transition-all duration-300 group space-y-1">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-[10px] font-bold uppercase tracking-wider">Active Drives</span>
-              <span className="text-slate-600">
+              <span className="text-[11px] font-bold uppercase tracking-wider group-hover:text-slate-800 transition-colors">Active Drives</span>
+              <span className="grid h-8 w-8 place-items-center rounded-xl bg-slate-100 text-slate-700 border border-slate-200/60 group-hover:bg-slate-900 group-hover:text-white group-hover:border-transparent transition-all duration-200">
                 <Building2 size={16} />
               </span>
             </div>
-            <p className="mt-1 text-2xl font-black text-slate-900">
+            <p className="text-2xl sm:text-3xl font-extrabold text-slate-900 group-hover:scale-105 transition-transform duration-200">
               {companies.length}
             </p>
-            <p className="text-[10px] text-slate-400">Published recruiters</p>
+            <p className="text-[11px] text-slate-500 font-medium">Published recruiters</p>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-xs">
+          <div className="rounded-2xl border border-slate-200/80 bg-white/85 backdrop-blur-md p-4 shadow-xs hover:shadow-xl hover:border-emerald-300 hover:-translate-y-1 transition-all duration-300 group space-y-1">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-[10px] font-bold uppercase tracking-wider">Total Applications</span>
-              <span className="text-slate-600">
+              <span className="text-[11px] font-bold uppercase tracking-wider group-hover:text-slate-800 transition-colors">Total Applications</span>
+              <span className="grid h-8 w-8 place-items-center rounded-xl bg-slate-100 text-slate-700 border border-slate-200/60 group-hover:bg-slate-900 group-hover:text-white group-hover:border-transparent transition-all duration-200">
                 <Layers size={16} />
               </span>
             </div>
-            <p className="mt-1 text-2xl font-black text-slate-900">
+            <p className="text-2xl sm:text-3xl font-extrabold text-slate-900 group-hover:scale-105 transition-transform duration-200">
               {applications.length}
             </p>
-            <p className="text-[10px] text-slate-400">Candidate submissions</p>
+            <p className="text-[11px] text-slate-500 font-medium">Candidate submissions</p>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-xs">
+          <div className="rounded-2xl border border-slate-200/80 bg-white/85 backdrop-blur-md p-4 shadow-xs hover:shadow-xl hover:border-emerald-300 hover:-translate-y-1 transition-all duration-300 group space-y-1">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-[10px] font-bold uppercase tracking-wider">Batch Size</span>
-              <span className="text-slate-600">
+              <span className="text-[11px] font-bold uppercase tracking-wider group-hover:text-slate-800 transition-colors">Batch Size</span>
+              <span className="grid h-8 w-8 place-items-center rounded-xl bg-slate-100 text-slate-700 border border-slate-200/60 group-hover:bg-slate-900 group-hover:text-white group-hover:border-transparent transition-all duration-200">
                 <Users size={16} />
               </span>
             </div>
-            <p className="mt-1 text-2xl font-black text-slate-900">
+            <p className="text-2xl sm:text-3xl font-extrabold text-slate-900 group-hover:scale-105 transition-transform duration-200">
               {students.length}
             </p>
-            <p className="text-[10px] text-slate-400">Academic batch 2027</p>
+            <p className="text-[11px] text-slate-500 font-medium">Academic batch 2027</p>
           </div>
         </div>
 
         {/* Operations Hub Banner */}
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 items-start">
-          <div className="lg:col-span-8 rounded-2xl bg-gradient-to-br from-emerald-800 to-emerald-950 p-4 sm:p-5 text-white shadow-sm">
-            <div className="flex items-center justify-between">
+          <div className="lg:col-span-8 rounded-3xl bg-gradient-to-r from-emerald-800 via-teal-900 to-slate-950 p-5 sm:p-6 text-white shadow-xl border border-emerald-700/40 relative overflow-hidden">
+            <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-emerald-500/15 blur-3xl pointer-events-none" />
+            <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <h3 className="text-base font-bold">
+                <h3 className="text-lg sm:text-xl font-extrabold tracking-tight">
                   Placement Coordination Desk
                 </h3>
                 <p className="mt-1 text-xs text-emerald-100/90 leading-relaxed max-w-lg">
@@ -228,10 +229,10 @@ export default function AdminDashboardPage() {
                 </p>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <div className="flex flex-wrap items-center gap-2.5 shrink-0">
                 <button
                   onClick={() => setIsHeadlineModalOpen(true)}
-                  className="flex items-center gap-1.5 rounded-xl border border-emerald-400/50 bg-emerald-900/60 px-3.5 py-2 text-xs font-bold text-white hover:bg-emerald-800 transition shadow-xs"
+                  className="flex items-center gap-1.5 rounded-xl border border-emerald-400/40 bg-white/10 px-4 py-2.5 text-xs font-bold text-white hover:bg-white/20 transition-all duration-200 hover:-translate-y-0.5 shadow-xs backdrop-blur-xs"
                   title="Configure Highest Package, Average CTC, Placement Rate & Recruiting Partners"
                 >
                   <BarChart3 size={14} /> Manage Homepage Stats
@@ -241,31 +242,31 @@ export default function AdminDashboardPage() {
                     setCompanyToEdit(null);
                     setIsCompanyModalOpen(true);
                   }}
-                  className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-xs font-bold text-slate-950 hover:bg-emerald-400 transition shadow-xs shrink-0"
+                  className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-300 px-4 py-2.5 text-xs font-extrabold text-slate-950 hover:brightness-105 transition-all duration-200 hover:-translate-y-0.5 shadow-xs shrink-0"
                 >
                   <Plus size={14} /> Add New Drive
                 </button>
               </div>
             </div>
 
-            <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+            <div className="relative z-10 mt-5 grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
               <Link
                 href="/admin/companies"
-                className="flex items-center justify-between rounded-xl bg-white/10 px-3 py-2.5 font-medium hover:bg-white/20 transition backdrop-blur-xs border border-white/10"
+                className="flex items-center justify-between rounded-xl bg-white/10 px-3.5 py-2.5 font-bold hover:bg-white/20 transition-all duration-200 hover:-translate-y-0.5 backdrop-blur-xs border border-white/15"
               >
                 <span>All Companies ({companies.length})</span>
                 <ArrowRight size={13} />
               </Link>
               <Link
                 href="/admin/applications"
-                className="flex items-center justify-between rounded-xl bg-white/10 px-3 py-2.5 font-medium hover:bg-white/20 transition backdrop-blur-xs border border-white/10"
+                className="flex items-center justify-between rounded-xl bg-white/10 px-3.5 py-2.5 font-bold hover:bg-white/20 transition-all duration-200 hover:-translate-y-0.5 backdrop-blur-xs border border-white/15"
               >
                 <span>Review Applications ({applications.length})</span>
                 <ArrowRight size={13} />
               </Link>
               <Link
                 href="/admin/students"
-                className="flex items-center justify-between rounded-xl bg-white/10 px-3 py-2.5 font-medium hover:bg-white/20 transition backdrop-blur-xs border border-white/10"
+                className="flex items-center justify-between rounded-xl bg-white/10 px-3.5 py-2.5 font-bold hover:bg-white/20 transition-all duration-200 hover:-translate-y-0.5 backdrop-blur-xs border border-white/15"
               >
                 <span>Students & User Access</span>
                 <Users size={13} />
@@ -274,9 +275,9 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* Confirmed Placements Wall */}
-          <div className="lg:col-span-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5 mb-3">
-              <CheckCircle2 size={14} className="text-emerald-600" />
+          <div className="lg:col-span-4 rounded-3xl border border-slate-200/80 bg-white/85 backdrop-blur-md p-5 shadow-xs space-y-3">
+            <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+              <CheckCircle2 size={15} className="text-emerald-600" />
               Latest Confirmed Offers
             </h3>
 
@@ -284,7 +285,7 @@ export default function AdminDashboardPage() {
               {placedStudents.slice(0, 3).map((s) => (
                 <div
                   key={s.id}
-                  className="flex items-center justify-between rounded-xl bg-slate-50 p-2.5 border border-slate-100"
+                  className="flex items-center justify-between rounded-xl bg-white/90 p-2.5 border border-slate-200/80 shadow-2xs hover:border-emerald-300 hover:shadow-xs transition-all"
                 >
                   <div className="min-w-0">
                     <p className="text-xs font-bold text-slate-900 truncate">
@@ -294,7 +295,7 @@ export default function AdminDashboardPage() {
                       {s.rollNo} · {s.department} (CGPA {s.cgpa})
                     </p>
                   </div>
-                  <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-bold text-emerald-800 shrink-0 border border-emerald-200">
+                  <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-extrabold text-emerald-800 shrink-0 border border-emerald-200">
                     ₹{s.highestOfferLpa} LPA
                   </span>
                 </div>
@@ -312,13 +313,13 @@ export default function AdminDashboardPage() {
         {/* =========================================================================
             INTERACTIVE DISPLAY WINDOW WITH BUTTONS (ADMIN)
         ========================================================================== */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-xs">
+        <div className="rounded-3xl border border-slate-200/80 bg-white/85 backdrop-blur-md p-5 sm:p-6 shadow-xs">
           {/* Header & Interactive Control Buttons */}
-          <div className="flex flex-col gap-3 pb-4 border-b border-slate-100">
+          <div className="flex flex-col gap-3 pb-4 border-b border-slate-200/60">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
               <div>
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Building2 size={16} className="text-emerald-700" />
+                <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                  <Building2 size={18} className="text-emerald-700" />
                   Recruitment Operations & Candidate Window
                 </h3>
                 <p className="text-xs text-slate-500">
@@ -337,10 +338,10 @@ export default function AdminDashboardPage() {
               <button
                 type="button"
                 onClick={() => setActiveWindowTab("drives")}
-                className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition border ${
+                className={`flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 ${
                   activeWindowTab === "drives"
-                    ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
-                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                    ? "bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xs border border-transparent"
+                    : "bg-white/90 text-slate-700 border border-slate-200/80 hover:bg-white hover:text-emerald-800 hover:border-emerald-300 shadow-2xs"
                 }`}
               >
                 <Building2 size={14} />
@@ -350,10 +351,10 @@ export default function AdminDashboardPage() {
               <button
                 type="button"
                 onClick={() => setActiveWindowTab("pipeline")}
-                className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition border ${
+                className={`flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 ${
                   activeWindowTab === "pipeline"
-                    ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
-                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                    ? "bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xs border border-transparent"
+                    : "bg-white/90 text-slate-700 border border-slate-200/80 hover:bg-white hover:text-emerald-800 hover:border-emerald-300 shadow-2xs"
                 }`}
               >
                 <Layers size={14} />
@@ -363,10 +364,10 @@ export default function AdminDashboardPage() {
               <button
                 type="button"
                 onClick={() => setActiveWindowTab("stages")}
-                className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition border ${
+                className={`flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 ${
                   activeWindowTab === "stages"
-                    ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
-                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                    ? "bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xs border border-transparent"
+                    : "bg-white/90 text-slate-700 border border-slate-200/80 hover:bg-white hover:text-emerald-800 hover:border-emerald-300 shadow-2xs"
                 }`}
               >
                 <Settings size={14} />
@@ -376,10 +377,10 @@ export default function AdminDashboardPage() {
               <button
                 type="button"
                 onClick={() => setActiveWindowTab("offers")}
-                className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition border ${
+                className={`flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 ${
                   activeWindowTab === "offers"
-                    ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
-                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                    ? "bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xs border border-transparent"
+                    : "bg-white/90 text-slate-700 border border-slate-200/80 hover:bg-white hover:text-emerald-800 hover:border-emerald-300 shadow-2xs"
                 }`}
               >
                 <Award size={14} />

@@ -129,11 +129,12 @@ export function CompanyStagesModal({
     >
       <div className="space-y-4 text-xs">
         {/* Helper Explanation */}
-        <div className="rounded-xl bg-emerald-50/60 p-3 text-slate-700 border border-emerald-200/60">
-          <p className="font-semibold text-emerald-900 text-xs">
+        <div className="rounded-2xl bg-gradient-to-r from-emerald-50/80 via-teal-50/60 to-emerald-50/40 p-3.5 text-slate-700 border border-emerald-200/70 shadow-xs">
+          <p className="font-bold text-emerald-950 text-xs flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
             Dynamic Stage Advancement
           </p>
-          <p className="mt-0.5 text-[11px] text-slate-600 leading-relaxed">
+          <p className="mt-1 text-[11px] text-slate-600 leading-relaxed font-medium">
             Candidates only appear in subsequent stages after being evaluated and advanced from prior rounds. The final stage marks the student as officially placed with an offer.
           </p>
         </div>
@@ -147,7 +148,7 @@ export function CompanyStagesModal({
             <button
               type="button"
               onClick={handleResetDefaults}
-              className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 hover:text-emerald-700"
+              className="flex items-center gap-1 text-[11px] font-bold text-slate-500 hover:text-emerald-700 transition"
             >
               <RotateCcw size={12} />
               <span>Reset Defaults</span>
@@ -158,15 +159,15 @@ export function CompanyStagesModal({
             {stages.map((stg, idx) => (
               <div
                 key={stg.id || idx}
-                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-2.5 shadow-2xs hover:border-slate-300 transition"
+                className="flex items-center justify-between rounded-2xl border border-slate-200/80 bg-white/95 p-3 shadow-xs hover:border-emerald-300 hover:shadow-md transition"
               >
                 <div className="flex items-center gap-3">
-                  <span className="grid h-6 w-6 place-items-center rounded-lg bg-emerald-100 text-xs font-bold text-emerald-800">
+                  <span className="grid h-7 w-7 place-items-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-xs font-black text-white shadow-xs">
                     {stg.order}
                   </span>
                   <div>
-                    <p className="font-bold text-slate-800 text-xs">{stg.name}</p>
-                    <p className="text-[10px] text-slate-400">
+                    <p className="font-bold text-slate-900 text-xs tracking-tight">{stg.name}</p>
+                    <p className="text-[10px] font-medium text-slate-400">
                       {idx === 0
                         ? "Initial Entry Stage"
                         : idx === stages.length - 1
@@ -181,7 +182,7 @@ export function CompanyStagesModal({
                     type="button"
                     disabled={idx === 0}
                     onClick={() => handleMoveStage(idx, "up")}
-                    className="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 disabled:opacity-30 transition"
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-slate-800 hover:bg-slate-100 disabled:opacity-30 transition"
                     title="Move Stage Up"
                   >
                     <ArrowUp size={14} />
@@ -190,7 +191,7 @@ export function CompanyStagesModal({
                     type="button"
                     disabled={idx === stages.length - 1}
                     onClick={() => handleMoveStage(idx, "down")}
-                    className="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 disabled:opacity-30 transition"
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-slate-800 hover:bg-slate-100 disabled:opacity-30 transition"
                     title="Move Stage Down"
                   >
                     <ArrowDown size={14} />
@@ -198,7 +199,7 @@ export function CompanyStagesModal({
                   <button
                     type="button"
                     onClick={() => handleRemoveStage(stg.id)}
-                    className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition ml-1"
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition ml-1"
                     title="Delete Stage"
                   >
                     <Trash2 size={14} />
@@ -212,7 +213,7 @@ export function CompanyStagesModal({
         {/* Add New Custom Stage Form */}
         <form
           onSubmit={handleAddStage}
-          className="rounded-xl border border-slate-200 bg-slate-50/80 p-3"
+          className="rounded-2xl border border-slate-200/80 bg-slate-50/70 p-3.5 backdrop-blur-xs"
         >
           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600 block mb-2">
             Insert New Stage
@@ -223,10 +224,9 @@ export function CompanyStagesModal({
               <input
                 required
                 type="text"
-                placeholder="e.g. Machine Coding Round or Managerial Interview"
                 value={newStageName}
                 onChange={(e) => setNewStageName(e.target.value)}
-                className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 focus:border-emerald-500 focus:outline-none shadow-2xs"
+                className="w-full rounded-xl border border-slate-200/80 bg-white/95 px-3 py-2 text-xs text-slate-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none shadow-xs transition"
               />
             </div>
             <div className="sm:col-span-2">
@@ -237,13 +237,13 @@ export function CompanyStagesModal({
                 value={newStageOrder}
                 onChange={(e) => setNewStageOrder(parseInt(e.target.value, 10) || 1)}
                 title="Position number to insert at"
-                className="w-full rounded-xl border border-slate-200 bg-white px-2 py-2 text-xs text-center text-slate-800 focus:border-emerald-500 focus:outline-none shadow-2xs"
+                className="w-full rounded-xl border border-slate-200/80 bg-white/95 px-2 py-2 text-xs text-center font-bold text-slate-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none shadow-xs transition"
               />
             </div>
             <div className="sm:col-span-2">
               <button
                 type="submit"
-                className="w-full h-full flex items-center justify-center gap-1 rounded-xl bg-slate-800 text-white font-bold text-xs py-2 hover:bg-slate-900 transition shadow-xs"
+                className="w-full h-full flex items-center justify-center gap-1 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 text-white font-bold text-xs py-2 hover:shadow-md hover:brightness-105 active:scale-95 transition"
               >
                 <Plus size={13} />
                 <span>Add</span>
@@ -257,7 +257,7 @@ export function CompanyStagesModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition"
+            className="rounded-xl border border-slate-200/80 bg-white px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 transition"
           >
             Cancel
           </button>
@@ -265,7 +265,7 @@ export function CompanyStagesModal({
             type="button"
             disabled={isSaving}
             onClick={handleSave}
-            className="flex items-center gap-1.5 rounded-xl bg-emerald-600 px-5 py-2 text-xs font-bold text-white hover:bg-emerald-700 transition disabled:opacity-50 shadow-xs"
+            className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 px-5 py-2 text-xs font-bold text-white shadow-md hover:shadow-lg hover:brightness-105 active:scale-95 transition disabled:opacity-50"
           >
             <Check size={14} />
             <span>{isSaving ? "Saving..." : "Save Pipeline Stages"}</span>

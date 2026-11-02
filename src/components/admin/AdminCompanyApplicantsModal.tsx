@@ -177,22 +177,22 @@ export function AdminCompanyApplicantsModal({
               <button
                 type="button"
                 onClick={() => setIsStagesModalOpen(true)}
-                className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition shadow-2xs"
+                className="flex items-center gap-1.5 rounded-xl border border-slate-200/80 bg-white/95 px-3 py-1.5 text-[11px] font-bold text-slate-700 hover:bg-slate-50 hover:border-emerald-300 transition shadow-xs"
               >
-                <Settings size={12} className="text-slate-500" />
+                <Settings size={12} className="text-emerald-600" />
                 <span>Configure Company Stages ({companyStages.length})</span>
               </button>
             </div>
 
             {/* Stages Scrollable Tabs */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 scrollbar-thin">
+            <div className="flex items-center gap-2 overflow-x-auto pb-1.5 scrollbar-thin">
               <button
                 type="button"
                 onClick={() => setActiveStageFilter("all")}
-                className={`rounded-xl px-3 py-1.5 font-bold text-xs whitespace-nowrap transition border ${
+                className={`rounded-xl px-3.5 py-1.5 font-bold text-xs whitespace-nowrap transition border ${
                   activeStageFilter === "all"
-                    ? "bg-slate-900 text-white border-slate-900 shadow-xs"
-                    : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                    ? "bg-slate-900 text-white border-slate-900 shadow-md"
+                    : "bg-white/95 text-slate-600 border-slate-200/80 hover:bg-slate-50"
                 }`}
               >
                 All Applicants ({applications.length})
@@ -210,14 +210,14 @@ export function AdminCompanyApplicantsModal({
                     key={stg.id || idx}
                     type="button"
                     onClick={() => setActiveStageFilter(stg.name)}
-                    className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 font-bold text-xs whitespace-nowrap transition border ${
+                    className={`flex items-center gap-2 rounded-xl px-3.5 py-1.5 font-bold text-xs whitespace-nowrap transition border ${
                       isSelected
-                        ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
-                        : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:border-emerald-200"
+                        ? "bg-gradient-to-r from-emerald-600 to-teal-700 text-white border-emerald-600 shadow-md"
+                        : "bg-white/95 text-slate-700 border-slate-200/80 hover:bg-slate-50 hover:border-emerald-300"
                     }`}
                   >
                     <span
-                      className={`grid h-4.5 w-4.5 place-items-center rounded-full text-[10px] ${
+                      className={`grid h-4.5 w-4.5 place-items-center rounded-full text-[10px] font-black ${
                         isSelected
                           ? "bg-white text-emerald-800"
                           : "bg-slate-100 text-slate-700"
@@ -227,9 +227,9 @@ export function AdminCompanyApplicantsModal({
                     </span>
                     <span>{stg.name}</span>
                     <span
-                      className={`rounded-full px-1.5 py-0.2 text-[9px] font-bold ${
+                      className={`rounded-full px-1.5 py-0.2 text-[9px] font-black ${
                         isSelected
-                          ? "bg-emerald-700 text-white"
+                          ? "bg-emerald-800 text-white"
                           : count > 0
                           ? "bg-emerald-100 text-emerald-800"
                           : "bg-slate-100 text-slate-400"
@@ -246,23 +246,22 @@ export function AdminCompanyApplicantsModal({
           {/* Search & Bulk Action Bar */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 border-t border-slate-100 pt-3">
             <div className="relative flex-1 max-w-sm">
-              <Search size={14} className="absolute left-2.5 top-2.5 text-slate-400" />
+              <Search size={14} className="absolute left-3 top-2.5 text-slate-400" />
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search candidate by name, roll no, or branch..."
-                className="w-full rounded-xl border border-slate-200 bg-white py-1.5 pl-8 pr-3 text-xs text-slate-800 focus:outline-none focus:border-emerald-500 shadow-2xs"
+                className="w-full rounded-xl border border-slate-200/80 bg-white/95 py-2 pl-9 pr-3 text-xs text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition"
               />
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-[11px] text-slate-500 font-medium">
+              <span className="text-[11px] text-slate-500 font-bold">
                 {selectedIds.length} selected
               </span>
               <button
                 disabled={selectedIds.length === 0 || isProcessing}
                 onClick={handleBulkAdvance}
-                className="flex items-center gap-1 rounded-xl bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-emerald-700 disabled:opacity-40 transition"
+                className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 px-3.5 py-2 text-xs font-bold text-white shadow-md hover:shadow-lg hover:brightness-105 active:scale-95 disabled:opacity-40 transition"
               >
                 <Check size={13} /> Advance Selected
               </button>
@@ -274,7 +273,7 @@ export function AdminCompanyApplicantsModal({
                     setSelectedIds([]);
                   }
                 }}
-                className="flex items-center gap-1 rounded-xl border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-bold text-rose-700 hover:bg-rose-100 disabled:opacity-40 transition"
+                className="flex items-center gap-1.5 rounded-xl border border-rose-200 bg-rose-50/80 px-3.5 py-2 text-xs font-bold text-rose-700 hover:bg-rose-100 active:scale-95 disabled:opacity-40 transition"
               >
                 <X size={13} /> Reject
               </button>
@@ -282,20 +281,19 @@ export function AdminCompanyApplicantsModal({
           </div>
 
           {/* Optional Evaluation Remark Input */}
-          <div className="flex items-center gap-2 rounded-xl bg-slate-50 p-2 border border-slate-200">
+          <div className="flex items-center gap-2 rounded-xl bg-slate-50/80 p-2.5 border border-slate-200/80 backdrop-blur-xs">
             <MessageSquare size={14} className="text-slate-400 ml-1 shrink-0" />
             <input
               value={remarksInput}
               onChange={(e) => setRemarksInput(e.target.value)}
-              placeholder="Add optional note/feedback for candidate advancement..."
-              className="w-full bg-transparent text-xs text-slate-800 outline-none placeholder:text-slate-400"
+              className="w-full bg-transparent text-xs text-slate-800 outline-none font-medium"
             />
           </div>
 
           {/* Candidate Table */}
-          <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+          <div className="overflow-x-auto rounded-2xl border border-slate-200/80 bg-white/95 shadow-xs">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-[10px] uppercase font-bold text-slate-500 border-b border-slate-200">
+              <thead className="bg-slate-50/80 text-[10px] uppercase font-bold text-slate-500 border-b border-slate-200/80">
                 <tr>
                   <th className="p-3 w-8">
                     <input
@@ -380,25 +378,25 @@ export function AdminCompanyApplicantsModal({
                             <button
                               disabled={isProcessing}
                               onClick={() => handleAdvanceToNextStage(app)}
-                              className="flex items-center gap-1 rounded-lg bg-emerald-600 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-emerald-700 transition shadow-2xs"
+                              className="flex items-center gap-1 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 px-3 py-1.5 text-[11px] font-bold text-white shadow-xs hover:shadow-md hover:brightness-105 active:scale-95 transition"
                               title={`Advance to ${nextStage?.name}`}
                             >
                               <span>Advance to {nextStage?.name}</span>
                               <ArrowRight size={11} />
                             </button>
                           ) : isFinalStage ? (
-                            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                              <Award size={12} /> Hired / Placed
+                            <span className="inline-flex items-center gap-1.5 text-[11px] font-black text-emerald-800 bg-emerald-100/80 px-3 py-1 rounded-xl border border-emerald-300/80 shadow-xs">
+                              <Award size={13} className="text-emerald-700" /> Placed / Hired
                             </span>
                           ) : (
-                            <span className="text-[11px] text-slate-400">Archived</span>
+                            <span className="text-[11px] font-medium text-slate-400">Archived</span>
                           )}
 
                           {!isFinalStage && !app.stage.toLowerCase().includes("reject") && (
                             <button
                               disabled={isProcessing}
                               onClick={() => handleReject(app.id)}
-                              className="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2 py-1 text-[11px] font-semibold text-slate-600 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 transition"
+                              className="flex items-center gap-1 rounded-xl border border-slate-200/80 bg-white/95 px-2.5 py-1.5 text-[11px] font-bold text-slate-600 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 transition"
                               title="Reject Candidate"
                             >
                               <X size={11} />

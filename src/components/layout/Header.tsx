@@ -50,11 +50,11 @@ export function Header({ user, student, title, subtitle, onSearch }: HeaderProps
       </div>
 
       {/* Main Toolbar */}
-      <header className="flex min-h-12 items-center justify-between gap-3 border-b border-slate-200 pb-2.5">
+      <header className="flex min-h-12 items-center justify-between gap-3 border-b border-slate-200/80 pb-2.5">
         {/* Title & Subtitle */}
         <div className="flex items-center gap-2.5 min-w-0">
           <div className="min-w-0">
-            <h1 className="text-base font-bold tracking-tight text-slate-900 sm:text-lg truncate">
+            <h1 className="text-base font-extrabold tracking-tight text-slate-900 sm:text-lg truncate">
               {title}
             </h1>
             {subtitle && (
@@ -75,23 +75,22 @@ export function Header({ user, student, title, subtitle, onSearch }: HeaderProps
             />
             <input
               type="text"
-              placeholder="Search companies, drives, roles..."
               value={searchValue}
               onChange={handleSearchChange}
-              className="h-8.5 w-48 lg:w-64 rounded-xl border border-slate-200 bg-white pl-8 pr-3 text-xs text-slate-700 outline-none placeholder:text-slate-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition shadow-xs"
+              className="h-8.5 w-48 lg:w-64 rounded-xl border border-slate-200/80 bg-white/80 backdrop-blur-xs pl-8 pr-3 text-xs text-slate-700 outline-none focus:bg-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition shadow-2xs"
             />
           </div>
 
           {/* User Profile Pill */}
-          <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white py-1 pl-1.5 pr-3 shadow-xs">
-            <div className="grid h-7 w-7 place-items-center rounded-lg bg-emerald-100 text-xs font-bold text-emerald-800">
+          <div className="flex items-center gap-2 rounded-xl border border-slate-200/80 bg-white/85 backdrop-blur-xs py-1 pl-1.5 pr-3 shadow-2xs hover:border-emerald-300 hover:shadow-xs transition-all">
+            <div className="grid h-7 w-7 place-items-center rounded-lg bg-emerald-100 text-xs font-extrabold text-emerald-800">
               {user.avatar || user.name[0]}
             </div>
             <div className="text-left text-xs leading-tight">
-              <p className="font-semibold text-slate-800 max-w-[120px] truncate">
+              <p className="font-bold text-slate-900 max-w-[120px] truncate">
                 {user.name}
               </p>
-              <p className="text-[10px] font-medium text-emerald-700 capitalize">
+              <p className="text-[10px] font-semibold text-emerald-700 capitalize">
                 {user.role === "admin"
                   ? "Placement Officer"
                   : `${student?.department || "Student"} · ${student?.rollNo || "Candidate"}`}
@@ -103,7 +102,7 @@ export function Header({ user, student, title, subtitle, onSearch }: HeaderProps
           <button
             onClick={handleLogout}
             title="Sign Out"
-            className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 shadow-xs hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition"
+            className="flex items-center gap-1.5 rounded-xl border border-slate-200/80 bg-white/80 backdrop-blur-xs px-3 py-1.5 text-xs font-bold text-slate-600 shadow-2xs hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 hover:-translate-y-0.5 active:translate-y-0 transition-all"
           >
             <LogOut size={13} />
             <span className="hidden sm:inline">Sign Out</span>

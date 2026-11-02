@@ -43,8 +43,8 @@ export function DashboardLayout({
 
   if (!user) {
     return (
-      <div className="flex h-screen items-center justify-center bg-slate-50">
-        <div className="flex items-center gap-2.5 text-sm font-semibold text-slate-600">
+      <div className="flex h-screen items-center justify-center bg-transparent backdrop-blur-xs">
+        <div className="flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white/80 p-5 shadow-lg backdrop-blur-md text-xs sm:text-sm font-semibold text-slate-700">
           <div className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
           <span>Opening PlaceHub Portal...</span>
         </div>
@@ -55,15 +55,15 @@ export function DashboardLayout({
   const role = user.role;
 
   return (
-    <main className="min-h-screen bg-slate-50/70 p-2 sm:p-4 lg:p-6 font-sans text-slate-900">
-      <div className="mx-auto flex min-h-[calc(100vh-2rem)] max-w-[1580px] flex-col">
-        {/* Main Application Container - Clean, crisp, NO black borders */}
-        <div className="flex flex-1 gap-3 rounded-2xl border border-slate-200 bg-white p-3 shadow-xs pb-16 sm:pb-3">
+    <main className="min-h-screen bg-transparent p-3 sm:p-5 lg:p-6 font-sans text-slate-900 relative">
+      <div className="mx-auto flex min-h-[calc(100vh-2.5rem)] max-w-[1600px] flex-col">
+        {/* Main Application Flow - Open & Consistent Layout without enclosing box border */}
+        <div className="flex flex-1 gap-4 lg:gap-6 pb-16 sm:pb-4 transition-all">
           {/* Collapsible Sidebar */}
           <ExpandableSidebar role={role} />
 
           {/* Main Content Viewport */}
-          <section className="flex min-w-0 flex-1 flex-col px-1 pb-1 sm:px-3">
+          <section className="flex min-w-0 flex-1 flex-col">
             <Header
               user={user}
               student={student}
@@ -72,21 +72,21 @@ export function DashboardLayout({
               onSearch={onSearch}
             />
 
-            <div className="mt-3 flex-1">{children}</div>
+            <div className="mt-3.5 flex-1">{children}</div>
           </section>
         </div>
 
         {/* Clean Footer */}
-        <footer className="hidden sm:flex items-center justify-between px-3 pt-3 text-xs text-slate-500 font-medium">
+        <footer className="hidden sm:flex items-center justify-between px-2 pt-3 text-xs text-slate-500 font-medium border-t border-slate-200/60 mt-auto">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-slate-700">PlaceHub Portal</span>
+            <span className="font-semibold text-slate-800">PlaceHub Portal</span>
             <span>·</span>
-            <span>Campus Placement System</span>
+            <span>University Campus Placements</span>
             <span>·</span>
-            <span>All systems operational</span>
+            <span className="text-emerald-700 font-semibold">Active Season 2026–2027</span>
           </div>
-          <div className="flex items-center gap-3">
-            <span>Academic Year 2026–2027</span>
+          <div className="flex items-center gap-3 text-slate-400">
+            <span>Secure Role-Based Session</span>
           </div>
         </footer>
       </div>

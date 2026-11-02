@@ -59,29 +59,41 @@ if (!global.__placehub_store__) {
 
 const store = global.__placehub_store__;
 
+let activeHydrationPromise: Promise<void> | null = null;
+
 export async function ensureNeonHydrated(): Promise<void> {
   const sql = getDb();
   if (!sql || store.hydratedFromNeon) return;
 
-  try {
-    const [neonUsers, neonStudents, neonCompanies, neonApps, neonStats] = await Promise.all([
-      neonGetUsers(),
-      neonGetStudents(),
-      neonGetCompanies(),
-      neonGetApplications(),
-      neonGetHeadlineStats(),
-    ]);
-
-    if (neonUsers.length > 0) store.users = neonUsers;
-    if (neonStudents.length > 0) store.students = neonStudents;
-    if (neonCompanies.length > 0) store.companies = neonCompanies;
-    if (neonApps.length > 0) store.applications = neonApps;
-    if (neonStats) store.headlineStats = neonStats;
-
-    store.hydratedFromNeon = true;
-  } catch (err) {
-    console.error("Neon hydration check fallback to in-memory store:", err);
+  if (activeHydrationPromise) {
+    return activeHydrationPromise;
   }
+
+  activeHydrationPromise = (async () => {
+    try {
+      const [neonUsers, neonStudents, neonCompanies, neonApps, neonStats] = await Promise.all([
+        neonGetUsers(),
+        neonGetStudents(),
+        neonGetCompanies(),
+        neonGetApplications(),
+        neonGetHeadlineStats(),
+      ]);
+
+      if (neonUsers.length > 0) store.users = neonUsers;
+      if (neonStudents.length > 0) store.students = neonStudents;
+      if (neonCompanies.length > 0) store.companies = neonCompanies;
+      if (neonApps.length > 0) store.applications = neonApps;
+      if (neonStats) store.headlineStats = neonStats;
+
+      store.hydratedFromNeon = true;
+    } catch (err) {
+      console.error("Neon hydration check fallback to in-memory store:", err);
+    } finally {
+      activeHydrationPromise = null;
+    }
+  })();
+
+  return activeHydrationPromise;
 }
 
 export const PlaceHubStore = {

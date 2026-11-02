@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { PublicNavbar } from "@/components/public/PublicNavbar";
 import { PublicFooter } from "@/components/public/PublicFooter";
+import { ParallaxCard } from "@/components/ui/ParallaxCard";
 import { CompanyDrive } from "@/types";
 import {
   Layers,
@@ -116,25 +117,28 @@ export default function PublicPipelinePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {standardStages.map((stg) => (
-                <div
+                <ParallaxCard
                   key={stg.step}
-                  className="relative rounded-2xl border border-slate-200/80 bg-white p-6 shadow-2xs hover:border-emerald-300 hover:shadow-md transition-all duration-200"
+                  maxTilt={8}
+                  className="rounded-2xl h-full"
                 >
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-50 border border-emerald-100">
-                      {stg.icon}
+                  <div className="h-full relative rounded-2xl border border-slate-200/80 bg-white/95 backdrop-blur-xs p-6 shadow-2xs hover:border-emerald-300 hover:shadow-md transition-all duration-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-50 border border-emerald-100">
+                        {stg.icon}
+                      </div>
+                      <span className="font-mono text-2xl font-black text-slate-200">
+                        {stg.step}
+                      </span>
                     </div>
-                    <span className="font-mono text-2xl font-black text-slate-200">
-                      {stg.step}
-                    </span>
+                    <h3 className="text-base font-bold text-slate-900 mb-2">
+                      {stg.title}
+                    </h3>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      {stg.desc}
+                    </p>
                   </div>
-                  <h3 className="text-base font-bold text-slate-900 mb-2">
-                    {stg.title}
-                  </h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    {stg.desc}
-                  </p>
-                </div>
+                </ParallaxCard>
               ))}
             </div>
           </div>

@@ -7,6 +7,7 @@ import { PublicFooter } from "@/components/public/PublicFooter";
 import { CompanyDrive, CompanyTier, StudentDepartment } from "@/types";
 import { TierBadge } from "@/components/ui/Badge";
 import { formatCurrencyLpa, formatStipend, formatDate } from "@/lib/utils";
+import { ParallaxCard } from "@/components/ui/ParallaxCard";
 import { getClientUser } from "@/lib/auth";
 import {
   Building2,
@@ -124,8 +125,7 @@ export default function PublicDrivesPage() {
                   <input
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Search by company, role, skills, or city..."
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 focus:bg-white transition"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-xs text-slate-900 focus:outline-none focus:border-emerald-500 focus:bg-white transition"
                   />
                 </div>
 
@@ -202,119 +202,122 @@ export default function PublicDrivesPage() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {filtered.map((company) => (
-                  <div
+                  <ParallaxCard
                     key={company.id}
-                    className="group flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-5 shadow-2xs hover:border-emerald-400/80 hover:shadow-md transition-all duration-200"
+                    maxTilt={7}
+                    className="rounded-2xl h-full"
                   >
-                    <div>
-                      {/* Header */}
-                      <div className="flex items-start justify-between gap-3 mb-3">
-                        <div className="flex items-center gap-3">
-                          <div className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-emerald-50 to-teal-100 font-extrabold text-emerald-800 text-sm shadow-2xs border border-emerald-200/80 group-hover:scale-105 transition-transform">
-                            {company.companyName.slice(0, 2).toUpperCase()}
+                    <div className="h-full group flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-5 shadow-2xs hover:border-emerald-400/80 hover:shadow-md transition-all duration-200">
+                      <div>
+                        {/* Header */}
+                        <div className="flex items-start justify-between gap-3 mb-3">
+                          <div className="flex items-center gap-3">
+                            <div className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-emerald-50 to-teal-100 font-extrabold text-emerald-800 text-sm shadow-2xs border border-emerald-200/80 group-hover:scale-105 transition-transform">
+                              {company.companyName.slice(0, 2).toUpperCase()}
+                            </div>
+                            <div>
+                              <h3 className="text-sm font-bold text-slate-900 group-hover:text-emerald-700 transition">
+                                {company.companyName}
+                              </h3>
+                              <span className="text-[11px] font-medium text-slate-500">
+                                {company.industry} · {company.location}
+                              </span>
+                            </div>
                           </div>
-                          <div>
-                            <h3 className="text-sm font-bold text-slate-900 group-hover:text-emerald-700 transition">
-                              {company.companyName}
-                            </h3>
-                            <span className="text-[11px] font-medium text-slate-500">
-                              {company.industry} · {company.location}
+                          <TierBadge tier={company.tier} />
+                        </div>
+
+                        {/* Role & Package */}
+                        <div className="rounded-xl bg-slate-50 p-3 mb-3.5 space-y-1">
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="font-semibold text-slate-700">{company.roleTitle}</span>
+                            <span className="font-extrabold text-emerald-700 text-sm">
+                              {formatCurrencyLpa(company.ctcLpa)}
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-between text-[11px] text-slate-500">
+                            <span>{company.roleType}</span>
+                            <span>Stipend: {formatStipend(company.stipendMonthly)}</span>
+                          </div>
+                        </div>
+
+                        {/* Criteria */}
+                        <div className="space-y-1.5 text-[11px] text-slate-600 mb-3.5">
+                          <div className="flex items-center justify-between">
+                            <span className="text-slate-400">Min CGPA Required:</span>
+                            <span className="font-bold text-slate-800">{company.minCgpa.toFixed(2)}</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-slate-400">Backlogs Permitted:</span>
+                            <span className="font-bold text-slate-800">
+                              {company.maxBacklogs === 0 ? "0 (Zero Active)" : company.maxBacklogs}
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-slate-400">Eligible Branches:</span>
+                            <span className="font-semibold text-emerald-800 truncate max-w-[170px]">
+                              {company.eligibleDepts.join(", ")}
                             </span>
                           </div>
                         </div>
-                        <TierBadge tier={company.tier} />
-                      </div>
 
-                      {/* Role & Package */}
-                      <div className="rounded-xl bg-slate-50 p-3 mb-3.5 space-y-1">
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="font-semibold text-slate-700">{company.roleTitle}</span>
-                          <span className="font-extrabold text-emerald-700 text-sm">
-                            {formatCurrencyLpa(company.ctcLpa)}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between text-[11px] text-slate-500">
-                          <span>{company.roleType}</span>
-                          <span>Stipend: {formatStipend(company.stipendMonthly)}</span>
-                        </div>
-                      </div>
-
-                      {/* Criteria */}
-                      <div className="space-y-1.5 text-[11px] text-slate-600 mb-3.5">
-                        <div className="flex items-center justify-between">
-                          <span className="text-slate-400">Min CGPA Required:</span>
-                          <span className="font-bold text-slate-800">{company.minCgpa.toFixed(2)}</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-slate-400">Backlogs Permitted:</span>
-                          <span className="font-bold text-slate-800">
-                            {company.maxBacklogs === 0 ? "0 (Zero Active)" : company.maxBacklogs}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-slate-400">Eligible Branches:</span>
-                          <span className="font-semibold text-emerald-800 truncate max-w-[170px]">
-                            {company.eligibleDepts.join(", ")}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Required Skills */}
-                      {company.requiredSkills && company.requiredSkills.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mb-4">
-                          {company.requiredSkills.slice(0, 3).map((skill) => (
-                            <span
-                              key={skill}
-                              className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600"
-                            >
-                              {skill}
-                            </span>
-                          ))}
-                          {company.requiredSkills.length > 3 && (
-                            <span className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium text-slate-500">
-                              +{company.requiredSkills.length - 3}
-                            </span>
-                          )}
-                        </div>
-                      )}
-
-                      {/* Selection Stages preview */}
-                      {company.stages && company.stages.length > 0 && (
-                        <div className="border-t border-slate-100 pt-2.5 mb-3 text-[11px]">
-                          <span className="text-slate-400 block mb-1 text-[10px] font-bold uppercase tracking-wider">
-                            Selection Flow ({company.stages.length} Stages):
-                          </span>
-                          <div className="flex items-center gap-1 overflow-x-auto pb-1 text-[10px] text-slate-600">
-                            {company.stages.map((stg, idx) => (
-                              <React.Fragment key={stg.id}>
-                                <span className="shrink-0 rounded bg-emerald-50 px-1.5 py-0.5 font-medium text-emerald-800">
-                                  {stg.name}
-                                </span>
-                                {idx < company.stages!.length - 1 && (
-                                  <ChevronRight size={10} className="text-slate-300 shrink-0" />
-                                )}
-                              </React.Fragment>
+                        {/* Required Skills */}
+                        {company.requiredSkills && company.requiredSkills.length > 0 && (
+                          <div className="flex flex-wrap gap-1 mb-4">
+                            {company.requiredSkills.slice(0, 3).map((skill) => (
+                              <span
+                                key={skill}
+                                className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600"
+                              >
+                                {skill}
+                              </span>
                             ))}
+                            {company.requiredSkills.length > 3 && (
+                              <span className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium text-slate-500">
+                                +{company.requiredSkills.length - 3}
+                              </span>
+                            )}
                           </div>
-                        </div>
-                      )}
-                    </div>
+                        )}
 
-                    {/* Card Footer */}
-                    <div className="border-t border-slate-100 pt-3 flex items-center justify-between text-xs">
-                      <span className="flex items-center gap-1 text-[11px] text-slate-500">
-                        <Clock size={12} className="text-amber-500" />
-                        Deadline: {formatDate(company.deadline)}
-                      </span>
-                      <Link
-                        href={applyLink}
-                        className="flex items-center gap-1 font-bold text-emerald-700 hover:text-emerald-800 transition group-hover:translate-x-0.5 duration-150"
-                      >
-                        <span>Apply</span>
-                        <ArrowRight size={13} />
-                      </Link>
+                        {/* Selection Stages preview */}
+                        {company.stages && company.stages.length > 0 && (
+                          <div className="border-t border-slate-100 pt-2.5 mb-3 text-[11px]">
+                            <span className="text-slate-400 block mb-1 text-[10px] font-bold uppercase tracking-wider">
+                              Selection Flow ({company.stages.length} Stages):
+                            </span>
+                            <div className="flex items-center gap-1 overflow-x-auto pb-1 text-[10px] text-slate-600">
+                              {company.stages.map((stg, idx) => (
+                                <React.Fragment key={stg.id}>
+                                  <span className="shrink-0 rounded bg-emerald-50 px-1.5 py-0.5 font-medium text-emerald-800">
+                                    {stg.name}
+                                  </span>
+                                  {idx < company.stages!.length - 1 && (
+                                    <ChevronRight size={10} className="text-slate-300 shrink-0" />
+                                  )}
+                                </React.Fragment>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Card Footer */}
+                      <div className="border-t border-slate-100 pt-3 flex items-center justify-between text-xs">
+                        <span className="flex items-center gap-1 text-[11px] text-slate-500">
+                          <Clock size={12} className="text-amber-500" />
+                          Deadline: {formatDate(company.deadline)}
+                        </span>
+                        <Link
+                          href={applyLink}
+                          className="flex items-center gap-1 font-bold text-emerald-700 hover:text-emerald-800 transition group-hover:translate-x-0.5 duration-150"
+                        >
+                          <span>Apply</span>
+                          <ArrowRight size={13} />
+                        </Link>
+                      </div>
                     </div>
-                  </div>
+                  </ParallaxCard>
                 ))}
               </div>
             )}

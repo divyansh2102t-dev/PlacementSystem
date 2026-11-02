@@ -21,12 +21,14 @@ interface ApplicationsTimelineProps {
 export function ApplicationsTimeline({ applications, companies = [] }: ApplicationsTimelineProps) {
   if (applications.length === 0) {
     return (
-      <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl bg-white p-8 text-center border border-slate-200">
-        <Building2 size={36} className="text-slate-300 mb-2" />
-        <h3 className="text-sm font-bold text-slate-800">
+      <div className="flex min-h-[300px] flex-col items-center justify-center rounded-3xl bg-white/85 backdrop-blur-md p-8 text-center border border-slate-200/80 shadow-xs">
+        <div className="grid h-14 w-14 place-items-center rounded-2xl bg-slate-100 text-slate-400 mb-3 border border-slate-200/60">
+          <Building2 size={28} />
+        </div>
+        <h3 className="text-base font-extrabold text-slate-900">
           No Applications Yet
         </h3>
-        <p className="mt-1 text-xs text-slate-500 max-w-sm">
+        <p className="mt-1 text-xs text-slate-500 max-w-sm leading-relaxed">
           Browse active campus recruitment drives and apply to eligible companies to track your recruitment milestones here.
         </p>
       </div>
@@ -65,19 +67,19 @@ export function ApplicationsTimeline({ applications, companies = [] }: Applicati
         return (
           <div
             key={app.id}
-            className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-xs transition hover:shadow-sm"
+            className="rounded-3xl border border-slate-200/80 bg-white/85 backdrop-blur-md p-5 sm:p-6 shadow-xs transition-all duration-300 hover:shadow-xl hover:border-emerald-300 hover:-translate-y-1"
           >
             {/* Header: Company & CTC & Current Badge */}
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between border-b border-slate-100 pb-3">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between border-b border-slate-200/60 pb-3.5">
               <div className="flex items-center gap-3">
-                <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-sm font-bold text-emerald-800 border border-emerald-200/60">
+                <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-100 text-sm font-extrabold text-emerald-800 border border-emerald-300/60 shadow-2xs">
                   {app.companyName.slice(0, 2).toUpperCase()}
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-slate-900">
+                  <h3 className="text-base font-extrabold text-slate-900">
                     {app.companyName}
                   </h3>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-slate-500 font-medium">
                     {app.roleTitle}
                   </p>
                 </div>
@@ -85,10 +87,10 @@ export function ApplicationsTimeline({ applications, companies = [] }: Applicati
 
               <div className="flex items-center gap-3 self-end sm:self-auto">
                 <div className="text-right">
-                  <span className="text-sm font-black text-emerald-700">
+                  <span className="text-base font-extrabold text-emerald-700">
                     {formatCurrencyLpa(app.ctcLpa)}
                   </span>
-                  <p className="text-[10px] text-slate-400">
+                  <p className="text-[10px] text-slate-400 font-medium">
                     Applied: {formatDate(app.appliedDate)}
                   </p>
                 </div>

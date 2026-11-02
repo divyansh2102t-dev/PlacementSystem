@@ -107,8 +107,9 @@ export default function StudentDashboardPage() {
     >
       <div className="space-y-4">
         {/* Welcome & Role Verification Banner */}
-        <div className="rounded-2xl bg-gradient-to-br from-emerald-800 to-emerald-950 p-4 sm:p-5 text-white shadow-sm">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="rounded-3xl bg-gradient-to-r from-emerald-800 via-teal-900 to-slate-950 p-5 sm:p-6 text-white shadow-xl border border-emerald-700/40 relative overflow-hidden">
+          <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-emerald-500/15 blur-3xl pointer-events-none" />
+          <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
             <div>
               <div className="flex items-center gap-2">
                 <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-[10px] font-bold text-emerald-200 border border-emerald-400/30">
@@ -123,7 +124,7 @@ export default function StudentDashboardPage() {
                   </Link>
                 )}
               </div>
-              <h2 className="mt-2 text-xl font-bold">
+              <h2 className="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight">
                 Welcome back, {student?.name || currentUser?.name || "Student"}!
               </h2>
               <p className="mt-1 text-xs text-emerald-100/90 leading-relaxed">
@@ -135,14 +136,14 @@ export default function StudentDashboardPage() {
             </div>
 
             {/* Profile Completion Dial */}
-            <div className="rounded-xl bg-white/10 p-3.5 backdrop-blur-xs min-w-[210px] border border-white/10">
+            <div className="rounded-2xl bg-white/10 p-3.5 backdrop-blur-md min-w-[210px] border border-white/15 shadow-inner">
               <div className="flex items-center justify-between text-xs mb-1.5 font-bold">
                 <span>Profile Completion</span>
-                <span className="text-emerald-300">{profileCompletion}%</span>
+                <span className="text-emerald-300 font-extrabold">{profileCompletion}%</span>
               </div>
-              <div className="h-2 w-full rounded-full bg-black/20 overflow-hidden">
+              <div className="h-2 w-full rounded-full bg-black/30 overflow-hidden">
                 <div
-                  className="h-full rounded-full bg-emerald-400 transition-all duration-500"
+                  className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-teal-300 transition-all duration-500"
                   style={{ width: `${profileCompletion}%` }}
                 />
               </div>
@@ -158,56 +159,56 @@ export default function StudentDashboardPage() {
 
         {/* 4 KPI Summary Cards */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-xs">
+          <div className="rounded-2xl border border-slate-200/80 bg-white/85 backdrop-blur-md p-4 shadow-xs hover:shadow-xl hover:border-emerald-300 hover:-translate-y-1 transition-all duration-300 group space-y-1">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-[10px] font-bold uppercase tracking-wider">Eligible Drives</span>
-              <span className="text-emerald-700">
+              <span className="text-[11px] font-bold uppercase tracking-wider group-hover:text-emerald-700 transition-colors">Eligible Drives</span>
+              <span className="grid h-8 w-8 place-items-center rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200/60 group-hover:bg-emerald-600 group-hover:text-white group-hover:border-transparent transition-all duration-200">
                 <CheckCircle2 size={16} />
               </span>
             </div>
-            <p className="mt-1 text-2xl font-black text-emerald-700">
+            <p className="text-2xl sm:text-3xl font-extrabold text-emerald-700 group-hover:scale-105 transition-transform duration-200">
               {eligibleCompanies.length}
             </p>
-            <p className="text-[10px] text-slate-400">Of {companies.length} active drives</p>
+            <p className="text-[11px] text-slate-500 font-medium">Of {companies.length} active drives</p>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-xs">
+          <div className="rounded-2xl border border-slate-200/80 bg-white/85 backdrop-blur-md p-4 shadow-xs hover:shadow-xl hover:border-emerald-300 hover:-translate-y-1 transition-all duration-300 group space-y-1">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-[10px] font-bold uppercase tracking-wider">My Applications</span>
-              <span className="text-slate-600">
+              <span className="text-[11px] font-bold uppercase tracking-wider group-hover:text-slate-800 transition-colors">My Applications</span>
+              <span className="grid h-8 w-8 place-items-center rounded-xl bg-slate-100 text-slate-700 border border-slate-200/60 group-hover:bg-slate-900 group-hover:text-white group-hover:border-transparent transition-all duration-200">
                 <Layers size={16} />
               </span>
             </div>
-            <p className="mt-1 text-2xl font-black text-slate-900">
+            <p className="text-2xl sm:text-3xl font-extrabold text-slate-900 group-hover:scale-105 transition-transform duration-200">
               {applications.length}
             </p>
-            <p className="text-[10px] text-slate-400">Submitted drives</p>
+            <p className="text-[11px] text-slate-500 font-medium">Submitted drives</p>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-xs">
+          <div className="rounded-2xl border border-slate-200/80 bg-white/85 backdrop-blur-md p-4 shadow-xs hover:shadow-xl hover:border-emerald-300 hover:-translate-y-1 transition-all duration-300 group space-y-1">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-[10px] font-bold uppercase tracking-wider">Accepted Offers</span>
-              <span className="text-emerald-600">
+              <span className="text-[11px] font-bold uppercase tracking-wider group-hover:text-emerald-700 transition-colors">Accepted Offers</span>
+              <span className="grid h-8 w-8 place-items-center rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200/60 group-hover:bg-emerald-600 group-hover:text-white group-hover:border-transparent transition-all duration-200">
                 <Award size={16} />
               </span>
             </div>
-            <p className="mt-1 text-2xl font-black text-emerald-700">
+            <p className="text-2xl sm:text-3xl font-extrabold text-emerald-700 group-hover:scale-105 transition-transform duration-200">
               {applications.filter((a) => a.stage === "Accepted" || a.stage.toLowerCase().includes("hired")).length}
             </p>
-            <p className="text-[10px] text-slate-400">Verified placement offers</p>
+            <p className="text-[11px] text-slate-500 font-medium">Verified placement offers</p>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-xs">
+          <div className="rounded-2xl border border-slate-200/80 bg-white/85 backdrop-blur-md p-4 shadow-xs hover:shadow-xl hover:border-emerald-300 hover:-translate-y-1 transition-all duration-300 group space-y-1">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-[10px] font-bold uppercase tracking-wider">Placement Status</span>
-              <span className="text-emerald-700">
+              <span className="text-[11px] font-bold uppercase tracking-wider group-hover:text-slate-800 transition-colors">Placement Status</span>
+              <span className="grid h-8 w-8 place-items-center rounded-xl bg-slate-100 text-slate-700 border border-slate-200/60 group-hover:bg-slate-900 group-hover:text-white group-hover:border-transparent transition-all duration-200">
                 <GraduationCap size={16} />
               </span>
             </div>
-            <p className="mt-1 text-lg font-black text-slate-900 truncate">
+            <p className="text-xl sm:text-2xl font-extrabold text-slate-900 truncate group-hover:scale-105 transition-transform duration-200">
               {student?.status || "In Process"}
             </p>
-            <p className="text-[10px] text-emerald-700 font-semibold truncate">
+            <p className="text-[11px] text-emerald-700 font-semibold truncate">
               {student?.highestOfferLpa ? `₹${student.highestOfferLpa} LPA Offer` : "Actively Eligible"}
             </p>
           </div>
@@ -216,13 +217,13 @@ export default function StudentDashboardPage() {
         {/* =========================================================================
             INTERACTIVE DISPLAY WINDOW WITH BUTTONS
         ========================================================================== */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-xs">
+        <div className="rounded-3xl border border-slate-200/80 bg-white/85 backdrop-blur-md p-5 sm:p-6 shadow-xs">
           {/* Header & Interactive Control Buttons */}
-          <div className="flex flex-col gap-3 pb-4 border-b border-slate-100">
+          <div className="flex flex-col gap-3 pb-4 border-b border-slate-200/60">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
               <div>
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Building2 size={16} className="text-emerald-700" />
+                <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                  <Building2 size={18} className="text-emerald-700" />
                   Placement Window & Applications Desk
                 </h3>
                 <p className="text-xs text-slate-500">
@@ -241,10 +242,10 @@ export default function StudentDashboardPage() {
               <button
                 type="button"
                 onClick={() => setActiveWindowTab("eligible")}
-                className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition border ${
+                className={`flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 ${
                   activeWindowTab === "eligible"
-                    ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
-                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                    ? "bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xs border border-transparent"
+                    : "bg-white/90 text-slate-700 border border-slate-200/80 hover:bg-white hover:text-emerald-800 hover:border-emerald-300 shadow-2xs"
                 }`}
               >
                 <CheckCircle2 size={14} />
@@ -254,10 +255,10 @@ export default function StudentDashboardPage() {
               <button
                 type="button"
                 onClick={() => setActiveWindowTab("applications")}
-                className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition border ${
+                className={`flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 ${
                   activeWindowTab === "applications"
-                    ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
-                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                    ? "bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xs border border-transparent"
+                    : "bg-white/90 text-slate-700 border border-slate-200/80 hover:bg-white hover:text-emerald-800 hover:border-emerald-300 shadow-2xs"
                 }`}
               >
                 <Layers size={14} />
@@ -267,10 +268,10 @@ export default function StudentDashboardPage() {
               <button
                 type="button"
                 onClick={() => setActiveWindowTab("all")}
-                className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition border ${
+                className={`flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 ${
                   activeWindowTab === "all"
-                    ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
-                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                    ? "bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xs border border-transparent"
+                    : "bg-white/90 text-slate-700 border border-slate-200/80 hover:bg-white hover:text-emerald-800 hover:border-emerald-300 shadow-2xs"
                 }`}
               >
                 <Building2 size={14} />
@@ -280,10 +281,10 @@ export default function StudentDashboardPage() {
               <button
                 type="button"
                 onClick={() => setActiveWindowTab("superdream")}
-                className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition border ${
+                className={`flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 ${
                   activeWindowTab === "superdream"
-                    ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
-                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                    ? "bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xs border border-transparent"
+                    : "bg-white/90 text-slate-700 border border-slate-200/80 hover:bg-white hover:text-emerald-800 hover:border-emerald-300 shadow-2xs"
                 }`}
               >
                 <Award size={14} />

@@ -117,14 +117,14 @@ export default function StudentCompaniesPage() {
       subtitle="Full-width vertical stack directory of all campus hiring drives with live eligibility checks"
     >
       <div className="space-y-4">
-        {/* Filtering & Search Toolbar (Requirement 3) */}
-        <div className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-slate-800 space-y-3">
-          <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
+        {/* Filtering & Search Toolbar */}
+        <div className="rounded-3xl border border-slate-200/80 bg-white/85 backdrop-blur-md p-5 sm:p-6 shadow-xs space-y-3.5">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             {/* Search Input */}
             <div className="relative flex-1 max-w-md">
               <Search
                 size={14}
-                className="absolute left-3 top-3 text-slate-400 pointer-events-none"
+                className="absolute left-3.5 top-3.5 text-slate-400 pointer-events-none"
               />
               <input
                 value={search}
@@ -132,13 +132,12 @@ export default function StudentCompaniesPage() {
                   setSearch(e.target.value);
                   setCurrentPage(1);
                 }}
-                placeholder="Search company, job role, skills, or location..."
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-xs dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-500"
+                className="w-full rounded-xl border border-slate-200/80 bg-white/90 py-2.5 pl-9 pr-3 text-xs text-slate-800 shadow-2xs focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
               />
             </div>
 
             {/* Eligible-Only Toggle */}
-            <label className="flex items-center gap-2 cursor-pointer select-none rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-900">
+            <label className="flex items-center gap-2 cursor-pointer select-none rounded-xl border border-slate-200/80 bg-white/90 px-3.5 py-2 shadow-2xs hover:border-emerald-300 transition">
               <input
                 type="checkbox"
                 checked={onlyEligible}
@@ -148,14 +147,14 @@ export default function StudentCompaniesPage() {
                 }}
                 className="rounded text-emerald-600 focus:ring-emerald-500"
               />
-              <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
+              <span className="text-xs font-bold text-slate-700">
                 Eligible Only For Me
               </span>
             </label>
           </div>
 
           {/* Secondary Filters: Tier & Department */}
-          <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-200/60 text-xs">
             {/* Tier filter pill buttons */}
             <div className="flex flex-wrap items-center gap-1.5">
               <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mr-1">
@@ -168,10 +167,10 @@ export default function StudentCompaniesPage() {
                     setSelectedTier(tier);
                     setCurrentPage(1);
                   }}
-                  className={`rounded-full px-3 py-1 text-[11px] font-semibold transition ${
+                  className={`rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 ${
                     selectedTier === tier
-                      ? "bg-emerald-600 text-white shadow-xs"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      ? "bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xs border border-transparent"
+                      : "bg-white/90 text-slate-700 border border-slate-200/80 hover:bg-white hover:text-emerald-800 hover:border-emerald-300 shadow-2xs"
                   }`}
                 >
                   {tier}
@@ -180,7 +179,7 @@ export default function StudentCompaniesPage() {
             </div>
 
             {/* Department dropdown */}
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
               <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                 Branch:
               </span>
@@ -190,7 +189,7 @@ export default function StudentCompaniesPage() {
                   setSelectedDept(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="rounded-xl border border-slate-200 bg-white px-2.5 py-1 text-xs dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 focus:outline-none"
+                className="rounded-xl border border-slate-200/80 bg-white/90 px-3 py-1.5 text-xs font-semibold text-slate-800 shadow-2xs focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
               >
                 <option value="All">All Branches</option>
                 <option value="CSE">CSE</option>
@@ -212,12 +211,14 @@ export default function StudentCompaniesPage() {
             <CompanyCardSkeleton />
           </div>
         ) : paginatedCompanies.length === 0 ? (
-          <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl bg-white p-8 text-center dark:bg-slate-800 border border-slate-200/80 dark:border-slate-800">
-            <Building2 size={36} className="text-slate-400 mb-2" />
-            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">
+          <div className="flex min-h-[300px] flex-col items-center justify-center rounded-3xl bg-white/85 backdrop-blur-md p-8 text-center border border-slate-200/80 shadow-xs">
+            <div className="grid h-14 w-14 place-items-center rounded-2xl bg-slate-100 text-slate-400 mb-3 border border-slate-200/60">
+              <Building2 size={28} />
+            </div>
+            <h3 className="text-base font-extrabold text-slate-900">
               No Companies Found
             </h3>
-            <p className="mt-1 text-xs text-slate-400">
+            <p className="mt-1 text-xs text-slate-500 max-w-sm leading-relaxed">
               Try adjusting your search criteria or unchecking "Eligible Only For Me".
             </p>
             <button
@@ -227,7 +228,7 @@ export default function StudentCompaniesPage() {
                 setSelectedDept("All");
                 setOnlyEligible(false);
               }}
-              className="mt-3 rounded-full bg-emerald-600 px-4 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 transition"
+              className="mt-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 px-5 py-2 text-xs font-bold text-white hover:from-emerald-700 hover:to-teal-800 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all"
             >
               Reset All Filters
             </button>
@@ -253,8 +254,8 @@ export default function StudentCompaniesPage() {
 
         {/* Pagination Controls */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-between rounded-xl bg-white p-3 shadow-xs dark:bg-slate-800 border border-slate-200/80 dark:border-slate-800 text-xs">
-            <span className="text-slate-500 text-[11px]">
+          <div className="flex items-center justify-between rounded-2xl bg-white/85 backdrop-blur-md p-3.5 shadow-xs border border-slate-200/80 text-xs">
+            <span className="text-slate-500 text-[11px] font-medium">
               Showing <strong>{(currentPage - 1) * pageSize + 1}</strong> –{" "}
               <strong>
                 {Math.min(currentPage * pageSize, filteredCompanies.length)}
@@ -266,17 +267,17 @@ export default function StudentCompaniesPage() {
               <button
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                className="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                className="flex items-center gap-1 rounded-xl border border-slate-200/80 bg-white/90 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-white hover:text-emerald-700 disabled:opacity-40 transition shadow-2xs"
               >
                 <ChevronLeft size={14} /> Previous
               </button>
-              <span className="px-2 font-bold text-slate-800 dark:text-slate-200">
+              <span className="px-2 font-bold text-slate-800">
                 {currentPage} / {totalPages}
               </span>
               <button
                 disabled={currentPage >= totalPages}
                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                className="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                className="flex items-center gap-1 rounded-xl border border-slate-200/80 bg-white/90 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-white hover:text-emerald-700 disabled:opacity-40 transition shadow-2xs"
               >
                 Next <ChevronRight size={14} />
               </button>

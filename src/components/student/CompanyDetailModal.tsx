@@ -29,30 +29,30 @@ export function CompanyDetailModal({
       icon={<Building2 size={18} />}
       maxWidth="xl"
     >
-      <div className="space-y-4 text-xs text-slate-700 dark:text-slate-300">
+      <div className="space-y-4 text-xs text-slate-700">
         {/* Tier & CTC Highlights */}
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-          <div className="rounded-xl bg-slate-50 p-3 dark:bg-slate-800">
-            <span className="text-[10px] text-slate-400">Total Package</span>
-            <p className="mt-0.5 text-sm font-black text-emerald-700 dark:text-emerald-400">
+          <div className="rounded-2xl bg-gradient-to-br from-emerald-50/80 to-teal-50/60 border border-emerald-200/80 p-3.5 shadow-2xs">
+            <span className="text-[10px] text-emerald-700 font-bold uppercase tracking-wider">Total Package</span>
+            <p className="mt-0.5 text-base font-black text-emerald-950">
               {formatCurrencyLpa(company.ctcLpa)}
             </p>
           </div>
-          <div className="rounded-xl bg-slate-50 p-3 dark:bg-slate-800">
-            <span className="text-[10px] text-slate-400">Monthly Stipend</span>
-            <p className="mt-0.5 text-xs font-bold text-slate-800 dark:text-slate-200">
+          <div className="rounded-2xl bg-white/90 border border-slate-200/80 p-3.5 shadow-2xs">
+            <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Monthly Stipend</span>
+            <p className="mt-0.5 text-xs font-bold text-slate-900">
               {formatStipend(company.stipendMonthly)}
             </p>
           </div>
-          <div className="rounded-xl bg-slate-50 p-3 dark:bg-slate-800">
-            <span className="text-[10px] text-slate-400">Tier Category</span>
+          <div className="rounded-2xl bg-white/90 border border-slate-200/80 p-3.5 shadow-2xs">
+            <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Tier Category</span>
             <div className="mt-1">
               <TierBadge tier={company.tier} />
             </div>
           </div>
-          <div className="rounded-xl bg-slate-50 p-3 dark:bg-slate-800">
-            <span className="text-[10px] text-slate-400">Location</span>
-            <p className="mt-0.5 text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
+          <div className="rounded-2xl bg-white/90 border border-slate-200/80 p-3.5 shadow-2xs">
+            <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Location</span>
+            <p className="mt-0.5 text-xs font-bold text-slate-900 truncate">
               {company.location}
             </p>
           </div>
@@ -60,41 +60,41 @@ export function CompanyDetailModal({
 
         {/* Detailed Description */}
         <div>
-          <h4 className="font-bold text-slate-900 dark:text-white mb-1">
+          <h4 className="font-extrabold text-slate-900 mb-1">
             Job Role & Opportunity Overview
           </h4>
-          <p className="leading-relaxed text-slate-600 dark:text-slate-400">
+          <p className="leading-relaxed text-slate-600">
             {company.description}
           </p>
         </div>
 
         {/* Criteria Specifications */}
-        <div className="rounded-xl border border-slate-200 p-3.5 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40">
-          <h4 className="font-bold text-slate-900 dark:text-white mb-2">
+        <div className="rounded-2xl border border-slate-200/80 p-4 bg-slate-50/70 shadow-2xs">
+          <h4 className="font-extrabold text-slate-900 mb-2.5">
             Institutional Eligibility Rules
           </h4>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 text-[11px]">
             <div>
-              <span className="text-slate-400">Minimum CGPA:</span>
-              <p className="font-bold text-slate-800 dark:text-slate-100">
+              <span className="text-slate-400 font-semibold">Minimum CGPA:</span>
+              <p className="font-extrabold text-slate-900">
                 {company.minCgpa.toFixed(2)}
               </p>
             </div>
             <div>
-              <span className="text-slate-400">Maximum Backlogs:</span>
-              <p className="font-bold text-slate-800 dark:text-slate-100">
+              <span className="text-slate-400 font-semibold">Maximum Backlogs:</span>
+              <p className="font-extrabold text-slate-900">
                 {company.maxBacklogs} Allowed
               </p>
             </div>
             <div>
-              <span className="text-slate-400">Graduating Batch:</span>
-              <p className="font-bold text-slate-800 dark:text-slate-100">
+              <span className="text-slate-400 font-semibold">Graduating Batch:</span>
+              <p className="font-extrabold text-slate-900">
                 {company.eligibleBatch}
               </p>
             </div>
             <div className="col-span-2 sm:col-span-3">
-              <span className="text-slate-400">Allowed Engineering Branches:</span>
-              <p className="font-bold text-emerald-800 dark:text-emerald-300">
+              <span className="text-slate-400 font-semibold">Allowed Engineering Branches:</span>
+              <p className="font-bold text-emerald-800">
                 {company.eligibleDepts.join(", ")}
               </p>
             </div>
@@ -104,7 +104,7 @@ export function CompanyDetailModal({
         {/* Recruitment Process Stages */}
         {company.stages && company.stages.length > 0 && (
           <div>
-            <h4 className="font-bold text-slate-900 dark:text-white mb-1.5">
+            <h4 className="font-extrabold text-slate-900 mb-2">
               Hiring Stages & Selection Workflow
             </h4>
             <div className="flex flex-wrap gap-2">
@@ -114,12 +114,12 @@ export function CompanyDetailModal({
                 .map((stg) => (
                   <div
                     key={stg.id}
-                    className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] shadow-2xs dark:border-slate-700 dark:bg-slate-800"
+                    className="flex items-center gap-2 rounded-xl border border-slate-200/80 bg-white px-3 py-1.5 text-[11px] shadow-2xs"
                   >
-                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-100 text-[10px] font-bold text-emerald-700">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-[10px] font-extrabold text-emerald-700">
                       {stg.order}
                     </span>
-                    <span className="font-semibold text-slate-800 dark:text-slate-200">
+                    <span className="font-bold text-slate-800">
                       {stg.name}
                     </span>
                   </div>
@@ -131,14 +131,14 @@ export function CompanyDetailModal({
         {/* Required Technical Skills */}
         {company.requiredSkills && company.requiredSkills.length > 0 && (
           <div>
-            <h4 className="font-bold text-slate-900 dark:text-white mb-1.5">
+            <h4 className="font-extrabold text-slate-900 mb-2">
               Target Skills & Competencies
             </h4>
             <div className="flex flex-wrap gap-1.5">
               {company.requiredSkills.map((skill) => (
                 <span
                   key={skill}
-                  className="rounded-lg bg-emerald-50 px-2.5 py-1 text-[11px] font-medium text-emerald-900 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/50 dark:border-emerald-800/40"
+                  className="rounded-lg bg-emerald-50 border border-emerald-200/60 px-2.5 py-1 text-[11px] font-bold text-emerald-800 shadow-2xs"
                 >
                   {skill}
                 </span>
@@ -148,12 +148,12 @@ export function CompanyDetailModal({
         )}
 
         {/* Schedule */}
-        <div className="flex items-center justify-between border-t border-slate-100 pt-3 dark:border-slate-800 text-[11px] text-slate-500">
+        <div className="flex items-center justify-between border-t border-slate-100 pt-3 text-[11px] text-slate-500 font-medium">
           <span>
-            Application Deadline: <strong>{formatDate(company.deadline)}</strong>
+            Application Deadline: <strong className="text-slate-800">{formatDate(company.deadline)}</strong>
           </span>
           <span>
-            Campus Drive: <strong>{formatDate(company.driveDate)}</strong>
+            Campus Drive: <strong className="text-slate-800">{formatDate(company.driveDate)}</strong>
           </span>
         </div>
       </div>

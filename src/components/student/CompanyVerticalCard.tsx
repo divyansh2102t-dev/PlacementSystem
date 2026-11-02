@@ -45,32 +45,32 @@ export function CompanyVerticalCard({
 
   return (
     <article
-      className="group relative flex flex-col w-full rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-xs hover:-translate-y-1.5 hover:shadow-xl hover:border-emerald-400 hover:ring-2 hover:ring-emerald-400/20 transition-all duration-300 ease-out dark:border-slate-800 dark:bg-slate-800/90"
+      className="group relative flex flex-col w-full rounded-3xl border border-slate-200/80 bg-white/90 backdrop-blur-md p-5 sm:p-6 shadow-xs hover:-translate-y-1.5 hover:shadow-xl hover:border-emerald-400 hover:ring-2 hover:ring-emerald-400/20 transition-all duration-300 ease-out"
     >
       {/* Top Header Row: Company + Package + Actions */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         {/* Left: Monogram, Company Name, Role, Tier */}
         <div className="flex items-start gap-3.5 min-w-0">
-          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-emerald-100 via-teal-100 to-emerald-200 text-base font-black text-emerald-950 dark:from-emerald-950 dark:to-teal-900 dark:text-emerald-200 shadow-xs border border-emerald-300/60 dark:border-emerald-700/60 group-hover:scale-105 group-hover:rotate-1 transition-transform duration-300">
+          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-emerald-100 via-teal-100 to-emerald-200 text-base font-black text-emerald-950 shadow-2xs border border-emerald-300/60 group-hover:scale-105 group-hover:rotate-1 transition-transform duration-300">
             {company.companyName.slice(0, 2).toUpperCase()}
           </div>
 
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
-              <h3 className="text-base font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors duration-200 dark:text-white truncate">
+              <h3 className="text-base font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors duration-200 truncate">
                 {company.companyName}
               </h3>
               <TierBadge tier={company.tier} />
-              <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[9px] font-semibold text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+              <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[9px] font-bold text-slate-600 border border-slate-200/60">
                 {company.roleType}
               </span>
             </div>
 
-            <p className="mt-0.5 text-xs font-semibold text-slate-700 dark:text-slate-300 truncate">
+            <p className="mt-0.5 text-xs font-bold text-slate-700 truncate">
               {company.roleTitle}
             </p>
 
-            <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-500 dark:text-slate-400">
+            <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-500 font-medium">
               <span className="flex items-center gap-1">
                 <MapPin size={12} className="text-slate-400 shrink-0" />
                 {company.location}
@@ -85,9 +85,9 @@ export function CompanyVerticalCard({
         </div>
 
         {/* Right: Package & Deadline */}
-        <div className="flex items-center justify-between sm:flex-col sm:items-end sm:text-right border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-100 dark:border-slate-800">
+        <div className="flex items-center justify-between sm:flex-col sm:items-end sm:text-right border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-100">
           <div>
-            <span className="text-lg font-black tracking-tight text-emerald-700 dark:text-emerald-400">
+            <span className="text-lg font-extrabold tracking-tight text-emerald-700">
               {formatCurrencyLpa(company.ctcLpa)}
             </span>
             <p className="text-[10px] text-slate-400 font-medium">
@@ -98,45 +98,45 @@ export function CompanyVerticalCard({
           <div className="mt-1 flex items-center gap-1 text-[11px] text-slate-500 font-medium">
             <Clock size={12} className={isDeadlinePassed ? "text-rose-500" : "text-amber-600"} />
             <span>
-              Deadline: <strong className={isDeadlinePassed ? "text-rose-600 dark:text-rose-400" : "text-slate-700 dark:text-slate-300"}>{formatDate(company.deadline)}</strong>
+              Deadline: <strong className={isDeadlinePassed ? "text-rose-600" : "text-slate-700"}>{formatDate(company.deadline)}</strong>
             </span>
           </div>
         </div>
       </div>
 
       {/* Description Summary */}
-      <p className="mt-3 text-xs leading-relaxed text-slate-600 dark:text-slate-300 line-clamp-2">
+      <p className="mt-3 text-xs leading-relaxed text-slate-600 line-clamp-2">
         {company.description}
       </p>
 
       {/* Prominent Eligibility Criteria Section (Requirement 3) */}
-      <div className="mt-3.5 rounded-xl bg-slate-50 p-3 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/80">
+      <div className="mt-3.5 rounded-2xl bg-slate-50/70 p-3.5 border border-slate-200/70 shadow-2xs">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
             Eligibility Criteria
           </span>
           <span className="text-[10px] text-slate-400">
-            Drive Date: <strong className="text-slate-700 dark:text-slate-300">{formatDate(company.driveDate)}</strong>
+            Drive Date: <strong className="text-slate-700">{formatDate(company.driveDate)}</strong>
           </span>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 text-xs">
           {/* Min CGPA Chip */}
-          <div className="flex items-center gap-1.5 rounded-lg bg-white px-2.5 py-1 border border-slate-200 dark:border-slate-700 dark:bg-slate-800">
-            <span className="text-[10px] text-slate-400">Min CGPA:</span>
-            <strong className="text-xs font-bold text-slate-800 dark:text-slate-100">
+          <div className="flex items-center gap-1.5 rounded-xl bg-white/90 px-3 py-1 border border-slate-200/80 shadow-2xs">
+            <span className="text-[10px] text-slate-400 font-semibold">Min CGPA:</span>
+            <strong className="text-xs font-extrabold text-slate-900">
               {company.minCgpa.toFixed(2)}
             </strong>
           </div>
 
           {/* Allowed Branches Chips */}
-          <div className="flex items-center gap-1 rounded-lg bg-white px-2.5 py-1 border border-slate-200 dark:border-slate-700 dark:bg-slate-800">
-            <span className="text-[10px] text-slate-400">Branches:</span>
+          <div className="flex items-center gap-1 rounded-xl bg-white/90 px-3 py-1 border border-slate-200/80 shadow-2xs">
+            <span className="text-[10px] text-slate-400 font-semibold">Branches:</span>
             <div className="flex gap-1">
               {company.eligibleDepts.map((d) => (
                 <span
                   key={d}
-                  className="rounded bg-slate-100 px-1.5 py-0.2 text-[9px] font-bold text-slate-700 dark:bg-slate-700 dark:text-slate-200"
+                  className="rounded-md bg-slate-100 px-1.5 py-0.2 text-[9px] font-extrabold text-slate-700"
                 >
                   {d}
                 </span>
@@ -145,26 +145,26 @@ export function CompanyVerticalCard({
           </div>
 
           {/* Max Backlogs */}
-          <div className="flex items-center gap-1.5 rounded-lg bg-white px-2.5 py-1 border border-slate-200 dark:border-slate-700 dark:bg-slate-800">
-            <span className="text-[10px] text-slate-400">Backlogs:</span>
-            <strong className="text-xs font-bold text-slate-800 dark:text-slate-100">
+          <div className="flex items-center gap-1.5 rounded-xl bg-white/90 px-3 py-1 border border-slate-200/80 shadow-2xs">
+            <span className="text-[10px] text-slate-400 font-semibold">Backlogs:</span>
+            <strong className="text-xs font-extrabold text-slate-900">
               {company.maxBacklogs === 0 ? "0 Clean" : `Max ${company.maxBacklogs}`}
             </strong>
           </div>
 
           {/* Batch */}
-          <div className="flex items-center gap-1.5 rounded-lg bg-white px-2.5 py-1 border border-slate-200 dark:border-slate-700 dark:bg-slate-800">
-            <span className="text-[10px] text-slate-400">Batch:</span>
-            <strong className="text-xs font-bold text-slate-800 dark:text-slate-100">
+          <div className="flex items-center gap-1.5 rounded-xl bg-white/90 px-3 py-1 border border-slate-200/80 shadow-2xs">
+            <span className="text-[10px] text-slate-400 font-semibold">Batch:</span>
+            <strong className="text-xs font-extrabold text-slate-900">
               {company.eligibleBatch}
             </strong>
           </div>
 
           {/* Required Skills */}
           {company.requiredSkills && company.requiredSkills.length > 0 && (
-            <div className="hidden lg:flex items-center gap-1.5 rounded-lg bg-white px-2.5 py-1 border border-slate-200 dark:border-slate-700 dark:bg-slate-800">
-              <span className="text-[10px] text-slate-400">Skills:</span>
-              <span className="text-[10px] font-medium text-emerald-800 dark:text-emerald-300">
+            <div className="hidden lg:flex items-center gap-1.5 rounded-xl bg-white/90 px-3 py-1 border border-slate-200/80 shadow-2xs">
+              <span className="text-[10px] text-slate-400 font-semibold">Skills:</span>
+              <span className="text-[10px] font-bold text-emerald-800">
                 {company.requiredSkills.slice(0, 3).join(", ")}
               </span>
             </div>
@@ -173,7 +173,7 @@ export function CompanyVerticalCard({
 
         {/* Student Specific Eligibility Feedback Reason Banner */}
         {!isAdmin && eligibility && (
-          <div className="mt-2.5 pt-2 border-t border-slate-200/50 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2">
+          <div className="mt-2.5 pt-2 border-t border-slate-200/50 flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <EligibilityBadge
                 eligible={eligibility.eligible}
@@ -181,12 +181,12 @@ export function CompanyVerticalCard({
                 isExpired={eligibility.isExpired}
               />
               {!eligibility.eligible && (
-                <span className="text-[11px] font-medium text-rose-600 dark:text-rose-400">
+                <span className="text-[11px] font-medium text-rose-600">
                   {eligibility.reasons[0]}
                 </span>
               )}
               {eligibility.eligible && !eligibility.isApplied && (
-                <span className="text-[11px] text-emerald-700 dark:text-emerald-400">
+                <span className="text-[11px] text-emerald-700 font-medium">
                   You meet all CGPA, branch, and backlog criteria.
                 </span>
               )}
@@ -202,13 +202,13 @@ export function CompanyVerticalCard({
       </div>
 
       {/* Bottom Footer Actions */}
-      <div className="mt-3.5 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-3 dark:border-slate-800">
-        <div className="flex items-center gap-2 text-[11px] text-slate-400">
+      <div className="mt-3.5 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-3">
+        <div className="flex items-center gap-2 text-[11px] text-slate-400 font-medium">
           <span>{company.applicantsCount} Students Applied</span>
           <span>•</span>
           <button
             onClick={() => onViewDetails(company)}
-            className="flex items-center gap-1 font-semibold text-slate-700 hover:text-emerald-700 dark:text-slate-300 dark:hover:text-emerald-400 transition"
+            className="flex items-center gap-1 font-bold text-slate-700 hover:text-emerald-700 transition"
           >
             <span>View Details</span>
             <ExternalLink size={12} />
@@ -222,7 +222,7 @@ export function CompanyVerticalCard({
               {onEdit && (
                 <button
                   onClick={() => onEdit(company)}
-                  className="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 transition"
+                  className="rounded-xl border border-slate-200/80 bg-white/90 px-3.5 py-1.5 text-xs font-bold text-slate-700 hover:bg-white hover:text-emerald-700 hover:border-emerald-300 shadow-2xs hover:-translate-y-0.5 transition-all"
                 >
                   Edit
                 </button>
@@ -230,7 +230,7 @@ export function CompanyVerticalCard({
               {onDelete && (
                 <button
                   onClick={() => onDelete(company)}
-                  className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-100 dark:border-rose-900/60 dark:bg-rose-950/40 dark:text-rose-300 transition"
+                  className="rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-1.5 text-xs font-bold text-rose-700 hover:bg-rose-100 shadow-2xs hover:-translate-y-0.5 transition-all"
                 >
                   Delete
                 </button>
@@ -238,7 +238,7 @@ export function CompanyVerticalCard({
               {onReviewApplicants && (
                 <button
                   onClick={() => onReviewApplicants(company)}
-                  className="flex items-center gap-1.5 rounded-xl bg-emerald-700 px-4 py-1.5 text-xs font-semibold text-white shadow-xs hover:bg-emerald-800 transition"
+                  className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 px-4 py-1.5 text-xs font-bold text-white shadow-xs hover:from-emerald-700 hover:to-teal-800 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
                 >
                   <span>Review Applicants ({company.applicantsCount})</span>
                   <ChevronRight size={14} />
@@ -251,7 +251,7 @@ export function CompanyVerticalCard({
               {eligibility?.isApplied ? (
                 <button
                   disabled
-                  className="flex items-center gap-1.5 rounded-xl bg-slate-100 px-4 py-1.5 text-xs font-semibold text-slate-400 dark:bg-slate-800 dark:text-slate-500 cursor-not-allowed"
+                  className="flex items-center gap-1.5 rounded-xl bg-slate-100 px-4 py-1.5 text-xs font-bold text-slate-400 cursor-not-allowed border border-slate-200/60"
                 >
                   <CheckCircle2 size={13} className="text-emerald-600" />
                   <span>Applied</span>
@@ -259,14 +259,14 @@ export function CompanyVerticalCard({
               ) : isDeadlinePassed ? (
                 <button
                   disabled
-                  className="rounded-xl bg-slate-100 px-4 py-1.5 text-xs font-semibold text-slate-400 dark:bg-slate-800 dark:text-slate-500 cursor-not-allowed"
+                  className="rounded-xl bg-slate-100 px-4 py-1.5 text-xs font-bold text-slate-400 cursor-not-allowed border border-slate-200/60"
                 >
                   Deadline Closed
                 </button>
               ) : eligibility?.eligible ? (
                 <button
                   onClick={() => onApply && onApply(company)}
-                  className="flex items-center gap-1.5 rounded-xl bg-emerald-700 px-4 py-1.5 text-xs font-semibold text-white shadow-xs hover:bg-emerald-800 transition"
+                  className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 px-5 py-2 text-xs font-bold text-white shadow-xs hover:from-emerald-700 hover:to-teal-800 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
                 >
                   <span>Apply Now</span>
                   <ChevronRight size={14} />
@@ -275,7 +275,7 @@ export function CompanyVerticalCard({
                 <button
                   disabled
                   title={eligibility?.reasons[0] || "You do not meet the eligibility criteria"}
-                  className="rounded-xl bg-slate-100 px-4 py-1.5 text-xs font-semibold text-slate-400 dark:bg-slate-800 dark:text-slate-500 cursor-not-allowed"
+                  className="rounded-xl bg-slate-100 px-4 py-1.5 text-xs font-bold text-slate-400 cursor-not-allowed border border-slate-200/60"
                 >
                   Not Eligible
                 </button>

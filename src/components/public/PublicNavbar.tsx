@@ -54,7 +54,6 @@ export function PublicNavbar() {
     { label: "Recruitment Drives", href: "/drives" },
     { label: "Hiring Pipeline", href: "/pipeline" },
     { label: "Placement Stats", href: "/statistics" },
-    { label: "Partner Companies", href: "/companies" },
     { label: "About & Policies", href: "/about" },
   ];
 
@@ -87,25 +86,14 @@ export function PublicNavbar() {
         {/* Right CTA / Auth controls */}
         <div className="hidden sm:flex items-center gap-2.5">
           {currentUser ? (
-            <div className="flex items-center gap-2">
-              <Link
-                href={dashboardHref}
-                className="group flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 px-4 py-2 text-xs font-bold text-white shadow-xs hover:from-emerald-700 hover:to-teal-800 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
-              >
-                <LayoutDashboard size={14} className="group-hover:rotate-6 transition-transform" />
-                <span>Go to Dashboard</span>
-                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-
-              <button
-                onClick={handleLogout}
-                title="Sign Out"
-                className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-500 hover:text-rose-600 hover:border-rose-300 hover:bg-rose-50/70 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-150 shadow-2xs"
-              >
-                <LogOut size={13} />
-                <span className="hidden md:inline">Sign Out</span>
-              </button>
-            </div>
+            <Link
+              href={dashboardHref}
+              className="group flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 px-4 py-2 text-xs font-bold text-white shadow-xs hover:from-emerald-700 hover:to-teal-800 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+            >
+              <LayoutDashboard size={14} className="group-hover:rotate-6 transition-transform" />
+              <span>Go to Dashboard</span>
+              <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
           ) : (
             <div className="flex items-center gap-2">
               <Link
@@ -171,26 +159,15 @@ export function PublicNavbar() {
 
           <div className="mt-4 pt-3 border-t border-slate-100 flex flex-col gap-2">
             {currentUser ? (
-              <div className="flex flex-col gap-2">
-                <Link
-                  href={dashboardHref}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-emerald-700 transition"
-                >
-                  <span>Go to Dashboard</span>
-                  <ArrowRight size={14} />
-                </Link>
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    handleLogout();
-                  }}
-                  className="flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 transition"
-                >
-                  <LogOut size={14} />
-                  <span>Sign Out</span>
-                </button>
-              </div>
+              <Link
+                href={dashboardHref}
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 px-4 py-2.5 text-xs font-bold text-white shadow-xs hover:from-emerald-700 hover:to-teal-800 transition"
+              >
+                <LayoutDashboard size={14} />
+                <span>Go to Dashboard</span>
+                <ArrowRight size={14} />
+              </Link>
             ) : (
               <div className="grid grid-cols-2 gap-2">
                 <Link
